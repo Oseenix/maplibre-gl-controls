@@ -8,3 +8,4 @@ example/vector.bundle.js.LICENSE.txt
 build
 __screenshots__
 coverage
+*.swp

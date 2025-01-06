@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@maplibre/maplibre-gl-style-spec':
+        specifier: ^22.0.1
+        version: 22.0.1
     devDependencies:
       '@vitest/browser':
         specifier: ^2.1.8
