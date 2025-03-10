@@ -8,13 +8,17 @@ export type TgBtnCfg = {
   layerIds: string[];   // Array of associated layer IDs
   repeat?: boolean;     // Repeatalbe button, do not update group choice
   setup?: (ctl: ToggleCtl, map: MlMap | undefined) => void;   // setup when map add
-  cleanup?: (ctl: ToggleCtl) => void; // clean up when control remove
+  cleanup?: (ctl: ToggleCtl, map: MlMap | undefined) => void; // clean up when control remove
+  onToggle?: (ctl: ToggleCtl, map: MlMap) => void;
+  onUntoggle?: (ctl: ToggleCtl, map: MlMap) => void;
 };
 
 export type ToggleCtlOptions = {
   buttons: TgBtnCfg[];
+  defaultActive: string;    // default active button
   position?: ControlPosition;
-  onToggle?: (ctl: ToggleCtl, map: MlMap, activeButtonId: string, layerIds: string[]) => void;
+  onToggle?: (ctl: ToggleCtl, map: MlMap, activeConfig: TgBtnCfg) => void;
+  onUntoggle?: (ctl: ToggleCtl, map: MlMap, config: TgBtnCfg) => void;
 };
 
 // Create an SVG image element
@@ -32,6 +36,7 @@ export default class ToggleCtl implements IControl {
   private container: HTMLElement;
   private outContainer: HTMLElement;
   private options: ToggleCtlOptions;
+  private defaultActiveId: string;
   private activeButtonId: string | null = null;
   private buttons: Map<string, HTMLButtonElement> = new Map();
 
@@ -40,6 +45,7 @@ export default class ToggleCtl implements IControl {
     const { outContainer, container } = this.createContainer();
     this.outContainer = outContainer;
     this.container = container;
+    this.defaultActiveId = this.options.defaultActive;
   }
 
   // Create the outer container for the control
@@ -57,16 +63,14 @@ export default class ToggleCtl implements IControl {
 
     const container = document.createElement('div');
     container.classList.add('maplibregl-ctrl', 'maplibregl-ctrl-group');
-    // container.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-	  // container.style.backgroundColor = "rgba(0, 36, 71, 0.7)";
     container.style.backgroundColor = "transparent";
     container.style.padding = '5px';
+    container.style.border = "transparent";
+    container.style.boxShadow = "none";
     container.style.borderRadius = '4px';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '4px';
-    // container.style.minWidth = 'fit-content'
-    // container.style.width = 'fit-content';
 
     // Add buttons to the container
     this.options.buttons.forEach((buttonConfig) => {
@@ -157,7 +161,6 @@ export default class ToggleCtl implements IControl {
     const mapContainer = this.map.getContainer();
     const containerWidth = mapContainer.clientWidth;
     const isSmallScreen = containerWidth < 768;     // Adjust threshold as needed
-    // this.container.style.width = isSmallScreen ? '40px' : '80px';
 
     this.buttons.forEach((btn) => {
       const label = btn.querySelector('span');
@@ -209,12 +212,25 @@ export default class ToggleCtl implements IControl {
 
   // Handle button click event
   private handleButtonClick(config: TgBtnCfg) {
+    // console.log("HandleButton:", config.id, this.activeButtonId);
     if (this.activeButtonId === config.id && !config.repeat) {
       return;
     }
 
+    const previousButtonId = this.activeButtonId;
+
     if (!config.repeat) {
       this.activeButtonId = config.id;
+    }
+
+    if (previousButtonId && previousButtonId !== this.activeButtonId && this.map) {
+      const previousConfig = this.options.buttons.find(b => b.id === previousButtonId);
+      if (previousConfig) {
+        // Call global onUntoggle first
+        if (this.options.onUntoggle) {
+          this.options.onUntoggle(this, this.map, previousConfig);
+        }
+      }
     }
 
     // Update button styles
@@ -226,20 +242,17 @@ export default class ToggleCtl implements IControl {
       }
     });
 
-    // Execute callback if provided
-    if (this.map && this.options.onToggle) {
-      this.options.onToggle(this, this.map, config.id, config.layerIds);
+    if (this.map) {
+      // Execute callback if provided
+      if (this.options.onToggle) {
+        this.options.onToggle(this, this.map, config);
+      }
     }
   }
 
   // Add control to the map
   onAdd(map: MlMap): HTMLElement {
     this.map = map;
-    
-    // Activate the first button by default
-    if (this.options.buttons.length > 0 && !this.activeButtonId) {
-      this.handleButtonClick(this.options.buttons[0]);
-    }
 
     this.map.on('resize', () => {
       this.updateInnerContainerStyle();
@@ -256,6 +269,12 @@ export default class ToggleCtl implements IControl {
       }
     });
 
+    // Activate the first button by default
+    if (this.options.buttons.length > 0 && !this.activeButtonId) {
+      const config = this.options.buttons.find(b => b.id === this.defaultActiveId);
+      this.handleButtonClick(config || this.options.buttons[0]);
+    }
+
     return this.container;
   }
 
@@ -268,7 +287,7 @@ export default class ToggleCtl implements IControl {
     // Execute cleanup for each button
     this.options.buttons.forEach((buttonConfig) => {
       if (buttonConfig.cleanup) {
-        buttonConfig.cleanup();
+        buttonConfig.cleanup(this, this.map);
       }
     });
     this.container.parentNode?.removeChild(this.container);
@@ -288,6 +307,17 @@ export default class ToggleCtl implements IControl {
     }
   }
 
+  public getActiveButton() {
+    const buttonId = this.activeButtonId || this.defaultActiveId;
+    const config = this.options.buttons.find(b => b.id === buttonId);
+
+    if (!config) {
+      return this.options.buttons[0];
+    }
+
+    return config;
+  }
+ 
   // New method to update a specific button
   public updateButton(buttonId: string, updates: Partial<TgBtnCfg>) {
     const button = this.buttons.get(buttonId);
@@ -313,6 +343,21 @@ export default class ToggleCtl implements IControl {
     // Recalculate layout if needed
     this.updateLayout();
   }
-}
 
+  // Update a all button configs
+  public updateButtonCallback(btnCfgs: Partial<TgBtnCfg>[]) {
+    btnCfgs.forEach((updates) => {
+      const buttonId = updates.id || '';
+      const button = this.buttons.get(buttonId);
+      const config = this.options.buttons.find(b => b.id === buttonId);
+
+      if (!button || !config) {
+        return;
+      }
+
+      // Update config
+      Object.assign(config, updates);
+    })
+  }
+}
 
