@@ -4,7 +4,7 @@ import maplibregl, {
 } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { TemporalControl, ColorBar, MsgCtl, ToggleCtl  } from '../src';
+import { TemporalControl, ColorBar, MsgCtl, ToggleCtl, TgBtnCfg  } from '../src';
 
 const temporalLayerNames = [
 	'201901',
@@ -275,7 +275,9 @@ const layerToggleControl = new ToggleCtl({
   ],
   position: 'top-right',
   onToggle: (ctl: ToggleCtl, map: maplibregl.Map,
-             activeButtonId: string, layerIds: string[]) => {
+             config: TgBtnCfg) => {;
+    const activeButtonId = config.id;
+    const layerIds = config.layerIds;
     console.log(`Switch to ${activeButtonId} with layers:`, layerIds);
     if (activeButtonId === 'fullscreen') {
       const mapContainer = map.getContainer();
