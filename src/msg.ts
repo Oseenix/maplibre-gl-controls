@@ -24,7 +24,7 @@ export default class MsgCtl implements IControl {
   constructor(options: Options) {
 		this.options = {
 	    position: "top-left",
-      width: "156px",    // Default width
+      width: "146px",    // Default width
       height: "24px",  // Default width
       ...options,       // Override with user-provided options
     };
@@ -37,11 +37,11 @@ export default class MsgCtl implements IControl {
   }
 
 	private getWidth(): string {
-		return this.options.width || "152px";
+		return this.options.width || "146px";
 	}
 
 	private getHeight(): string {
-		return this.options.height || "27px";
+		return this.options.height || "24px";
 	}
 
   // Create the control's container elements
@@ -80,7 +80,7 @@ export default class MsgCtl implements IControl {
   }
 
 
-	updateInnerContainerStyle(container: HTMLElement): void {
+	updateInnerContainerStyle(): void {
     if (!this.map) {
       return;
     }
@@ -121,20 +121,20 @@ export default class MsgCtl implements IControl {
     }
 
     if (this.options.position?.endsWith("left")) {
-      container.style.marginLeft = `${marginLeft}px`;
-      container.style.marginRight = `${defMarginRight}px`;
+      this.container.style.marginLeft = `${marginLeft}px`;
+      this.container.style.marginRight = `${defMarginRight}px`;
     } else {
-      container.style.marginLeft = `${defMarginLeft}px`;
-      container.style.marginRight = `${marginRight}px`;
+      this.container.style.marginLeft = `${defMarginLeft}px`;
+      this.container.style.marginRight = `${marginRight}px`;
 		}
 
     // Apply styles to innerContainer
-    container.style.marginTop = `${marginTop}px`;
-    container.style.marginBottom = `${marginBottom}px`;
+    this.container.style.marginTop = `${marginTop}px`;
+    this.container.style.marginBottom = `${marginBottom}px`;
   }
 
   public update(): void {
-    this.updateInnerContainerStyle(this.container);
+    this.updateInnerContainerStyle();
   }
 
   onAdd(map: Map): HTMLElement {
