@@ -16,7 +16,7 @@ export default class MsgCtl implements IControl {
     private getWidth;
     private getHeight;
     private createContainer;
-    updateInnerContainerStyle(container: HTMLElement): void;
+    updateInnerContainerStyle(): void;
     update(): void;
     onAdd(map: Map): HTMLElement;
     onRemove(): void;
