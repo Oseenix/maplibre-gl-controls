@@ -7,11 +7,14 @@ export type TgBtnCfg = {
     repeat?: boolean;
     setup?: (ctl: ToggleCtl, map: MlMap | undefined) => void;
     cleanup?: (ctl: ToggleCtl) => void;
+    onToggle?: (ctl: ToggleCtl, map: MlMap, layerIds: string[]) => void;
+    onUntoggle?: (ctl: ToggleCtl, map: MlMap, layerIds: string[]) => void;
 };
 export type ToggleCtlOptions = {
     buttons: TgBtnCfg[];
     position?: ControlPosition;
     onToggle?: (ctl: ToggleCtl, map: MlMap, activeButtonId: string, layerIds: string[]) => void;
+    onUntoggle?: (ctl: ToggleCtl, map: MlMap, buttonId: string, layerIds: string[]) => void;
 };
 export default class ToggleCtl implements IControl {
     private map;

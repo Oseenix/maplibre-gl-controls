@@ -37,17 +37,17 @@ const Mn = ({
   }, p = document.createElement("button");
   p.appendChild(re(kn)), p.onclick = c, p.style.border = "0", p.style.height = "24px", p.style.borderRadius = "4px";
   const d = () => {
-    ye !== void 0 && (clearInterval(ye), ye = void 0, y.onclick = null, I.style.backgroundColor = "");
+    ye !== void 0 && (clearInterval(ye), ye = void 0, y.onclick = null, E.style.backgroundColor = "");
   }, y = document.createElement("button");
   y.appendChild(re(vn)), y.style.border = "0", y.style.height = "24px", y.style.borderRadius = "4px", y.onclick = d;
-  const C = () => I.style.backgroundColor === de, M = () => {
-    C() || (I.style.backgroundColor = de, ye = setInterval(() => {
+  const C = () => E.style.backgroundColor === de, M = () => {
+    C() || (E.style.backgroundColor = de, ye = setInterval(() => {
       f();
     }, e));
-  }, I = document.createElement("button");
-  I.appendChild(re(wn)), I.style.border = "0", I.style.height = "24px", I.style.borderRadius = "4px", I.onclick = M;
+  }, E = document.createElement("button");
+  E.appendChild(re(wn)), E.style.border = "0", E.style.height = "24px", E.style.borderRadius = "4px", E.onclick = M;
   const T = document.createElement("button");
-  return T.appendChild(re(xn)), T.style.border = "0", T.style.height = "24px", T.style.borderRadius = "4px", T.onclick = f, o.appendChild(p), o.appendChild(y), o.appendChild(I), o.appendChild(T), r.appendChild(o), {
+  return T.appendChild(re(xn)), T.style.border = "0", T.style.height = "24px", T.style.borderRadius = "4px", T.onclick = f, o.appendChild(p), o.appendChild(y), o.appendChild(E), o.appendChild(T), r.appendChild(o), {
     container: r,
     titleDiv: i,
     slider: s,
@@ -175,7 +175,7 @@ class rt {
     return this.bindings[e] ? !0 : this.parent ? this.parent.has(e) : !1;
   }
 }
-const Ie = { kind: "null" }, h = { kind: "number" }, b = { kind: "string" }, g = { kind: "boolean" }, j = { kind: "color" }, Te = { kind: "projectionDefinition" }, Y = { kind: "object" }, m = { kind: "value" }, En = { kind: "error" }, $e = { kind: "collator" }, Se = { kind: "formatted" }, Ae = { kind: "padding" }, ce = { kind: "resolvedImage" }, De = { kind: "variableAnchorOffsetCollection" };
+const Ee = { kind: "null" }, h = { kind: "number" }, b = { kind: "string" }, g = { kind: "boolean" }, j = { kind: "color" }, Te = { kind: "projectionDefinition" }, Y = { kind: "object" }, m = { kind: "value" }, In = { kind: "error" }, $e = { kind: "collator" }, Se = { kind: "formatted" }, Ae = { kind: "padding" }, ce = { kind: "resolvedImage" }, De = { kind: "variableAnchorOffsetCollection" };
 function S(n, e) {
   return {
     kind: "array",
@@ -190,8 +190,8 @@ function k(n) {
   } else
     return n.kind;
 }
-const In = [
-  Ie,
+const En = [
+  Ee,
   h,
   b,
   g,
@@ -214,7 +214,7 @@ function se(n, e) {
     if (n.kind === e.kind)
       return null;
     if (n.kind === "value") {
-      for (const t of In)
+      for (const t of En)
         if (!se(t, e))
           return null;
     }
@@ -323,7 +323,7 @@ function Nn(n) {
         // ,|/       (optional)
         M,
         // <numeric> (optional)
-        I
+        E
         // %         (optional)
       ] = s, T = [u || " ", p || " ", C].join("");
       if (T === "  " || T === "  /" || T === ",," || T === ",,,") {
@@ -333,9 +333,9 @@ function Nn(n) {
             G(+a / pe, 0, 1),
             G(+c / pe, 0, 1),
             G(+d / pe, 0, 1),
-            M ? Et(+M, I) : 1
+            M ? It(+M, E) : 1
           ];
-          if (It(Mt))
+          if (Et(Mt))
             return Mt;
         }
       }
@@ -369,9 +369,9 @@ function Nn(n) {
         +s,
         G(+a, 0, 100),
         G(+u, 0, 100),
-        f ? Et(+f, p) : 1
+        f ? It(+f, p) : 1
       ];
-      if (It(y))
+      if (Et(y))
         return Pn(y);
     }
   }
@@ -379,13 +379,13 @@ function Nn(n) {
 function ge(n) {
   return parseInt(n.padEnd(2, n), 16) / 255;
 }
-function Et(n, e) {
+function It(n, e) {
   return G(e ? n / 100 : n, 0, 1);
 }
 function G(n, e, t) {
   return Math.min(Math.max(e, n), t);
 }
-function It(n) {
+function Et(n) {
   return !n.some(Number.isNaN);
 }
 const Ln = {
@@ -656,13 +656,13 @@ class w {
           let R = u - s;
           u > s && R > 180 ? R -= 360 : u < s && s - u > 180 && (R += 360), d = s + r * R;
         } else isNaN(s) ? isNaN(u) ? d = NaN : (d = u, (a === 1 || a === 0) && (y = c)) : (d = s, (f === 1 || f === 0) && (y = o));
-        const [C, M, I, T] = Dn([
+        const [C, M, E, T] = Dn([
           d,
           y ?? V(o, c, r),
           V(a, f, r),
           V(l, p, r)
         ]);
-        return new w(C, M, I, T, !1);
+        return new w(C, M, E, T, !1);
       }
       case "lab": {
         const [s, o, a, l] = Qt(oe(e.lab, t.lab, r));
@@ -838,9 +838,9 @@ function ae(n) {
   } else
     return !1;
 }
-function E(n) {
+function I(n) {
   if (n === null)
-    return Ie;
+    return Ee;
   if (typeof n == "string")
     return b;
   if (typeof n == "boolean")
@@ -865,7 +865,7 @@ function E(n) {
     const e = n.length;
     let t;
     for (const r of n) {
-      const i = E(r);
+      const i = I(r);
       if (!t)
         t = i;
       else {
@@ -893,7 +893,7 @@ class ee {
     if (!ae(e[1]))
       return t.error("invalid value");
     const r = e[1];
-    let i = E(r);
+    let i = I(r);
     const s = t.expectedType;
     return i.kind === "array" && i.N === 0 && s && s.kind === "array" && (typeof s.N != "number" || s.N === 0) && (i = s), new ee(i, r);
   }
@@ -954,9 +954,9 @@ class N {
   evaluate(e) {
     for (let t = 0; t < this.args.length; t++) {
       const r = this.args[t].evaluate(e);
-      if (se(this.type, E(r))) {
+      if (se(this.type, I(r))) {
         if (t === this.args.length - 1)
-          throw new x(`Expected value to be of type ${k(this.type)}, but found ${k(E(r))} instead.`);
+          throw new x(`Expected value to be of type ${k(this.type)}, but found ${k(I(r))} instead.`);
       } else return r;
     }
     throw new Error();
@@ -1315,16 +1315,16 @@ class at {
     if (e.length !== 3)
       return t.error(`Expected 2 arguments, but found ${e.length - 1} instead.`);
     const r = t.parse(e[1], 1, m), i = t.parse(e[2], 2, m);
-    return !r || !i ? null : it(r.type, [g, b, h, Ie, m]) ? new at(r, i) : t.error(`Expected first argument to be of type boolean, string, number or null, but found ${k(r.type)} instead`);
+    return !r || !i ? null : it(r.type, [g, b, h, Ee, m]) ? new at(r, i) : t.error(`Expected first argument to be of type boolean, string, number or null, but found ${k(r.type)} instead`);
   }
   evaluate(e) {
     const t = this.needle.evaluate(e), r = this.haystack.evaluate(e);
     if (!r)
       return !1;
     if (!_(t, ["boolean", "string", "number", "null"]))
-      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${k(E(t))} instead.`);
+      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${k(I(t))} instead.`);
     if (!_(r, ["string", "array"]))
-      throw new x(`Expected second argument to be of type array or string, but found ${k(E(r))} instead.`);
+      throw new x(`Expected second argument to be of type array or string, but found ${k(I(r))} instead.`);
     return r.indexOf(t) >= 0;
   }
   eachChild(e) {
@@ -1344,7 +1344,7 @@ class we {
     const r = t.parse(e[1], 1, m), i = t.parse(e[2], 2, m);
     if (!r || !i)
       return null;
-    if (!it(r.type, [g, b, h, Ie, m]))
+    if (!it(r.type, [g, b, h, Ee, m]))
       return t.error(`Expected first argument to be of type boolean, string, number or null, but found ${k(r.type)} instead`);
     if (e.length === 4) {
       const s = t.parse(e[3], 3, h);
@@ -1355,7 +1355,7 @@ class we {
   evaluate(e) {
     const t = this.needle.evaluate(e), r = this.haystack.evaluate(e);
     if (!_(t, ["boolean", "string", "number", "null"]))
-      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${k(E(t))} instead.`);
+      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${k(I(t))} instead.`);
     let i;
     if (this.fromIndex && (i = this.fromIndex.evaluate(e)), _(r, ["string"])) {
       const s = r.indexOf(t, i);
@@ -1363,7 +1363,7 @@ class we {
     } else {
       if (_(r, ["array"]))
         return r.indexOf(t, i);
-      throw new x(`Expected second argument to be of type array or string, but found ${k(E(r))} instead.`);
+      throw new x(`Expected second argument to be of type array or string, but found ${k(I(r))} instead.`);
     }
   }
   eachChild(e) {
@@ -1400,8 +1400,8 @@ class lt {
         if (typeof y == "number" && Math.floor(y) !== y)
           return p.error("Numeric branch labels must be integer values.");
         if (!r)
-          r = E(y);
-        else if (p.checkSubtype(r, E(y)))
+          r = I(y);
+        else if (p.checkSubtype(r, I(y)))
           return null;
         if (typeof s[String(y)] < "u")
           return p.error("Branch labels must be unique.");
@@ -1420,7 +1420,7 @@ class lt {
   }
   evaluate(e) {
     const t = this.input.evaluate(e);
-    return (E(t) === this.inputType && this.outputs[this.cases[t]] || this.otherwise).evaluate(e);
+    return (I(t) === this.inputType && this.outputs[this.cases[t]] || this.otherwise).evaluate(e);
   }
   eachChild(e) {
     e(this.input), this.outputs.forEach(e), e(this.otherwise);
@@ -1497,7 +1497,7 @@ class Ce {
       return [...t].slice(r, i).join("");
     if (_(t, ["array"]))
       return t.slice(r, i);
-    throw new x(`Expected first argument to be of type array or string, but found ${k(E(t))} instead.`);
+    throw new x(`Expected first argument to be of type array or string, but found ${k(I(t))} instead.`);
   }
   eachChild(e) {
     e(this.input), e(this.beginIndex), this.endIndex && e(this.endIndex);
@@ -1839,12 +1839,12 @@ function te(n, e, t) {
     evaluate(s) {
       const o = this.lhs.evaluate(s), a = this.rhs.evaluate(s);
       if (r && this.hasUntypedArgument) {
-        const l = E(o), u = E(a);
+        const l = I(o), u = I(a);
         if (l.kind !== u.kind || !(l.kind === "string" || l.kind === "number"))
           throw new x(`Expected arguments for "${n}" to be (string, string) or (number, number), but found (${l.kind}, ${u.kind}) instead.`);
       }
       if (this.collator && !r && this.hasUntypedArgument) {
-        const l = E(o), u = E(a);
+        const l = I(o), u = I(a);
         if (l.kind !== "string" || u.kind !== "string")
           return e(s, o, a);
       }
@@ -1970,7 +1970,7 @@ class ft {
   evaluate(e) {
     const t = (r) => {
       const i = r.content.evaluate(e);
-      return E(i) === ce ? new Ze("", i, null, null, null) : new Ze(ie(i), null, r.scale ? r.scale.evaluate(e) : null, r.font ? r.font.evaluate(e).join(",") : null, r.textColor ? r.textColor.evaluate(e) : null);
+      return I(i) === ce ? new Ze("", i, null, null, null) : new Ze(ie(i), null, r.scale ? r.scale.evaluate(e) : null, r.font ? r.font.evaluate(e).join(",") : null, r.textColor ? r.textColor.evaluate(e) : null);
     };
     return new z(this.sections.map(t));
   }
@@ -2019,7 +2019,7 @@ class pt {
       return [...t].length;
     if (Array.isArray(t))
       return t.length;
-    throw new x(`Expected value to be of type string or array, but found ${k(E(t))} instead.`);
+    throw new x(`Expected value to be of type string or array, but found ${k(I(t))} instead.`);
   }
   eachChild(e) {
     e(this.input);
@@ -2433,7 +2433,7 @@ function Mr(n, e, t, r, i) {
         return o;
   return o;
 }
-function Er(n, e, t) {
+function Ir(n, e, t) {
   if (ne(n, e, !0))
     return 0;
   let r = 1 / 0;
@@ -2447,7 +2447,7 @@ function Er(n, e, t) {
   }
   return r;
 }
-function Ir(n, e, t, r) {
+function Er(n, e, t, r) {
   if (!O(e, n.length))
     return NaN;
   for (let s = e[0]; s <= e[1]; ++s)
@@ -2488,10 +2488,10 @@ function Tr(n, e, t, r = 1 / 0) {
       const f = a[c], p = a[l];
       for (const d of e)
         for (let y = 0, C = d.length, M = C - 1; y < C; M = y++) {
-          const I = d[M], T = d[y];
-          if (Be(f, p, I, T))
+          const E = d[M], T = d[y];
+          if (Be(f, p, E, T))
             return 0;
-          o = Math.min(o, bt(f, p, I, T, t));
+          o = Math.min(o, bt(f, p, E, T, t));
         }
     }
   return o;
@@ -2522,13 +2522,13 @@ function xe(n, e, t, r, i = 1 / 0) {
       if (!O(u, n.length))
         return NaN;
       if (e) {
-        const f = Ir(n, u, t, r);
+        const f = Er(n, u, t, r);
         if (isNaN(f) || f === 0)
           return f;
         s = Math.min(s, f);
       } else
         for (let f = u[0]; f <= u[1]; ++f) {
-          const p = Er(n[f], t, r);
+          const p = Ir(n[f], t, r);
           if (s = Math.min(s, p), s === 0)
             return 0;
         }
@@ -2751,7 +2751,7 @@ class L {
     u.length === e.length - 1);
     let l = null;
     for (const [u, c] of a) {
-      l = new Pe(t.registry, Ee, t.path, null, t.scope);
+      l = new Pe(t.registry, Ie, t.path, null, t.scope);
       const f = [];
       let p = !1;
       for (let d = 1; d < e.length; d++) {
@@ -2823,7 +2823,7 @@ function W(n) {
 }
 L.register(vt, {
   error: [
-    En,
+    In,
     [b],
     (n, [e]) => {
       throw new x(e.evaluate(n));
@@ -2832,7 +2832,7 @@ L.register(vt, {
   typeof: [
     b,
     [m],
-    (n, [e]) => k(E(e.evaluate(n)))
+    (n, [e]) => k(I(e.evaluate(n)))
   ],
   "to-rgba": [
     S(h, 4),
@@ -3249,9 +3249,9 @@ L.register(vt, {
 function Pr(n) {
   return Array.isArray(n) ? `(${n.map(k).join(", ")})` : `(${k(n.type)}...)`;
 }
-function Ee(n) {
+function Ie(n) {
   if (n instanceof Le)
-    return Ee(n.boundExpression);
+    return Ie(n.boundExpression);
   if (n instanceof L && n.name === "error")
     return !1;
   if (n instanceof ze)
@@ -3263,7 +3263,7 @@ function Ee(n) {
   const e = n instanceof q || n instanceof N;
   let t = !0;
   return n.eachChild((r) => {
-    e ? t = t && Ee(r) : t = t && r instanceof ee;
+    e ? t = t && Ie(r) : t = t && r instanceof ee;
   }), t ? wt(n) && kt(n, ["zoom", "heatmap-density", "line-progress", "accumulated", "is-supported-script"]) : !1;
 }
 function wt(n) {
@@ -3483,7 +3483,7 @@ function pn(n) {
   return Array.isArray(n) && n.length > 0 && typeof n[0] == "string" && n[0] in vt;
 }
 function dn(n, e) {
-  const t = new Pe(vt, Ee, [], e ? qr(e) : void 0), r = t.parse(n, void 0, void 0, void 0, e && e.type === "string" ? { typeAnnotation: "coerce" } : void 0);
+  const t = new Pe(vt, Ie, [], e ? qr(e) : void 0), r = t.parse(n, void 0, void 0, void 0, e && e.type === "string" ? { typeAnnotation: "coerce" } : void 0);
   return r ? et(new hn(r, e)) : Q(t.errors);
 }
 class tt {
@@ -4022,9 +4022,16 @@ class Gr {
   }
   // Handle button click event
   handleButtonClick(e) {
-    this.activeButtonId === e.id && !e.repeat || (e.repeat || (this.activeButtonId = e.id), this.buttons.forEach((t, r) => {
-      r === this.activeButtonId ? t.style.backgroundColor = "rgba(0, 36, 71, 0.98)" : t.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
-    }), this.map && this.options.onToggle && this.options.onToggle(this, this.map, e.id, e.layerIds));
+    if (this.activeButtonId === e.id && !e.repeat)
+      return;
+    const t = this.activeButtonId;
+    if (t && t !== e.id && this.map) {
+      const r = this.options.buttons.find((i) => i.id === t);
+      r && (this.options.onUntoggle && this.options.onUntoggle(this, this.map, t, r.layerIds), r.onUntoggle && r.onUntoggle(this, this.map, r.layerIds));
+    }
+    e.repeat || (this.activeButtonId = e.id), this.buttons.forEach((r, i) => {
+      i === this.activeButtonId ? r.style.backgroundColor = "rgba(0, 36, 71, 0.98)" : r.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
+    }), this.map && (this.options.onToggle && this.options.onToggle(this, this.map, e.id, e.layerIds), e.onToggle && e.onToggle(this, this.map, e.layerIds));
   }
   // Add control to the map
   onAdd(e) {
