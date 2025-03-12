@@ -34,4 +34,5 @@ export default class ToggleCtl implements IControl {
     getDefaultPosition(): ControlPosition;
     setActiveButton(buttonId: string): void;
     updateButton(buttonId: string, updates: Partial<TgBtnCfg>): void;
+    updateButtonCallback(btnCfgs: Partial<TgBtnCfg>[]): void;
 }
