@@ -4047,7 +4047,7 @@ class Gr {
   onRemove() {
     var e;
     this.map && (this.map.off("resize", this.updateInnerContainerStyle), this.map.off("styledata", this.updateInnerContainerStyle)), this.options.buttons.forEach((t) => {
-      t.cleanup && t.cleanup(this);
+      t.cleanup && t.cleanup(this, this.map);
     }), (e = this.container.parentNode) == null || e.removeChild(this.container), this.map = void 0;
   }
   // Default position of the control

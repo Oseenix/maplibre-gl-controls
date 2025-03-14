@@ -6,7 +6,7 @@ export type TgBtnCfg = {
     layerIds: string[];
     repeat?: boolean;
     setup?: (ctl: ToggleCtl, map: MlMap | undefined) => void;
-    cleanup?: (ctl: ToggleCtl) => void;
+    cleanup?: (ctl: ToggleCtl, map: MlMap | undefined) => void;
     onToggle?: (ctl: ToggleCtl, map: MlMap) => void;
     onUntoggle?: (ctl: ToggleCtl, map: MlMap) => void;
 };
