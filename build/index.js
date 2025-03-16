@@ -3974,7 +3974,7 @@ class Gr {
     const e = document.createElement("div");
     e.classList.add("maplibregl-ctrl"), e.style.height = "100%", e.style.display = "flex", e.style.flexDirection = "column", e.style.alignItems = "center", e.style.backgroundColor = "transparent";
     const t = document.createElement("div");
-    return t.classList.add("maplibregl-ctrl", "maplibregl-ctrl-group"), t.style.backgroundColor = "transparent", t.style.padding = "5px", t.style.borderRadius = "4px", t.style.display = "flex", t.style.flexDirection = "column", t.style.gap = "4px", this.options.buttons.forEach((r) => {
+    return t.classList.add("maplibregl-ctrl", "maplibregl-ctrl-group"), t.style.backgroundColor = "transparent", t.style.padding = "5px", t.style.border = "none", t.style.borderRadius = "4px", t.style.display = "flex", t.style.flexDirection = "column", t.style.gap = "4px", this.options.buttons.forEach((r) => {
       const i = this.createButton(r);
       t.appendChild(i), this.buttons.set(r.id, i);
     }), this.container = t, this.updateLayout(), e.appendChild(this.container), { outContainer: e, container: t };
