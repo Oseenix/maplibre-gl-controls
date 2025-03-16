@@ -3962,11 +3962,12 @@ class Gr {
     v(this, "container");
     v(this, "outContainer");
     v(this, "options");
+    v(this, "defaultActiveId");
     v(this, "activeButtonId", null);
     v(this, "buttons", /* @__PURE__ */ new Map());
     this.options = e;
     const { outContainer: t, container: r } = this.createContainer();
-    this.outContainer = t, this.container = r;
+    this.outContainer = t, this.container = r, this.defaultActiveId = this.options.defaultActive;
   }
   // Create the outer container for the control
   createContainer() {
@@ -4035,13 +4036,17 @@ class Gr {
   }
   // Add control to the map
   onAdd(e) {
-    return this.map = e, this.options.buttons.length > 0 && !this.activeButtonId && this.handleButtonClick(this.options.buttons[0]), this.map.on("resize", () => {
+    if (this.map = e, this.map.on("resize", () => {
       this.updateInnerContainerStyle();
     }), this.map.on("styledata", () => {
       this.updateInnerContainerStyle();
     }), this.options.buttons.forEach((t) => {
       t.setup && t.setup(this, this.map);
-    }), this.container;
+    }), this.options.buttons.length > 0 && !this.activeButtonId) {
+      const t = this.options.buttons.find((r) => r.id === this.defaultActiveId);
+      this.handleButtonClick(t || this.options.buttons[0]);
+    }
+    return this.container;
   }
   // Remove control from the map
   onRemove() {
@@ -4058,6 +4063,10 @@ class Gr {
   setActiveButton(e) {
     const t = this.options.buttons.find((r) => r.id === e);
     t && this.handleButtonClick(t);
+  }
+  getActiveButton() {
+    const e = this.activeButtonId || this.defaultActiveId, t = this.options.buttons.find((r) => r.id === e);
+    return t || this.options.buttons[0];
   }
   // New method to update a specific button
   updateButton(e, t) {

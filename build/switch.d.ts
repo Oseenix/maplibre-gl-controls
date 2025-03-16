@@ -12,6 +12,7 @@ export type TgBtnCfg = {
 };
 export type ToggleCtlOptions = {
     buttons: TgBtnCfg[];
+    defaultActive: string;
     position?: ControlPosition;
     onToggle?: (ctl: ToggleCtl, map: MlMap, activeConfig: TgBtnCfg) => void;
     onUntoggle?: (ctl: ToggleCtl, map: MlMap, config: TgBtnCfg) => void;
@@ -21,6 +22,7 @@ export default class ToggleCtl implements IControl {
     private container;
     private outContainer;
     private options;
+    private defaultActiveId;
     private activeButtonId;
     private buttons;
     constructor(options: ToggleCtlOptions);
@@ -33,6 +35,7 @@ export default class ToggleCtl implements IControl {
     onRemove(): void;
     getDefaultPosition(): ControlPosition;
     setActiveButton(buttonId: string): void;
+    getActiveButton(): TgBtnCfg;
     updateButton(buttonId: string, updates: Partial<TgBtnCfg>): void;
     updateButtonCallback(btnCfgs: Partial<TgBtnCfg>[]): void;
 }
