@@ -166,6 +166,43 @@ const windColors = {
   ],
 };
 
+export const wavePeriodColors = {
+  'fill-opacity': 1.0,
+  'fill-color': [
+    'step',
+    ['get', 'speed'],
+    '#0e00cc',
+    0.18750, '#0e66cc', // 0.5
+    0.21875, '#0299ff', // 1.0
+    0.25000, '#66ccff', // 1.5
+    0.28125, '#66e6ff', // 2.0
+    0.31250, '#aaffee', // 2.5
+    0.34375, '#00ffcb', // 3.0
+    0.37500, '#00dd99', // 3.5
+    0.40625, '#00cc88', // 4.0
+    0.43750, '#a8ff04',
+    0.46875, '#feff32',
+    0.50000, '#66cc00',
+    0.53125, '#508000',
+    0.56250, '#ffcc65',
+    0.59375, '#ff9966',
+    0.62500, '#ff6602',
+    0.65625, '#d45a4a',
+    0.68750, '#f04020',
+    0.71875, '#a83838',
+    0.75000, '#ffccff',
+    0.78125, '#ff99ff',
+    0.81250, '#ff66ff',
+    0.84375, '#cc02ff',
+    0.87500, '#9900cc',
+    // 0.75000, '#402060',
+    // 0.78125, '#c0c0c0',
+    // 0.81250, '#999999',
+    // 0.84375, '#666666',
+    // 0.87500, '#333333', // 1.000, 14
+  ],
+};
+
 const waveColors = {
   'fill-opacity': 1.0,
   'fill-color': [
@@ -203,11 +240,15 @@ const waveColors = {
   ],
 };
 
-const colorbar = new ColorBar(windColors, {
+// const colorbar = new ColorBar(wavePeriodColors, {
+const colorbar = new ColorBar(waveColors, {
 	title: "Wind",
   unit: "m/s",
-  max: 32,
+  // max: 32,
+  max: 16,
   position: "top-left",
+  // tickValue: 2,
+  tickMinStep: 1,
 });
 
 map.addControl(colorbar);

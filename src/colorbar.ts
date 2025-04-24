@@ -16,6 +16,7 @@ type Options = {
   height?: string;  // Optional width with a default 272px
   max?: number;     // Optional max with a default 30
   decimal?: number; // Optional decimal with a default 1
+  tickMinStep?: number; // Optional setup min step, with a default 0 not limit
 };
 
 interface ColorStep {
@@ -94,7 +95,8 @@ export default class ColorBar implements IControl {
       width: "56px",    // Default width
       height: "272px",  // Default width
       max: 30,          // Default max
-      decimal: 1,          // Default max
+      decimal: 1,       // Default max
+      tickMinStep: 0,   // Default tick value
       ...options,       // Override with user-provided options
     };
 
@@ -109,6 +111,10 @@ export default class ColorBar implements IControl {
     this.container.appendChild(this.titleDiv);
     this.container.appendChild(this.unitDiv);
 
+  }
+
+  private getTickMinStep(): number {
+    return this.options.tickMinStep || 0;
   }
 
 	private getWidth(): string {
@@ -208,10 +214,11 @@ export default class ColorBar implements IControl {
   private createLabel(_step: ColorStep): HTMLElement {
     const label = document.createElement("div");
     label.classList.add("map_colorbar_label");
+    label.style.marginTop = "0px";
     label.style.marginLeft = "0px";
     label.style.marginRight = "2px";
     label.style.color = "white";
-    label.style.fontSize = "10px";
+    label.style.fontSize = "9px";
     label.textContent = "";
     return label;
   }
@@ -223,6 +230,7 @@ export default class ColorBar implements IControl {
       legendItem.style.display = "flex";
       legendItem.style.alignItems = "center";
       legendItem.style.marginBottom = "0px";
+      legendItem.style.marginTop = "0px";
       legendItem.style.marginLeft = "10px";
 
       const colorBox = this.createColorBox(color);
@@ -254,21 +262,31 @@ export default class ColorBar implements IControl {
     this.updateInnerContainerStyle(this.outContainer, this.container);
     const { stepHeight, showInterval } = this.calculateHeights();
 
+    let lastValIdx = this.colorSteps.length - 1;
     [...this.legendItems].reverse().forEach((legendItem, index) => {
       const colorBox = legendItem.querySelector(".map_colorbar_color_box") as HTMLElement;
       const label = legendItem.querySelector(".map_colorbar_label") as HTMLElement;
 
-      legendItem.style.height = `${stepHeight}px`;
-      colorBox.style.height = `${stepHeight}px`;
-      let reverseIndex = this.colorSteps.length - 1 - index;
+      const height = index === 0 ? stepHeight + 3 : stepHeight;
 
-      if (
-        index % showInterval !== 0
-      ) {
+      legendItem.style.height = `${stepHeight}px`;
+      colorBox.style.height = `${height}px`;
+      let reverseIndex = this.colorSteps.length - 1 - index;
+      const currentVal = this.colorSteps[reverseIndex].speed;
+
+      const lastVal = this.colorSteps[lastValIdx].speed;
+      const diff = Math.abs(currentVal - lastVal);
+
+      let blank = (this.getTickMinStep() == 0
+                    && showInterval > 0
+                    && index % showInterval !== 0) || diff < this.getTickMinStep();
+
+      if (blank && reverseIndex < lastValIdx) {
         label.textContent = "";
       } else {
-        label.textContent = `- ${this.colorSteps[reverseIndex]
-                                  .speed.toFixed(this.options.decimal)}`;
+        label.textContent = `- ${currentVal.toFixed(this.options.decimal)}`;
+        lastValIdx = reverseIndex;
+        label.style.marginTop = `${stepHeight}px`;
       }
     });
   }
@@ -406,7 +424,6 @@ export default class ColorBar implements IControl {
     // Sort steps by speed in ascending order
     return steps.sort((a, b) => b.speed - a.speed);
   }
-
 
   /**
    * Sets a property using a Mapbox style expression.
