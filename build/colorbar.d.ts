@@ -8,6 +8,7 @@ type Options = {
     height?: string;
     max?: number;
     decimal?: number;
+    tickMinStep?: number;
 };
 interface ColorStep {
     speed: number;
@@ -24,6 +25,7 @@ export default class ColorBar implements IControl {
     private legendItems;
     propertySpec: Record<string, any>;
     constructor(propertySpec: any, options: Options);
+    private getTickMinStep;
     private getWidth;
     private getHeight;
     private getHeightInPixels;
