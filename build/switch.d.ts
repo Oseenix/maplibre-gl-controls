@@ -29,6 +29,7 @@ export default class ToggleCtl implements IControl {
     private createContainer;
     updateInnerContainerStyle(): void;
     private updateLayout;
+    private calculateFontSize;
     private createButton;
     private handleButtonClick;
     onAdd(map: MlMap): HTMLElement;

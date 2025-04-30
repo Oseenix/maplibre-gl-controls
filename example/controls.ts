@@ -291,13 +291,13 @@ const layerToggleControl = new ToggleCtl({
     {
       id: 'wave',
       svg: wave_icon, // Road icon SVG
-      label: 'Wave',
+      label: 'Wave Height',
       layerIds: ['roads-layer', 'highways-layer']
     },
     {
       id: 'wind',
       svg: wind_icon, // Building icon SVG
-      label: 'Wind',
+      label: 'Wind Speed',
       layerIds: ['buildings-layer']
     },
     {
