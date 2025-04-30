@@ -21,12 +21,17 @@ export type ToggleCtlOptions = {
   onUntoggle?: (ctl: ToggleCtl, map: MlMap, config: TgBtnCfg) => void;
 };
 
+const iconWidth = 20;
+const btnPadingX = 6;
+const btnPadingY = 4;
+const btnGap = 4;
+
 // Create an SVG image element
 const makeImg = (svg: string): HTMLImageElement => {
   const img = document.createElement('img');
   img.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-  img.style.width = '20px';
-  img.style.height = '20px';
+  img.style.width = `${iconWidth}px`;
+  img.style.height = `${iconWidth}px`;
   img.style.color = 'white';
   return img;
 };
@@ -173,18 +178,52 @@ export default class ToggleCtl implements IControl {
     // Recalculate max width when labels are toggled
     const buttonElements = Array.from(this.buttons.values());
     const maxWidth = Math.max(...buttonElements.map(btn => btn.offsetWidth));
-    buttonElements.forEach(btn => {
-      btn.style.width = isSmallScreen ? '34px' : `${maxWidth}px`;
+
+    const targetWidth = isSmallScreen ? '34px' : `${maxWidth}px`;
+    const minFontSize = 12;
+
+    const labels = buttonElements.map(btn => {
+      btn.style.width = targetWidth;
+
+      if (isSmallScreen) return null;
+
+      const label = btn.querySelector('span');
+      if (!label || !label.textContent) return null;
+
+      return [label, this.calculateFontSize(maxWidth, label.textContent)] as const;
+      // return { element: label, fontSize: this.calculateFontSize(maxWdth - iconWidth, label.textContent) };
+    }).filter((item): item is readonly [HTMLElement, number] => !!item);
+
+    // Apply minimum font size across all labels
+    const smallestFontSize = Math.min(minFontSize, ...labels.map(([, fontSize]) => fontSize));
+    labels.forEach(([label]) => {
+      label.style.fontSize = `${smallestFontSize}px`;
     });
   };
+
+  // Function to calculate font size based on width and character count
+  private calculateFontSize(btnWidth: number, text: string, maxFontSize: number = 12, minFontSize: number = 6) {
+    const widthPx = btnWidth - iconWidth - btnPadingX * 2 - btnGap; // Adjusted width for text
+    const charCount = text.replace(/<[^>]+>/g, '').length; // Strip HTML tags to count plain text
+    if (charCount === 0) return; // Avoid division by zero
+
+    // Scaling factor: approximate character width-to-height ratio (adjust as needed)
+    const scalingFactor = 0.5; // 0.5–0.7 works for most fonts
+    let fontSize = Math.floor(widthPx / (charCount * scalingFactor));
+
+    // Clamp font size between min and max
+    fontSize = Math.min(maxFontSize, Math.max(minFontSize, fontSize));
+
+    return fontSize;
+  }
 
   // Create a single button with icon and label
   private createButton(config: TgBtnCfg): HTMLButtonElement {
     const button = document.createElement('button');
     button.style.display = 'flex';
     button.style.alignItems = 'center';
-    button.style.gap = '6px';
-    button.style.padding = '4px 8px';
+    button.style.gap = `${btnGap}px`;
+    button.style.padding = `${btnPadingY}px ${btnPadingX}px`;
     button.style.border = 'none';
     // button.style.backgroundColor = 'transparent';
     button.style.cursor = 'pointer';
@@ -200,7 +239,7 @@ export default class ToggleCtl implements IControl {
     // Add label (can be English or Chinese)
     const label = document.createElement('span');
     label.textContent = config.label; // e.g., "Roads"
-    label.style.fontSize = '12px';
+    label.style.fontSize = '10px';
     label.style.color = 'inherit';
     button.appendChild(label);
 
