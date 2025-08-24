@@ -17,6 +17,7 @@ type Options = {
   max?: number;     // Optional max with a default 30
   decimal?: number; // Optional decimal with a default 1
   tickMinStep?: number; // Optional setup min step, with a default 0 not limit
+  onClick?: (event: MouseEvent, options: Options) => void; // Optional click callback with current options
 };
 
 interface ColorStep {
@@ -110,6 +111,11 @@ export default class ColorBar implements IControl {
 
     this.container.appendChild(this.titleDiv);
     this.container.appendChild(this.unitDiv);
+
+    // Add click event listener to innerContainer if onClick callback is provided
+    if (this.options.onClick) {
+      this.container.addEventListener('click', this.handleContainerClick);
+    }
 
   }
 
@@ -326,6 +332,61 @@ export default class ColorBar implements IControl {
     return this.options.position || 'top-left';
   };
 
+  /**
+   * Updates the options and refreshes the control
+   * @param newOptions Partial options to update
+   */
+  public updateOptions(newOptions: Partial<Options>): void {
+    // Update the options
+    this.options = { ...this.options, ...newOptions };
+
+    // Update title if changed
+    if (newOptions.title !== undefined) {
+      this.titleDiv.innerHTML = newOptions.title;
+    }
+
+    // Update unit if changed
+    if (newOptions.unit !== undefined) {
+      this.unitDiv.innerHTML = `(${newOptions.unit})`;
+    }
+
+    // Update container dimensions if changed
+    if (newOptions.width !== undefined || newOptions.height !== undefined) {
+      this.container.style.width = this.getWidth();
+      this.container.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;
+    }
+
+    // Recalculate color steps if max changed
+    if (newOptions.max !== undefined) {
+      this.colorSteps = this.getColorSteps();
+      // Reinitialize legend items with new color steps
+      this.legendItems.forEach(item => item.remove());
+      this.legendItems = [];
+      this.initializeLegendItems();
+    }
+
+    // Update decimal precision if changed
+    if (newOptions.decimal !== undefined || newOptions.tickMinStep !== undefined) {
+      this.update();
+    }
+
+    // Update click event listener if onClick changed
+    if (newOptions.onClick !== undefined) {
+      // Remove existing click listener
+      this.container.removeEventListener('click', this.handleContainerClick);
+    }
+
+    // Refresh the control
+    this.update();
+  }
+
+  // Handler for container click events
+  private handleContainerClick = (event: MouseEvent) => {
+    if (this.options.onClick) {
+      this.options.onClick(event, this.options);
+    }
+  };
+
 	updateInnerContainerStyle(outContainer: HTMLElement, container: HTMLElement): void {
     if (!this.map) {
       return;
@@ -454,4 +515,3 @@ export default class ColorBar implements IControl {
     }
   }
 }
-

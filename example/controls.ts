@@ -306,14 +306,15 @@ const layerToggleControl = new ToggleCtl({
       label: 'Fullscreen',
       layerIds: ['roads-layer', 'highways-layer'],
       repeat: true,
-      setup: (ctl: ToggleCtl, map: maplibregl.Map) => {
+      setup: (ctl: ToggleCtl, map: maplibregl.Map | undefined) => {
         document.addEventListener('fullscreenchange', () => fullscreenHandler(ctl));
       },
-      cleanup: (ctl: ToggleCtl) => {
+      cleanup: (ctl: ToggleCtl, map: maplibregl.Map | undefined) => {
         document.removeEventListener('fullscreenchange', () => fullscreenHandler(ctl));
       }
     }
   ],
+  defaultActive: 'wave',
   position: 'top-right',
   onToggle: (ctl: ToggleCtl, map: maplibregl.Map,
              config: TgBtnCfg) => {;
@@ -340,4 +341,3 @@ const layerToggleControl = new ToggleCtl({
 });
 
 map.addControl(layerToggleControl);
-

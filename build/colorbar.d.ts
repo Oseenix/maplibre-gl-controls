@@ -9,6 +9,7 @@ type Options = {
     max?: number;
     decimal?: number;
     tickMinStep?: number;
+    onClick?: (event: MouseEvent, options: Options) => void;
 };
 interface ColorStep {
     speed: number;
@@ -41,6 +42,12 @@ export default class ColorBar implements IControl {
     onRemove(): void;
     refresh(): void;
     getDefaultPosition(): ControlPosition;
+    /**
+     * Updates the options and refreshes the control
+     * @param newOptions Partial options to update
+     */
+    updateOptions(newOptions: Partial<Options>): void;
+    private handleContainerClick;
     updateInnerContainerStyle(outContainer: HTMLElement, container: HTMLElement): void;
     /**
      * Parses the "fill-color" property and extracts speed-to-color mappings.

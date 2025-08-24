@@ -26,10 +26,11 @@ const btnPadingX = 6;
 const btnPadingY = 4;
 const btnGap = 4;
 
-// Create an SVG image element
-const makeImg = (svg: string): HTMLImageElement => {
+// Create an SVG image element with alt text for SEO
+const makeImg = (svg: string, alt: string): HTMLImageElement => {
   const img = document.createElement('img');
   img.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  img.alt = alt; // Set alt text for SEO and accessibility
   img.style.width = `${iconWidth}px`;
   img.style.height = `${iconWidth}px`;
   img.style.color = 'white';
@@ -232,8 +233,8 @@ export default class ToggleCtl implements IControl {
     button.style.color = 'white'
 	  button.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
 
-    // Add icon
-    const icon = makeImg(config.svg);
+    // Add icon with alt text for SEO
+    const icon = makeImg(config.svg, config.label);
     button.appendChild(icon);
 
     // Add label (can be English or Chinese)
@@ -371,8 +372,13 @@ export default class ToggleCtl implements IControl {
 
     // Update button DOM
     const icon = button.querySelector('img');
-    if (icon && updates.svg) {
-      icon.src = `data:image/svg+xml,${encodeURIComponent(updates.svg)}`;
+    if (icon) {
+      if (updates.svg) {
+        icon.src = `data:image/svg+xml,${encodeURIComponent(updates.svg)}`;
+      }
+      if (updates.label) {
+        icon.alt = updates.label; // Update alt text when label changes
+      }
     }
     const label = button.querySelector('span');
     if (label && updates.label) {
@@ -399,4 +405,3 @@ export default class ToggleCtl implements IControl {
     })
   }
 }
-

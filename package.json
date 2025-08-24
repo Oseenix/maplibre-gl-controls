@@ -7,7 +7,7 @@
 		"test": "vitest src --coverage --coverage.provider=v8",
 		"build": "vite build -c vite.config.example.ts",
 		"build:pkg": "vite build && tsc",
-		"prepare": "npm run build:pkg",
+		"prepare": "pnpm run build:pkg",
 		"dev": "vite -c vite.config.example.ts"
 	},
 	"repository": {
@@ -23,6 +23,7 @@
 	"devDependencies": {
 		"@vitest/browser": "^2.1.8",
 		"@vitest/coverage-v8": "^2.1.8",
+		"fast-glob": "^3.3.3",
 		"jma-utils": "^0.1.0",
 		"maplibre-gl": "^5.0.0",
 		"playwright": "^1.49.1",
@@ -45,5 +46,6 @@
 	},
 	"dependencies": {
 		"@maplibre/maplibre-gl-style-spec": "^22.0.1"
-	}
+	},
+	"packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

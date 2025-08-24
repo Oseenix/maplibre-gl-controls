@@ -1,5 +1,19 @@
 import { defineConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
+import fg from 'fast-glob';
+
+// Function to automatically find all HTML files in the example directory
+async function getHtmlInputs() {
+  const htmlFiles = await fg('example/*.html');
+  
+  const inputs: Record<string, string> = {};
+  htmlFiles.forEach((file: string) => {
+    const name = file.replace('example/', '').replace('.html', '');
+    inputs[name] = file;
+  });
+  
+  return inputs;
+}
 
 export default defineConfig({
 	root: './example',
@@ -9,11 +23,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     emptyOutDir: true,
 		rollupOptions: {
-			input: {
-        index: 'example/index.html',
-				raster: 'example/raster.html',
-				vector: 'example/vector.html',
-			},
+			input: await getHtmlInputs(),
 		},
 	},
   plugins: [
@@ -23,4 +33,3 @@ export default defineConfig({
     }),
   ],
 });
-

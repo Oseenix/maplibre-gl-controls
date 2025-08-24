@@ -175,7 +175,7 @@ class ie {
     return this.bindings[t] ? !0 : this.parent ? this.parent.has(t) : !1;
   }
 }
-const Et = { kind: "null" }, h = { kind: "number" }, b = { kind: "string" }, g = { kind: "boolean" }, j = { kind: "color" }, Tt = { kind: "projectionDefinition" }, Q = { kind: "object" }, m = { kind: "value" }, $n = { kind: "error" }, $t = { kind: "collator" }, St = { kind: "formatted" }, At = { kind: "padding" }, ct = { kind: "resolvedImage" }, Dt = { kind: "variableAnchorOffsetCollection" };
+const Et = { kind: "null" }, h = { kind: "number" }, b = { kind: "string" }, g = { kind: "boolean" }, z = { kind: "color" }, Tt = { kind: "projectionDefinition" }, Q = { kind: "object" }, m = { kind: "value" }, $n = { kind: "error" }, $t = { kind: "collator" }, St = { kind: "formatted" }, At = { kind: "padding" }, ct = { kind: "resolvedImage" }, Dt = { kind: "variableAnchorOffsetCollection" };
 function S(n, t) {
   return {
     kind: "array",
@@ -195,7 +195,7 @@ const Sn = [
   h,
   b,
   g,
-  j,
+  z,
   Tt,
   St,
   Q,
@@ -235,17 +235,17 @@ function Qe(n) {
   return n = n % 360, n < 0 && (n += 360), n;
 }
 function Ke([n, t, e, r]) {
-  n = Ot(n), t = Ot(t), e = Ot(e);
+  n = Ht(n), t = Ht(t), e = Ht(e);
   let i, s;
-  const o = Ht((0.2225045 * n + 0.7168786 * t + 0.0606169 * e) / Ze);
-  n === t && t === e ? i = s = o : (i = Ht((0.4360747 * n + 0.3850649 * t + 0.1430804 * e) / Xe), s = Ht((0.0139322 * n + 0.0971045 * t + 0.7141733 * e) / Ge));
+  const o = Ot((0.2225045 * n + 0.7168786 * t + 0.0606169 * e) / Ze);
+  n === t && t === e ? i = s = o : (i = Ot((0.4360747 * n + 0.3850649 * t + 0.1430804 * e) / Xe), s = Ot((0.0139322 * n + 0.0971045 * t + 0.7141733 * e) / Ge));
   const a = 116 * o - 16;
   return [a < 0 ? 0 : a, 500 * (i - o), 200 * (o - s), r];
 }
-function Ot(n) {
+function Ht(n) {
   return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
 }
-function Ht(n) {
+function Ot(n) {
   return n > An ? Math.pow(n, 1 / 3) : n / Ye + Je;
 }
 function tn([n, t, e, r]) {
@@ -279,10 +279,10 @@ function Fn([n, t, e, r]) {
   }
   return [i(0), i(8), i(4), r];
 }
-function jn(n) {
+function zn(n) {
   if (n = n.toLowerCase().trim(), n === "transparent")
     return [0, 0, 0, 0];
-  const t = zn[n];
+  const t = jn[n];
   if (t) {
     const [i, s, o] = t;
     return [i / 255, s / 255, o / 255, 1];
@@ -388,7 +388,7 @@ function J(n, t, e) {
 function Te(n) {
   return !n.some(Number.isNaN);
 }
-const zn = {
+const jn = {
   aliceblue: [240, 248, 255],
   antiquewhite: [250, 235, 215],
   aqua: [0, 255, 255],
@@ -576,7 +576,7 @@ class w {
       return t;
     if (typeof t != "string")
       return;
-    const e = jn(t);
+    const e = zn(t);
     if (e)
       return new w(...e, !1);
   }
@@ -691,18 +691,18 @@ class Zt {
     this.text = t, this.image = e, this.scale = r, this.fontStack = i, this.textColor = s;
   }
 }
-class z {
+class j {
   constructor(t) {
     this.sections = t;
   }
   static fromString(t) {
-    return new z([new Zt(t, null, null, null, null)]);
+    return new j([new Zt(t, null, null, null, null)]);
   }
   isEmpty() {
     return this.sections.length === 0 ? !0 : !this.sections.some((t) => t.text.length !== 0 || t.image && t.image.name.length !== 0);
   }
   static factory(t) {
-    return t instanceof z ? t : z.fromString(t);
+    return t instanceof j ? t : j.fromString(t);
   }
   toString() {
     return this.sections.length === 0 ? "" : this.sections.map((t) => t.text).join("");
@@ -790,7 +790,7 @@ class D {
     return new D(o);
   }
 }
-class H {
+class O {
   constructor(t) {
     this.name = t.name, this.available = t.available;
   }
@@ -798,7 +798,7 @@ class H {
     return this.name;
   }
   static fromString(t) {
-    return t ? new H({ name: t, available: !1 }) : null;
+    return t ? new O({ name: t, available: !1 }) : null;
   }
 }
 class A {
@@ -823,7 +823,7 @@ function en(n, t, e, r) {
   return typeof n == "number" && n >= 0 && n <= 255 && typeof t == "number" && t >= 0 && t <= 255 && typeof e == "number" && e >= 0 && e <= 255 ? typeof r > "u" || typeof r == "number" && r >= 0 && r <= 1 ? null : `Invalid rgba value [${[n, t, e, r].join(", ")}]: 'a' must be between 0 and 1.` : `Invalid rgba value [${(typeof r == "number" ? [n, t, e, r] : [n, t, e]).join(", ")}]: 'r', 'g', and 'b' must be between 0 and 255.`;
 }
 function at(n) {
-  if (n === null || typeof n == "string" || typeof n == "boolean" || typeof n == "number" || n instanceof A || n instanceof w || n instanceof oe || n instanceof z || n instanceof $ || n instanceof D || n instanceof H)
+  if (n === null || typeof n == "string" || typeof n == "boolean" || typeof n == "number" || n instanceof A || n instanceof w || n instanceof oe || n instanceof j || n instanceof $ || n instanceof D || n instanceof O)
     return !0;
   if (Array.isArray(n)) {
     for (const t of n)
@@ -848,18 +848,18 @@ function I(n) {
   if (typeof n == "number")
     return h;
   if (n instanceof w)
-    return j;
+    return z;
   if (n instanceof A)
     return Tt;
   if (n instanceof oe)
     return $t;
-  if (n instanceof z)
+  if (n instanceof j)
     return St;
   if (n instanceof $)
     return At;
   if (n instanceof D)
     return Dt;
-  if (n instanceof H)
+  if (n instanceof O)
     return ct;
   if (Array.isArray(n)) {
     const t = n.length;
@@ -881,7 +881,7 @@ function I(n) {
 }
 function it(n) {
   const t = typeof n;
-  return n === null ? "" : t === "string" || t === "number" || t === "boolean" ? String(n) : n instanceof w || n instanceof A || n instanceof z || n instanceof $ || n instanceof D || n instanceof H ? n.toString() : JSON.stringify(n);
+  return n === null ? "" : t === "string" || t === "number" || t === "boolean" ? String(n) : n instanceof w || n instanceof A || n instanceof j || n instanceof $ || n instanceof D || n instanceof O ? n.toString() : JSON.stringify(n);
 }
 class tt {
   constructor(t, e) {
@@ -970,7 +970,7 @@ class N {
 }
 const $e = {
   "to-boolean": g,
-  "to-color": j,
+  "to-color": z,
   "to-number": h,
   "to-string": b
 };
@@ -1045,9 +1045,9 @@ class q {
         throw new x(`Could not convert ${JSON.stringify(e)} to number.`);
       }
       case "formatted":
-        return z.fromString(it(this.args[0].evaluate(t)));
+        return j.fromString(it(this.args[0].evaluate(t)));
       case "resolvedImage":
-        return H.fromString(it(this.args[0].evaluate(t)));
+        return O.fromString(it(this.args[0].evaluate(t)));
       case "projectionDefinition":
         return this.args[0].evaluate(t);
       default:
@@ -1061,7 +1061,7 @@ class q {
     return this.args.every((t) => t.outputDefined());
   }
 }
-function On(n, t) {
+function Hn(n, t) {
   if (n.length <= 1)
     return [n];
   const r = [];
@@ -1078,7 +1078,7 @@ function nn(n) {
     s = n[e], o = n[i], t += (o.x - s.x) * (s.y + o.y);
   return t;
 }
-function Hn(n) {
+function On(n) {
   const t = n.length;
   for (let e = 0, r; e < t; e++) {
     const i = nn(n[e]);
@@ -1115,7 +1115,7 @@ class rn {
     if (typeof t != "number" || (t = Se[this.feature.type], t === "Unknown"))
       return t;
     const e = this.geometry();
-    return e.length === 1 ? t : t !== "Polygon" ? `Multi${t}` : Hn(e) ? "MultiPolygon" : "Polygon";
+    return e.length === 1 ? t : t !== "Polygon" ? `Multi${t}` : On(e) ? "MultiPolygon" : "Polygon";
   }
   geometry() {
     return this.feature && "geometry" in this.feature ? this.feature.geometry : null;
@@ -1520,7 +1520,7 @@ function Ft(n, t) {
       throw new x("Input is not a number.");
   return 0;
 }
-class jt {
+class zt {
   constructor(t, e, r) {
     this.type = t, this.input = e, this.labels = [], this.outputs = [];
     for (const [i, s] of r)
@@ -1548,7 +1548,7 @@ class jt {
         return null;
       s = s || f.type, i.push([a, f]);
     }
-    return new jt(s, r, i);
+    return new zt(s, r, i);
   }
   evaluate(t) {
     const e = this.labels, r = this.outputs;
@@ -1663,7 +1663,7 @@ class P {
       return null;
     const a = [];
     let l = null;
-    r === "interpolate-hcl" || r === "interpolate-lab" ? l = j : e.expectedType && e.expectedType.kind !== "value" && (l = e.expectedType);
+    r === "interpolate-hcl" || r === "interpolate-lab" ? l = z : e.expectedType && e.expectedType.kind !== "value" && (l = e.expectedType);
     for (let u = 0; u < o.length; u += 2) {
       const c = o[u], f = o[u + 1], p = u + 3, d = u + 4;
       if (typeof c != "number")
@@ -1675,7 +1675,7 @@ class P {
         return null;
       l = l || y.type, a.push([c, y]);
     }
-    return !G(l, h) && !G(l, Tt) && !G(l, j) && !G(l, At) && !G(l, Dt) && !G(l, S(h)) ? e.error(`Type ${C(l)} is not interpolatable.`) : new P(l, r, i, s, a);
+    return !G(l, h) && !G(l, Tt) && !G(l, z) && !G(l, At) && !G(l, Dt) && !G(l, S(h)) ? e.error(`Type ${C(l)} is not interpolatable.`) : new P(l, r, i, s, a);
   }
   evaluate(t) {
     const e = this.labels, r = this.outputs;
@@ -1754,7 +1754,7 @@ class lt {
   evaluate(t) {
     let e = null, r = 0, i;
     for (const s of this.args)
-      if (r++, e = s.evaluate(t), e && e instanceof H && !e.available && (i || (i = e.name), e = null, r === this.args.length && (e = i)), e !== null)
+      if (r++, e = s.evaluate(t), e && e instanceof O && !e.available && (i || (i = e.name), e = null, r === this.args.length && (e = i)), e !== null)
         break;
     return e;
   }
@@ -1859,7 +1859,7 @@ function et(n, t, e) {
   };
 }
 const sr = et("==", Zn, sn), or = et("!=", Gn, tr), ar = et("<", Jn, er), lr = et(">", Yn, nr), ur = et("<=", Qn, rr), cr = et(">=", Kn, ir);
-class zt {
+class jt {
   constructor(t, e, r) {
     this.type = $t, this.locale = r, this.caseSensitive = t, this.diacriticSensitive = e;
   }
@@ -1876,7 +1876,7 @@ class zt {
     if (!s)
       return null;
     let o = null;
-    return r.locale && (o = e.parse(r.locale, 1, b), !o) ? null : new zt(i, s, o);
+    return r.locale && (o = e.parse(r.locale, 1, b), !o) ? null : new jt(i, s, o);
   }
   evaluate(t) {
     return new oe(this.caseSensitive.evaluate(t), this.diacriticSensitive.evaluate(t), this.locale ? this.locale.evaluate(t) : null);
@@ -1951,7 +1951,7 @@ class he {
         if (a["text-font"] && (u = e.parse(a["text-font"], 1, S(b)), !u))
           return null;
         let c = null;
-        if (a["text-color"] && (c = e.parse(a["text-color"], 1, j), !c))
+        if (a["text-color"] && (c = e.parse(a["text-color"], 1, z), !c))
           return null;
         const f = i[i.length - 1];
         f.scale = l, f.font = u, f.textColor = c;
@@ -1972,7 +1972,7 @@ class he {
       const i = r.content.evaluate(t);
       return I(i) === ct ? new Zt("", i, null, null, null) : new Zt(it(i), null, r.scale ? r.scale.evaluate(t) : null, r.font ? r.font.evaluate(t).join(",") : null, r.textColor ? r.textColor.evaluate(t) : null);
     };
-    return new z(this.sections.map(e));
+    return new j(this.sections.map(e));
   }
   eachChild(t) {
     for (const e of this.sections)
@@ -1993,7 +1993,7 @@ class pe {
     return r ? new pe(r) : e.error("No image name provided.");
   }
   evaluate(t) {
-    const e = this.input.evaluate(t), r = H.fromString(e);
+    const e = this.input.evaluate(t), r = O.fromString(e);
     return r && t.availableImages && (r.available = t.availableImages.indexOf(e) > -1), r;
   }
   eachChild(t) {
@@ -2291,11 +2291,11 @@ class cn {
     e[t] = s;
   }
 }
-const Ir = 6378.137, Fe = 1 / 298.257223563, je = Fe * (2 - Fe), ze = Math.PI / 180;
+const Ir = 6378.137, Fe = 1 / 298.257223563, ze = Fe * (2 - Fe), je = Math.PI / 180;
 class me {
   constructor(t) {
-    const e = ze * Ir * 1e3, r = Math.cos(t * ze), i = 1 / (1 - je * (1 - r * r)), s = Math.sqrt(i);
-    this.kx = e * s * r, this.ky = e * s * i * (1 - je);
+    const e = je * Ir * 1e3, r = Math.cos(t * je), i = 1 / (1 - ze * (1 - r * r)), s = Math.sqrt(i);
+    this.kx = e * s * r, this.ky = e * s * i * (1 - ze);
   }
   /**
    * Given two points of the form [longitude, latitude], returns the distance.
@@ -2352,7 +2352,7 @@ function fn(n, t) {
 function Ct(n) {
   return n[1] - n[0] + 1;
 }
-function O(n, t) {
+function H(n, t) {
   return n[1] >= n[0] && n[1] < t;
 }
 function Yt(n, t) {
@@ -2377,7 +2377,7 @@ function Yt(n, t) {
   ];
 }
 function Qt(n, t) {
-  if (!O(t, n.length))
+  if (!H(t, n.length))
     return [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   const e = [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   for (let r = t[0]; r <= t[1]; ++r)
@@ -2409,7 +2409,7 @@ function ve(n, t, e, r, i) {
   return Math.min(s, o);
 }
 function Er(n, t, e, r, i) {
-  if (!(O(t, n.length) && O(r, e.length)))
+  if (!(H(t, n.length) && H(r, e.length)))
     return 1 / 0;
   let o = 1 / 0;
   for (let a = t[0]; a < t[1]; ++a) {
@@ -2424,7 +2424,7 @@ function Er(n, t, e, r, i) {
   return o;
 }
 function Tr(n, t, e, r, i) {
-  if (!(O(t, n.length) && O(r, e.length)))
+  if (!(H(t, n.length) && H(r, e.length)))
     return NaN;
   let o = 1 / 0;
   for (let a = t[0]; a <= t[1]; ++a)
@@ -2448,7 +2448,7 @@ function $r(n, t, e) {
   return r;
 }
 function Sr(n, t, e, r) {
-  if (!O(t, n.length))
+  if (!H(t, n.length))
     return NaN;
   for (let s = t[0]; s <= t[1]; ++s)
     if (nt(n[s], e, !0))
@@ -2496,7 +2496,7 @@ function Ar(n, t, e, r = 1 / 0) {
     }
   return o;
 }
-function Oe(n, t, e, r, i, s) {
+function He(n, t, e, r, i, s) {
   if (!s)
     return;
   const o = be(Qt(r, s), i, e);
@@ -2519,7 +2519,7 @@ function xt(n, t, e, r, i = 1 / 0) {
       continue;
     const u = l[1], c = t ? Jt : Gt;
     if (Ct(u) <= c) {
-      if (!O(u, n.length))
+      if (!H(u, n.length))
         return NaN;
       if (t) {
         const f = Sr(n, u, e, r);
@@ -2534,7 +2534,7 @@ function xt(n, t, e, r, i = 1 / 0) {
         }
     } else {
       const f = Yt(u, t);
-      Oe(o, s, r, n, a, f[0]), Oe(o, s, r, n, a, f[1]);
+      He(o, s, r, n, a, f[0]), He(o, s, r, n, a, f[1]);
     }
   }
   return s;
@@ -2550,7 +2550,7 @@ function Mt(n, t, e, r, i, s = 1 / 0) {
       continue;
     const u = l[1], c = l[2], f = t ? Jt : Gt, p = r ? Jt : Gt;
     if (Ct(u) <= f && Ct(c) <= p) {
-      if (!O(u, n.length) && O(c, e.length))
+      if (!H(u, n.length) && H(c, e.length))
         return NaN;
       let d;
       if (t && r)
@@ -2624,7 +2624,7 @@ function Nr(n, t) {
   const e = n.geometry();
   if (e.length === 0 || e[0].length === 0)
     return NaN;
-  const r = On(e).map((o) => o.map((a) => a.map((l) => ye([l.x, l.y], n.canonical)))), i = new me(r[0][0][0][1]);
+  const r = Hn(e).map((o) => o.map((a) => a.map((l) => ye([l.x, l.y], n.canonical)))), i = new me(r[0][0][0][1]);
   let s = 1 / 0;
   for (const o of t)
     for (const a of r) {
@@ -2704,7 +2704,7 @@ const we = {
   boolean: N,
   case: ce,
   coalesce: lt,
-  collator: zt,
+  collator: jt,
   format: he,
   image: pe,
   in: le,
@@ -2720,7 +2720,7 @@ const we = {
   "number-format": fe,
   object: N,
   slice: kt,
-  step: jt,
+  step: zt,
   string: N,
   "to-boolean": q,
   "to-color": q,
@@ -2795,7 +2795,7 @@ class L {
       t[r] = L;
   }
 }
-function He(n, [t, e, r, i]) {
+function Oe(n, [t, e, r, i]) {
   t = t.evaluate(n), e = e.evaluate(n), r = r.evaluate(n);
   const s = i ? i.evaluate(n) : 1, o = en(t, e, r, s);
   if (o)
@@ -2836,21 +2836,21 @@ L.register(we, {
   ],
   "to-rgba": [
     S(h, 4),
-    [j],
+    [z],
     (n, [t]) => {
       const [e, r, i, s] = t.evaluate(n).rgb;
       return [e * 255, r * 255, i * 255, s];
     }
   ],
   rgb: [
-    j,
+    z,
     [h, h, h],
-    He
+    Oe
   ],
   rgba: [
-    j,
+    z,
     [h, h, h, h],
-    He
+    Oe
   ],
   has: {
     type: g,
@@ -3254,7 +3254,7 @@ function It(n) {
     return It(n.boundExpression);
   if (n instanceof L && n.name === "error")
     return !1;
-  if (n instanceof zt)
+  if (n instanceof jt)
     return !1;
   if (n instanceof X)
     return !1;
@@ -3308,10 +3308,10 @@ function te(n) {
 function Y(n) {
   return { result: "error", value: n };
 }
-function jr(n) {
+function zr(n) {
   return n["property-type"] === "data-driven" || n["property-type"] === "cross-faded-data-driven";
 }
-function zr(n) {
+function jr(n) {
   return !!n.expression && n.expression.parameters.indexOf("zoom") > -1;
 }
 function hn(n) {
@@ -3338,14 +3338,14 @@ function dn(n, t) {
   if (o === "exponential")
     a = Ve;
   else if (o === "interval")
-    a = Or;
+    a = Hr;
   else if (o === "categorical") {
     a = Rr, l = /* @__PURE__ */ Object.create(null);
     for (const c of n.stops)
       l[c[0]] = c[1];
     u = typeof n.stops[0][0];
   } else if (o === "identity")
-    a = Hr;
+    a = Or;
   else
     throw new Error(`Unknown function type "${o}"`);
   if (r) {
@@ -3406,7 +3406,7 @@ function Rr(n, t, e, r, i) {
   const s = typeof e === i ? r[e] : void 0;
   return ht(s, n.default, t.default);
 }
-function Or(n, t, e) {
+function Hr(n, t, e) {
   if (Me(e) !== "number")
     return ht(n.default, t.default);
   const r = n.stops.length;
@@ -3435,16 +3435,16 @@ function Ve(n, t, e) {
     }
   } : u(a, l, o, n.colorSpace);
 }
-function Hr(n, t, e) {
+function Or(n, t, e) {
   switch (t.type) {
     case "color":
       e = w.parse(e);
       break;
     case "formatted":
-      e = z.fromString(e.toString());
+      e = j.fromString(e.toString());
       break;
     case "resolvedImage":
-      e = H.fromString(e.toString());
+      e = O.fromString(e.toString());
       break;
     case "padding":
       e = $.parse(e);
@@ -3519,10 +3519,10 @@ function bn(n, t) {
   if (e.result === "error")
     return e;
   const r = e.value.expression, i = ke(r);
-  if (!i && !jr(t))
+  if (!i && !zr(t))
     return Y([new F("", "data expressions not supported")]);
   const s = xe(r, ["zoom"]);
-  if (!s && !zr(t))
+  if (!s && !jr(t))
     return Y([new F("", "zoom expressions not supported")]);
   const o = vt(r);
   if (!o && !s)
@@ -3574,7 +3574,7 @@ function vt(n) {
     for (const e of n.args)
       if (t = vt(e), t)
         break;
-  } else (n instanceof jt || n instanceof P) && n.input instanceof L && n.input.name === "zoom" && (t = n);
+  } else (n instanceof zt || n instanceof P) && n.input instanceof L && n.input.name === "zoom" && (t = n);
   return t instanceof F || n.eachChild((e) => {
     const r = vt(e);
     r instanceof F ? t = r : !t && r ? t = new F("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.') : t && r && t !== r && (t = new F("", 'Only one zoom-based "step" or "interpolate" subexpression may be used in an expression.'));
@@ -3582,7 +3582,7 @@ function vt(n) {
 }
 function Ur(n) {
   const t = {
-    color: j,
+    color: z,
     string: b,
     number: h,
     enum: b,
@@ -3652,6 +3652,10 @@ class Qr {
     v(this, "unitDiv");
     v(this, "legendItems", []);
     v(this, "propertySpec");
+    // Handler for container click events
+    v(this, "handleContainerClick", (t) => {
+      this.options.onClick && this.options.onClick(t, this.options);
+    });
     t ? this.propertySpec = t : this.propertySpec = {
       "fill-color": {
         default: [
@@ -3735,7 +3739,7 @@ class Qr {
       // Override with user-provided options
     }, this.colorSteps = this.getColorSteps();
     const { outContainer: r, innerContainer: i } = this.createContainer();
-    this.outContainer = r, this.container = i, this.titleDiv = this.createTitleDiv(this.options.title), this.unitDiv = this.createUnitDiv(this.options.unit), this.container.appendChild(this.titleDiv), this.container.appendChild(this.unitDiv);
+    this.outContainer = r, this.container = i, this.titleDiv = this.createTitleDiv(this.options.title), this.unitDiv = this.createUnitDiv(this.options.unit), this.container.appendChild(this.titleDiv), this.container.appendChild(this.unitDiv), this.options.onClick && this.container.addEventListener("click", this.handleContainerClick);
   }
   getTickMinStep() {
     return this.options.tickMinStep || 0;
@@ -3818,6 +3822,13 @@ class Qr {
   }
   getDefaultPosition() {
     return this.options.position || "top-left";
+  }
+  /**
+   * Updates the options and refreshes the control
+   * @param newOptions Partial options to update
+   */
+  updateOptions(t) {
+    this.options = { ...this.options, ...t }, t.title !== void 0 && (this.titleDiv.innerHTML = t.title), t.unit !== void 0 && (this.unitDiv.innerHTML = `(${t.unit})`), (t.width !== void 0 || t.height !== void 0) && (this.container.style.width = this.getWidth(), this.container.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`), t.max !== void 0 && (this.colorSteps = this.getColorSteps(), this.legendItems.forEach((e) => e.remove()), this.legendItems = [], this.initializeLegendItems()), (t.decimal !== void 0 || t.tickMinStep !== void 0) && this.update(), t.onClick !== void 0 && this.container.removeEventListener("click", this.handleContainerClick), this.update();
   }
   updateInnerContainerStyle(t, e) {
     var p;
@@ -3959,9 +3970,9 @@ class Kr {
     return this.options.position || "top-left";
   }
 }
-const re = 20, We = 6, Zr = 4, Ue = 4, Gr = (n) => {
-  const t = document.createElement("img");
-  return t.src = `data:image/svg+xml,${encodeURIComponent(n)}`, t.style.width = `${re}px`, t.style.height = `${re}px`, t.style.color = "white", t;
+const re = 20, We = 6, Zr = 4, Ue = 4, Gr = (n, t) => {
+  const e = document.createElement("img");
+  return e.src = `data:image/svg+xml,${encodeURIComponent(n)}`, e.alt = t, e.style.width = `${re}px`, e.style.height = `${re}px`, e.style.color = "white", e;
 };
 class ti {
   constructor(t) {
@@ -4034,7 +4045,7 @@ class ti {
   createButton(t) {
     const e = document.createElement("button");
     e.style.display = "flex", e.style.alignItems = "center", e.style.gap = `${Ue}px`, e.style.padding = `${Zr}px ${We}px`, e.style.border = "none", e.style.cursor = "pointer", e.style.borderRadius = "4px", e.style.width = "fit-content", e.style.color = "white", e.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
-    const r = Gr(t.svg);
+    const r = Gr(t.svg, t.label);
     e.appendChild(r);
     const i = document.createElement("span");
     return i.textContent = t.label, i.style.fontSize = "10px", i.style.color = "inherit", e.appendChild(i), e.onclick = () => this.handleButtonClick(t), e;
@@ -4093,7 +4104,7 @@ class ti {
       return;
     Object.assign(i, e);
     const s = r.querySelector("img");
-    s && e.svg && (s.src = `data:image/svg+xml,${encodeURIComponent(e.svg)}`);
+    s && (e.svg && (s.src = `data:image/svg+xml,${encodeURIComponent(e.svg)}`), e.label && (s.alt = e.label));
     const o = r.querySelector("span");
     o && e.label && (o.textContent = e.label), this.updateLayout();
   }
