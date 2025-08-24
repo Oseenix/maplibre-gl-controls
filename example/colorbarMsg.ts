@@ -79,6 +79,24 @@ const colorbar = new ColorBar(waveColors, {
   position: "top-left",
   // tickValue: 2,
   tickMinStep: 1,
+  onClick: (event, options) => {
+    // Cycle through max values: 16, 48, 64
+    const currentMax = options.max || 16;
+    let newMax;
+    
+    if (currentMax === 16) {
+      newMax = 48;
+    } else if (currentMax === 48) {
+      newMax = 64;
+    } else {
+      newMax = 16;
+    }
+    
+    // Update the colorbar with the new max value
+    colorbar.updateOptions({ max: newMax });
+    
+    console.log(`ColorBar clicked! Max value changed from ${currentMax} to ${newMax}`);
+  }
 });
 
 map.addControl(colorbar);

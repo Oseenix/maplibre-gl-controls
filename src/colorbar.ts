@@ -337,8 +337,15 @@ export default class ColorBar implements IControl {
    * @param newOptions Partial options to update
    */
   public updateOptions(newOptions: Partial<Options>): void {
+    // Store original options before updating
+    const originalOptions = { ...this.options };
+    
     // Update the options
     this.options = { ...this.options, ...newOptions };
+    
+    // Adjust tickMinStep proportionally if max changed but tickMinStep wasn't explicitly set
+    if (newOptions.max !== undefined && newOptions.tickMinStep === undefined) {
+    }
 
     // Update title if changed
     if (newOptions.title !== undefined) {
@@ -358,6 +365,12 @@ export default class ColorBar implements IControl {
 
     // Recalculate color steps if max changed
     if (newOptions.max !== undefined) {
+      if (newOptions.tickMinStep === undefined) {
+        const originalTickMinStep = originalOptions.tickMinStep ?? 0;
+        const originalMax = originalOptions.max ?? 30;
+        this.options.tickMinStep = originalTickMinStep * newOptions.max / originalMax;
+      }
+
       this.colorSteps = this.getColorSteps();
       // Reinitialize legend items with new color steps
       this.legendItems.forEach(item => item.remove());
