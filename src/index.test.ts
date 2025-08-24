@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import TemporalControl from './index.ts';
+import { TemporalControl } from './index.ts';
 import { Map } from 'maplibre-gl';
 
 test('unittest', async () => {
