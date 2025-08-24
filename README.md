@@ -231,7 +231,14 @@ toggleControl.updateButton('wave', {
 
 - RasterTiles: <https://mug-jp.github.io/maplibre-gl-temporal-control/raster.html>
 - VectorTiles: <https://mug-jp.github.io/maplibre-gl-temporal-control/vector.html>
-- Controls Demo: <https://mug-jp.github.io/maplibre-gl-temporal-control/controls.html>
+- Others:
+
+  ```sh
+  pnpm run dev
+  ```
+
+  Then access:
+  http://localhost:5173/index.html
 
 ## Tips
 
@@ -271,6 +278,7 @@ toggleControl.updateButton('wave', {
 
 ```sh
 pnpm install
+pnpm run build
 pnpm run dev
-pnpm test
+pnpm run test
 ```
