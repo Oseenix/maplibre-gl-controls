@@ -378,11 +378,6 @@ export default class ColorBar implements IControl {
       this.initializeLegendItems();
     }
 
-    // Update decimal precision if changed
-    if (newOptions.decimal !== undefined || newOptions.tickMinStep !== undefined) {
-      this.update();
-    }
-
     // Update click event listener if onClick changed
     if (newOptions.onClick !== undefined) {
       // Remove existing click listener

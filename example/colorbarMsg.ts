@@ -71,35 +71,41 @@ const waveColors = {
 };
 
 // const colorbar = new ColorBar(wavePeriodColors, {
-const colorbar = new ColorBar(waveColors, {
-	title: "Wind",
-  unit: "m/s",
-  // max: 32,
+const colorBar = new ColorBar(waveColors, {
+	title: "Wave Height",
+  unit: "m",
   max: 16,
   position: "top-left",
-  // tickValue: 2,
   tickMinStep: 1,
   onClick: (event, options) => {
     // Cycle through max values: 16, 48, 64
     const currentMax = options.max || 16;
-    let newMax;
-    
+    let nMax = 16;
+    let nTickMinStep = 1;
+    let nUnit = 'm';
+
     if (currentMax === 16) {
-      newMax = 48;
-    } else if (currentMax === 48) {
-      newMax = 64;
+      nMax = 56;
+      nTickMinStep = 2;
+      nUnit = 'ft';
+    } else if (currentMax === 56) {
+      nMax = 16;
+      nTickMinStep = 1;
+      nUnit = 'm';
     } else {
-      newMax = 16;
+      nMax = 16;
+      nTickMinStep = 1;
+      nUnit = 'm';
     }
-    
+
     // Update the colorbar with the new max value
-    colorbar.updateOptions({ max: newMax });
-    
-    console.log(`ColorBar clicked! Max value changed from ${currentMax} to ${newMax}`);
+    colorBar.updateOptions({ max: nMax, tickMinStep: nTickMinStep, unit: nUnit });
+
+    console.log(`ColorBar clicked! Max value changed from ${currentMax} to ${nMax}`);
   }
 });
 
-map.addControl(colorbar);
+map.addControl(colorBar);
 
 const msgShow = new MsgCtl({
   position: "bottom-right",
@@ -139,7 +145,7 @@ updateTitleBtn.textContent = 'Update Title';
 updateTitleBtn.style.marginLeft = '5px';
 updateTitleBtn.style.marginBottom = '5px';
 updateTitleBtn.onclick = () => {
-  colorbar.updateOptions({ title: titleInput.value });
+  colorBar.updateOptions({ title: titleInput.value });
 };
 
 // Unit update control  
@@ -155,7 +161,7 @@ updateUnitBtn.textContent = 'Update Unit';
 updateUnitBtn.style.marginLeft = '5px';
 updateUnitBtn.style.marginBottom = '5px';
 updateUnitBtn.onclick = () => {
-  colorbar.updateOptions({ unit: unitInput.value });
+  colorBar.updateOptions({ unit: unitInput.value });
 };
 
 // Max value update control
@@ -171,7 +177,7 @@ updateMaxBtn.textContent = 'Update Max';
 updateMaxBtn.style.marginLeft = '5px';
 updateMaxBtn.style.marginBottom = '5px';
 updateMaxBtn.onclick = () => {
-  colorbar.updateOptions({ max: parseFloat(maxInput.value) });
+  colorBar.updateOptions({ max: parseFloat(maxInput.value) });
 };
 
 // Decimal precision update control
@@ -189,7 +195,7 @@ updateDecimalBtn.textContent = 'Update Decimal';
 updateDecimalBtn.style.marginLeft = '5px';
 updateMaxBtn.style.marginBottom = '5px';
 updateDecimalBtn.onclick = () => {
-  colorbar.updateOptions({ decimal: parseInt(decimalInput.value) });
+  colorBar.updateOptions({ decimal: parseInt(decimalInput.value) });
 };
 
 // Add all controls to the container
