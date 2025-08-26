@@ -157,7 +157,8 @@ export default class ColorBar implements IControl {
 	  outContainer.style.display = "flex";
 	  outContainer.style.flexDirection = "column";
 	  outContainer.style.alignItems = "center";
-    outContainer.style.backgroundColor = "transparent"; 
+    outContainer.style.backgroundColor = "transparent";
+    outContainer.style.pointerEvents = "none"; // Allow clicks to pass through to map
 
 	  // Inner container
     const group = this.options.position?.endsWith("left")
@@ -173,6 +174,7 @@ export default class ColorBar implements IControl {
 	  innerContainer.style.display = "flex";
 	  innerContainer.style.flexDirection = "column";
 		innerContainer.style.borderRadius = "10px";
+    innerContainer.style.pointerEvents = "auto"; // Ensure colorbar is interactive
 	
 	  // Add inner container to outer container
 	  outContainer.appendChild(innerContainer);
