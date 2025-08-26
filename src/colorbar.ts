@@ -8,7 +8,7 @@ import type {
 import { expression } from "@maplibre/maplibre-gl-style-spec";
 import type { Expression } from "@maplibre/maplibre-gl-style-spec";
 
-type Options = {
+export type Options = {
   title: string;    // show title at the top of the color bar
   unit: string;     // show unit at the bottom of the color bar
 	position?: ControlPosition;   // Optional position with a default top-left position

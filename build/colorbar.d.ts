@@ -1,6 +1,6 @@
 import type { IControl, Map, ControlPosition } from 'maplibre-gl';
 import type { Expression } from "@maplibre/maplibre-gl-style-spec";
-type Options = {
+export type Options = {
     title: string;
     unit: string;
     position?: ControlPosition;
