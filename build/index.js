@@ -3654,7 +3654,7 @@ class Qr {
     v(this, "propertySpec");
     // Handler for container click events
     v(this, "handleContainerClick", (t) => {
-      this.options.onClick && this.options.onClick(t, this.options);
+      this.options.onClick && this.options.onClick(t, this, this.options);
     });
     t ? this.propertySpec = t : this.propertySpec = {
       "fill-color": {
@@ -3837,6 +3837,12 @@ class Qr {
       this.colorSteps = this.getColorSteps(), this.legendItems.forEach((r) => r.remove()), this.legendItems = [], this.initializeLegendItems();
     }
     t.onClick !== void 0 && this.container.removeEventListener("click", this.handleContainerClick), this.update();
+  }
+  getOptions() {
+    return this.options;
+  }
+  getMap() {
+    return this.map;
   }
   updateInnerContainerStyle(t, e) {
     var p;

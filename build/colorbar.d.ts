@@ -9,7 +9,8 @@ type Options = {
     max?: number;
     decimal?: number;
     tickMinStep?: number;
-    onClick?: (event: MouseEvent, options: Options) => void;
+    layerIds?: string[];
+    onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void;
 };
 interface ColorStep {
     speed: number;
@@ -37,6 +38,7 @@ export default class ColorBar implements IControl {
     private createLabel;
     private initializeLegendItems;
     private calculateHeights;
+    private handleContainerClick;
     update(): void;
     onAdd(map: Map): HTMLElement;
     onRemove(): void;
@@ -47,7 +49,8 @@ export default class ColorBar implements IControl {
      * @param newOptions Partial options to update
      */
     updateOptions(newOptions: Partial<Options>): void;
-    private handleContainerClick;
+    getOptions(): Options;
+    getMap(): Map | undefined;
     updateInnerContainerStyle(outContainer: HTMLElement, container: HTMLElement): void;
     /**
      * Parses the "fill-color" property and extracts speed-to-color mappings.
