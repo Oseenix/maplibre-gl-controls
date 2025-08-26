@@ -17,7 +17,8 @@ type Options = {
   max?: number;     // Optional max with a default 30
   decimal?: number; // Optional decimal with a default 1
   tickMinStep?: number; // Optional setup min step, with a default 0 not limit
-  onClick?: (event: MouseEvent, options: Options) => void; // Optional click callback with current options
+  layerIds?: string[];  // Optional array of layer IDs affected by the color bar
+  onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void; // Optional click callback with current options
 };
 
 interface ColorStep {
@@ -264,6 +265,13 @@ export default class ColorBar implements IControl {
     return { stepHeight, showInterval };
   }
 
+  // Handler for container click events
+  private handleContainerClick = (event: MouseEvent) => {
+    if (this.options.onClick) {
+      this.options.onClick(event, this, this.options);
+    }
+  };
+
   public update(): void {
     this.updateInnerContainerStyle(this.outContainer, this.container);
     const { stepHeight, showInterval } = this.calculateHeights();
@@ -388,12 +396,13 @@ export default class ColorBar implements IControl {
     this.update();
   }
 
-  // Handler for container click events
-  private handleContainerClick = (event: MouseEvent) => {
-    if (this.options.onClick) {
-      this.options.onClick(event, this.options);
-    }
-  };
+  public getOptions(): Options {
+    return this.options;
+  }
+
+  public getMap(): Map | undefined {
+    return this.map;
+  }
 
 	updateInnerContainerStyle(outContainer: HTMLElement, container: HTMLElement): void {
     if (!this.map) {

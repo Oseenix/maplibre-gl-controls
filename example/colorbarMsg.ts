@@ -77,7 +77,7 @@ const colorBar = new ColorBar(waveColors, {
   max: 16,
   position: "top-left",
   tickMinStep: 1,
-  onClick: (event, options) => {
+  onClick: (event, bar, options) => {
     // Cycle through max values: 16, 48, 64
     const currentMax = options.max || 16;
     let nMax = 16;
@@ -99,7 +99,7 @@ const colorBar = new ColorBar(waveColors, {
     }
 
     // Update the colorbar with the new max value
-    colorBar.updateOptions({ max: nMax, tickMinStep: nTickMinStep, unit: nUnit });
+    bar.updateOptions({ max: nMax, tickMinStep: nTickMinStep, unit: nUnit });
 
     console.log(`ColorBar clicked! Max value changed from ${currentMax} to ${nMax}`);
   }
