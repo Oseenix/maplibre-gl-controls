@@ -106,14 +106,14 @@ export default class ToggleCtl implements IControl {
 	  let marginTop = 10;
 	  let marginBottom = 10;
 		let defMarginLeft = Math.max(
-		  10,
+		  0,
 		  parseFloat(
 		    getComputedStyle(parentContainer)
 					.getPropertyValue('env(safe-area-inset-left)') || '0'
 		  )
 		);
     let defMarginRight = Math.max(
-		  10,
+		  0,
 		  parseFloat(
 		    getComputedStyle(parentContainer)
 					.getPropertyValue('env(safe-area-inset-right)') || '0'
