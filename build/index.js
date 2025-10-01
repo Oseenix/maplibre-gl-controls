@@ -3851,12 +3851,12 @@ class Qr {
     const r = this.map.getContainer(), i = r.offsetWidth, s = r.offsetHeight;
     t.style.height = `${s}px`;
     let o = 10, a = 10, l = Math.max(
-      2,
+      0,
       parseFloat(
         getComputedStyle(r).getPropertyValue("env(safe-area-inset-left)") || "0"
       )
     ), u = Math.max(
-      2,
+      0,
       parseFloat(
         getComputedStyle(r).getPropertyValue("env(safe-area-inset-right)") || "0"
       )
@@ -4018,12 +4018,12 @@ class ti {
     const t = this.map.getContainer(), e = t.offsetWidth, r = t.offsetHeight;
     this.outContainer.style.height = `${r}px`;
     let i = 10, s = 10, o = Math.max(
-      2,
+      0,
       parseFloat(
         getComputedStyle(t).getPropertyValue("env(safe-area-inset-left)") || "0"
       )
     ), a = Math.max(
-      2,
+      0,
       parseFloat(
         getComputedStyle(t).getPropertyValue("env(safe-area-inset-right)") || "0"
       )
