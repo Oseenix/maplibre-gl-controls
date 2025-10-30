@@ -37,6 +37,8 @@ const makeImg = (svg: string, alt: string): HTMLImageElement => {
   return img;
 };
 
+type ToggleCtlEvent = 'toggle' | 'untoggle';
+
 export default class ToggleCtl implements IControl {
   private map: MlMap | undefined;
   private container: HTMLElement;
@@ -46,12 +48,35 @@ export default class ToggleCtl implements IControl {
   private activeButtonId: string | null = null;
   private buttons: Map<string, HTMLButtonElement> = new Map();
 
+  private listeners: Record<ToggleCtlEvent, Set<(ctl: ToggleCtl) => void>> = {
+    toggle: new Set(),
+    untoggle: new Set(),
+  };
+
   constructor(options: ToggleCtlOptions) {
     this.options = options;
     const { outContainer, container } = this.createContainer();
     this.outContainer = outContainer;
     this.container = container;
     this.defaultActiveId = this.options.defaultActive;
+  }
+
+  on(event: ToggleCtlEvent, callback: (ctl: ToggleCtl) => void) {
+    this.listeners[event].add(callback);
+  }
+
+  off(event: ToggleCtlEvent, callback: (ctl: ToggleCtl) => void) {
+    this.listeners[event].delete(callback);
+  }
+
+  private emit(event: ToggleCtlEvent) {
+    for (const cb of this.listeners[event]) {
+      try {
+        cb(this);
+      } catch (err) {
+        console.error(`[ToggleCtl] error in ${event} listener`, err);
+      }
+    }
   }
 
   // Create the outer container for the control
@@ -269,6 +294,7 @@ export default class ToggleCtl implements IControl {
         // Call global onUntoggle first
         if (this.options.onUntoggle) {
           this.options.onUntoggle(this, this.map, previousConfig);
+          this.emit('untoggle');
         }
       }
     }
@@ -286,6 +312,7 @@ export default class ToggleCtl implements IControl {
       // Execute callback if provided
       if (this.options.onToggle) {
         this.options.onToggle(this, this.map, config);
+        this.emit('toggle');
       }
     }
   }
