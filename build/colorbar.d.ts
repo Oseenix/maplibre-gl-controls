@@ -43,7 +43,7 @@ export default class ColorBar implements IControl {
     onAdd(map: Map): HTMLElement;
     onRemove(): void;
     refresh(): void;
-    getDefaultPosition(): ControlPosition;
+    getPosition(): ControlPosition;
     /**
      * Updates the options and refreshes the control
      * @param newOptions Partial options to update

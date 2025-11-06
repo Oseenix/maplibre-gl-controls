@@ -23,6 +23,6 @@ export default class MsgCtl implements IControl {
     refresh(): void;
     updateStyle(newStyle: Partial<CSSStyleDeclaration>): void;
     updateContent(newContent: string, isHTML?: boolean): void;
-    getDefaultPosition(): ControlPosition;
+    getPosition(): ControlPosition;
 }
 export {};
