@@ -1,4 +1,6 @@
 import type { IControl, Map as MlMap, ControlPosition } from 'maplibre-gl';
+import { createStyledButton, createSvgImage, unregisterButtonGroup, applyGlobalResponsiveLayout, registerButtonGroup, calculateContainerPosition, applyContainerStyles } from './utils/ui';
+import { THEME } from './utils/theme';
 
 // Define the type for button configuration
 export type TgBtnCfg = {
@@ -21,32 +23,16 @@ export type ToggleCtlOptions = {
   onUntoggle?: (ctl: ToggleCtl, map: MlMap, config: TgBtnCfg) => void;
 };
 
-const iconWidth = 20;
-const btnPadingX = 6;
-const btnPadingY = 4;
-const btnGap = 4;
-
-// Create an SVG image element with alt text for SEO
-const makeImg = (svg: string, alt: string): HTMLImageElement => {
-  const img = document.createElement('img');
-  img.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-  img.alt = alt; // Set alt text for SEO and accessibility
-  img.style.width = `${iconWidth}px`;
-  img.style.height = `${iconWidth}px`;
-  img.style.color = 'white';
-  return img;
-};
-
 type ToggleCtlEvent = 'toggle' | 'untoggle';
 
 export default class ToggleCtl implements IControl {
   private map: MlMap | undefined;
   private container: HTMLElement;
-  private outContainer: HTMLElement;
   private options: ToggleCtlOptions;
   private defaultActiveId: string;
   private activeButtonId: string | null = null;
   private buttons: Map<string, HTMLButtonElement> = new Map();
+  private instanceId: string;
 
   private listeners: Record<ToggleCtlEvent, Set<(ctl: ToggleCtl) => void>> = {
     toggle: new Set(),
@@ -55,10 +41,17 @@ export default class ToggleCtl implements IControl {
 
   constructor(options: ToggleCtlOptions) {
     this.options = options;
-    const { outContainer, container } = this.createContainer();
-    this.outContainer = outContainer;
-    this.container = container;
+    this.instanceId = this.generateInstanceId();
+    this.container = this.createContainer();
     this.defaultActiveId = this.options.defaultActive;
+  }
+
+  /**
+   * Generate a unique instance ID for this control
+   * @returns Unique identifier string
+   */
+  private generateInstanceId(): string {
+    return `togglectl-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   on(event: ToggleCtlEvent, callback: (ctl: ToggleCtl) => void) {
@@ -79,29 +72,13 @@ export default class ToggleCtl implements IControl {
     }
   }
 
-  // Create the outer container for the control
-  private createContainer(): { outContainer: HTMLElement; container: HTMLElement } {
-    // Outer container
-	  const outContainer = document.createElement("div");
-	  outContainer.classList.add("maplibregl-ctrl");
-	
-	  // Outer container styles
-	  outContainer.style.height = "100%"; // Fixed or dynamically adjustable height
-	  outContainer.style.display = "flex";
-	  outContainer.style.flexDirection = "column";
-	  outContainer.style.alignItems = "center";
-    outContainer.style.backgroundColor = "transparent";
-
+  // Create the container for the control
+  private createContainer(): HTMLElement {
     const container = document.createElement('div');
-    container.classList.add('maplibregl-ctrl', 'maplibregl-ctrl-group');
-    container.style.backgroundColor = "transparent";
-    container.style.padding = '5px';
-    container.style.border = "transparent";
-    container.style.boxShadow = "none";
-    container.style.borderRadius = '4px';
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '4px';
+    container.id = this.instanceId;
+    
+    // Apply common container styles
+    applyContainerStyles(container);
 
     // Add buttons to the container
     this.options.buttons.forEach((buttonConfig) => {
@@ -109,12 +86,9 @@ export default class ToggleCtl implements IControl {
       container.appendChild(button);
       this.buttons.set(buttonConfig.id, button);
     });
-    this.container = container;
 
     this.updateLayout();
-    outContainer.appendChild(this.container);
-
-    return { outContainer, container };
+    return container;
   }
 
 	updateInnerContainerStyle(): void {
@@ -122,64 +96,21 @@ export default class ToggleCtl implements IControl {
       return;
     }
     const parentContainer = this.map.getContainer();
-	  const parentWidth = parentContainer.offsetWidth;
-	  const parentHeight = parentContainer.offsetHeight;
 
-    this.outContainer.style.height = `${parentHeight}px`;
+    // Use shared container positioning utility
+    const { marginTop, marginBottom, marginLeft, marginRight } = calculateContainerPosition(
+      parentContainer,
+      this.getPosition()
+    );
 
-	  // Default styles
-	  let marginTop = 10;
-	  let marginBottom = 10;
-		let defMarginLeft = Math.max(
-		  0,
-		  parseFloat(
-		    getComputedStyle(parentContainer)
-					.getPropertyValue('env(safe-area-inset-left)') || '0'
-		  )
-		);
-    let defMarginRight = Math.max(
-		  0,
-		  parseFloat(
-		    getComputedStyle(parentContainer)
-					.getPropertyValue('env(safe-area-inset-right)') || '0'
-		  )
-		);
-		let marginLeft = defMarginLeft;
-		let marginRight = defMarginRight;
-	
-	  // Update styles based on parent dimensions
-	  if (parentWidth >= 480) {
-	    marginTop = 15;
-	    marginBottom = 15;
-	    marginLeft = Math.max(15, defMarginLeft);
-	    marginRight = Math.max(15, defMarginRight);
-	  }
-
-	  if (parentHeight >= 992) {
-	    marginTop = 40;
-	    marginBottom = 40;
-    }
-
-	  if (parentWidth >= 992) {
-	    marginLeft = Math.max(40, defMarginLeft);
-	    marginRight = Math.max(40, defMarginRight);
-    }
-
-    if (this.options.position?.endsWith("left")) {
-      this.container.style.marginLeft = `${marginLeft}px`;
-      this.container.style.marginRight = `${defMarginRight}px`;
-    } else {
-      this.container.style.marginLeft = `${defMarginLeft}px`;
-      this.container.style.marginRight = `${marginRight}px`;
-		}
-
-    // Apply styles to innerContainer
+    // Apply calculated margins to container
     this.container.style.marginTop = `${marginTop}px`;
     this.container.style.marginBottom = `${marginBottom}px`;
+    this.container.style.marginLeft = `${marginLeft}px`;
+    this.container.style.marginRight = `${marginRight}px`;
   
     this.container.style.alignItems = 'flex-start';
     this.container.style.display = 'flex'; // Ensures `align-items` works
-	  // this.container.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;
 
     this.updateLayout()
   }
@@ -191,86 +122,20 @@ export default class ToggleCtl implements IControl {
     }
     const mapContainer = this.map.getContainer();
     const containerWidth = mapContainer.clientWidth;
-    const isSmallScreen = containerWidth < 768;     // Adjust threshold as needed
-
-    this.buttons.forEach((btn) => {
-      const label = btn.querySelector('span');
-      if (label) {
-        label.style.display = isSmallScreen ? 'none' : 'inline';
-      }
-      btn.style.width = 'fit-content'
-    });
-
-    // Recalculate max width when labels are toggled
-    const buttonElements = Array.from(this.buttons.values());
-    const maxWidth = Math.max(...buttonElements.map(btn => btn.offsetWidth));
-
-    const targetWidth = isSmallScreen ? '34px' : `${maxWidth}px`;
-    const minFontSize = 12;
-
-    const labels = buttonElements.map(btn => {
-      btn.style.width = targetWidth;
-
-      if (isSmallScreen) return null;
-
-      const label = btn.querySelector('span');
-      if (!label || !label.textContent) return null;
-
-      return [label, this.calculateFontSize(maxWidth, label.textContent)] as const;
-      // return { element: label, fontSize: this.calculateFontSize(maxWdth - iconWidth, label.textContent) };
-    }).filter((item): item is readonly [HTMLElement, number] => !!item);
-
-    // Apply minimum font size across all labels
-    const smallestFontSize = Math.min(minFontSize, ...labels.map(([, fontSize]) => fontSize));
-    labels.forEach(([label]) => {
-      label.style.fontSize = `${smallestFontSize}px`;
-    });
-  };
-
-  // Function to calculate font size based on width and character count
-  private calculateFontSize(btnWidth: number, text: string, maxFontSize: number = 12, minFontSize: number = 6) {
-    const widthPx = btnWidth - iconWidth - btnPadingX * 2 - btnGap; // Adjusted width for text
-    const charCount = text.replace(/<[^>]+>/g, '').length; // Strip HTML tags to count plain text
-    if (charCount === 0) return; // Avoid division by zero
-
-    // Scaling factor: approximate character width-to-height ratio (adjust as needed)
-    const scalingFactor = 0.5; // 0.5–0.7 works for most fonts
-    let fontSize = Math.floor(widthPx / (charCount * scalingFactor));
-
-    // Clamp font size between min and max
-    fontSize = Math.min(maxFontSize, Math.max(minFontSize, fontSize));
-
-    return fontSize;
+    
+    // Use shared responsive layout utility
+    // applyResponsiveLayout(Array.from(this.buttons.values()), containerWidth);
+    applyGlobalResponsiveLayout(this.getPosition(), containerWidth);
   }
 
   // Create a single button with icon and label
   private createButton(config: TgBtnCfg): HTMLButtonElement {
-    const button = document.createElement('button');
-    button.style.display = 'flex';
-    button.style.alignItems = 'center';
-    button.style.gap = `${btnGap}px`;
-    button.style.padding = `${btnPadingY}px ${btnPadingX}px`;
-    button.style.border = 'none';
-    // button.style.backgroundColor = 'transparent';
-    button.style.cursor = 'pointer';
-    button.style.borderRadius = '4px';
-    button.style.width = 'fit-content'
-    button.style.color = 'white'
-	  button.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
-
-    // Add icon with alt text for SEO
-    const icon = makeImg(config.svg, config.label);
-    button.appendChild(icon);
-
-    // Add label (can be English or Chinese)
-    const label = document.createElement('span');
-    label.textContent = config.label; // e.g., "Roads"
-    label.style.fontSize = '10px';
-    label.style.color = 'inherit';
-    button.appendChild(label);
-
-    // Handle button click
-    button.onclick = () => this.handleButtonClick(config);
+    const button = createStyledButton({
+      icon: createSvgImage(config.svg, config.label),
+      label: config.label,
+      // title: config.label,
+      onClick: () => this.handleButtonClick(config)
+    });
 
     return button;
   }
@@ -302,9 +167,9 @@ export default class ToggleCtl implements IControl {
     // Update button styles
     this.buttons.forEach((btn, id) => {
       if (id === this.activeButtonId) {
-	      btn.style.backgroundColor = "rgba(0, 36, 71, 0.98)";
+	      btn.style.backgroundColor = THEME.color.activeBackground;
       } else {
-	      btn.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
+	      btn.style.backgroundColor = THEME.color.background;
       }
     });
 
@@ -341,12 +206,14 @@ export default class ToggleCtl implements IControl {
       const config = this.options.buttons.find(b => b.id === this.defaultActiveId);
       this.handleButtonClick(config || this.options.buttons[0]);
     }
+    registerButtonGroup(this.getPosition(), this.buttons);
 
     return this.container;
   }
 
   // Remove control from the map
   onRemove() {
+    unregisterButtonGroup(this.getPosition(), this.buttons);
     if (this.map) {
       this.map.off('resize', this.updateInnerContainerStyle);
       this.map.off('styledata', this.updateInnerContainerStyle);
@@ -362,8 +229,16 @@ export default class ToggleCtl implements IControl {
   }
 
   // Default position of the control
-  getDefaultPosition(): ControlPosition {
-    return 'top-right';
+  getPosition(): ControlPosition {
+    return this.options?.position || 'top-right';
+  }
+
+  /**
+   * Get the unique instance ID for this control
+   * @returns Unique identifier string
+   */
+  public getInstanceId(): string {
+    return this.instanceId;
   }
 
   // Public method to programmatically switch to a specific button

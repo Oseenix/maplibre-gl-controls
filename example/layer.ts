@@ -1,7 +1,7 @@
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { ConfigManager as LayerManager } from '../src';
+import { ConfigManager } from '../src';
 
 const mapContainer = document.getElementById('map');
 if (!mapContainer) {
@@ -100,70 +100,57 @@ const map = new maplibregl.Map({
 // Wait for the map to load
 map.on('load', () => {
   // Initialize the Layer Manager
-  const layerManager = new LayerManager({
-    layers: [
-      {
-        id: 'background',
-        name: 'Background (OSM)',
-        visible: true,
-        opacity: 1.0,
-        originalStyle: {
-          'raster-opacity': 1.0,
+  const layerManager = new ConfigManager({
+    feature: 'wave',
+    featureConfigs: {
+      wave: {
+        pressure: {
+          type: 'toggle',
+          value: false,
+          label: 'Pressure Isobar'
         },
+        direction: {
+          type: 'select',
+          value: 'Particle',
+          options: ['Particle', 'Arrow', 'None'],
+          labels: ['Particle', 'Arrow', 'None'],
+          label: 'Direction Indicator'
+        }
       },
-      {
-        id: 'usgs-imagery',
-        name: 'USGS Imagery',
-        visible: false,
-        opacity: 0.8,
-        originalStyle: {
-          'raster-opacity': 0.8,
-          'raster-brightness-min': 0,
-          'raster-brightness-max': 1,
-          'raster-saturation': 0,
-          'raster-contrast': 0,
+      wind: {
+        pressure: {
+          type: 'toggle',
+          value: true,
+          label: 'Pressure Isobar'
         },
+        direction: {
+          type: 'select',
+          value: 'Particle',
+          options: ['Particle', 'Arrow', 'None'],
+          labels: ['Particle', 'Arrow', 'None'],
+          label: 'Direction Indicator'
+        }
       },
-      {
-        id: 'us-states',
-        name: 'US States Fill',
-        visible: true,
-        opacity: 0.5,
-        originalStyle: {
-          'fill-color': '#627BC1',
-          'fill-opacity': 0.5,
-          'fill-outline-color': '#ffffff',
+      wave_period: {
+        pressure: {
+          type: 'toggle',
+          value: false,
+          label: 'Pressure Isobar'
         },
-      },
-      {
-        id: 'us-states-border',
-        name: 'US States Border',
-        visible: true,
-        opacity: 0.8,
-        originalStyle: {
-          'line-color': '#627BC1',
-          'line-width': 2,
-          'line-opacity': 0.8,
-        },
-      },
-      {
-        id: 'cities',
-        name: 'World Cities',
-        visible: true,
-        opacity: 0.8,
-        originalStyle: {
-          'circle-radius': 5,
-          'circle-color': '#3388ff',
-          'circle-opacity': 0.8,
-          'circle-blur': 0,
-          'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 1,
-          'circle-stroke-opacity': 1,
-        },
-      },
-    ],
+        direction: {
+          type: 'select',
+          value: 'Particle',
+          options: ['Particle', 'Arrow', 'None'],
+          labels: ['Particle', 'Arrow', 'None'],
+          label: 'Direction Indicator'
+        }
+      }
+    },
     position: 'top-left',
     collapsed: false,
+    onChange: (feature, key, preCfg, curCfg) => {
+      console.log(`Config changed for ${feature}.${key}:`, preCfg, '->', curCfg);
+    }
   });
 
   // Add the layer manager to the map

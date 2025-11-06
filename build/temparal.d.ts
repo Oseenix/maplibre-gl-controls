@@ -26,7 +26,7 @@ export default class TemporalControl implements IControl {
     constructor(temporalFrames: TemporalFrame[], options?: Options);
     onAdd(map: Map): HTMLDivElement;
     onRemove(): void;
-    getDefaultPosition(): ControlPosition;
+    getPosition(): ControlPosition;
     refresh(): void;
     private setVisible;
 }

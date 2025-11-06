@@ -187,7 +187,7 @@ export default class MsgCtl implements IControl {
     }
   }
 
-  getDefaultPosition(): ControlPosition {
+  getPosition(): ControlPosition {
     return this.options.position || 'top-left';
   };
 }

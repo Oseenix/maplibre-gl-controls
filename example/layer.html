@@ -13,8 +13,8 @@
     />
 
     <!-- Layer Manager Plugin -->
-    <link href="../src/layer-manager.css" rel="stylesheet" />
-    <script src="../src/layer-manager.js"></script>
+    <!-- <link href="../src/layer-manager.css" rel="stylesheet" />
+    <script src="../src/layer-manager.js"></script> -->
 
     <style>
       body {
@@ -64,30 +64,6 @@
   </head>
   <body>
     <div id="map"></div>
-
-    <div class="info-panel">
-      <h3>MapLibre GL Layer Manager</h3>
-      <p>This demo showcases the layer manager plugin with multiple layers:</p>
-      <ul style="font-size: 13px; margin: 10px 0; padding-left: 20px">
-        <li><strong>Background</strong> - Base map style</li>
-        <li><strong>USGS Imagery</strong> - Satellite imagery</li>
-        <li><strong>US States</strong> - Polygon layer</li>
-        <li><strong>World Cities</strong> - Point layer</li>
-      </ul>
-      <p
-        style="
-          margin-top: 15px;
-          padding-top: 15px;
-          border-top: 1px solid #e0e0e0;
-        "
-      >
-        <strong>Features:</strong><br />
-        • Toggle layer visibility<br />
-        • Adjust layer opacity<br />
-        • Style layer properties<br />
-        • Remove layers
-      </p>
-    </div>
     <script type="module" src="./layer.ts"></script>
   </body>
 </html>

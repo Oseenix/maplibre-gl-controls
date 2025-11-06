@@ -94,7 +94,7 @@ export default class ColorBar implements IControl {
 
 		this.options = {
 	    position: "top-left",
-      width: "56px",    // Default width
+      width: "50px",    // Default width
       height: "272px",  // Default width
       max: 30,          // Default max
       decimal: 1,       // Default max
@@ -338,7 +338,7 @@ export default class ColorBar implements IControl {
 	refresh() {
 	}
 
-  getDefaultPosition(): ControlPosition {
+  getPosition(): ControlPosition {
     return this.options.position || 'top-left';
   };
 

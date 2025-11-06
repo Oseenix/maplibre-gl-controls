@@ -1,12 +1,12 @@
-var Cn = Object.defineProperty;
-var wn = (n, e, t) => e in n ? Cn(n, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : n[e] = t;
-var g = (n, e, t) => wn(n, typeof e != "symbol" ? e + "" : e, t);
-const kn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause</title><path d="M14,19H18V5H14M6,19H10V5H6V19Z" /></svg>', xn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play</title><path d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>', En = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>reload</title><path d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" /></svg>', Mn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>skip-backward</title><path d="M20,5V19L13,12M6,5V19H4V5M13,5V19L6,12" /></svg>', Sn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>skip-forward</title><path d="M4,5V19L11,12M18,5V19H20V5M11,5V19L18,12" /></svg>', de = "rgb(204, 204, 204)", re = (n) => {
+var Tn = Object.defineProperty;
+var Sn = (n, e, t) => e in n ? Tn(n, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : n[e] = t;
+var g = (n, e, t) => Sn(n, typeof e != "symbol" ? e + "" : e, t);
+const $n = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause</title><path d="M14,19H18V5H14M6,19H10V5H6V19Z" /></svg>', Pn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play</title><path d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>', Nn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>reload</title><path d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" /></svg>', Ln = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>skip-backward</title><path d="M20,5V19L13,12M6,5V19H4V5M13,5V19L6,12" /></svg>', An = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>skip-forward</title><path d="M4,5V19L11,12M18,5V19H20V5M11,5V19L18,12" /></svg>', me = "rgb(204, 204, 204)", se = (n) => {
   const e = document.createElement("img");
   return e.src = `data:image/svg+xml,${encodeURIComponent(n)}`, e.style.width = "24px", e.style.height = "24px", e;
 };
-let ye;
-const In = ({
+let be;
+const Dn = ({
   length: n,
   interval: e,
   onSliderValueChange: t
@@ -22,9 +22,9 @@ const In = ({
   const o = document.createElement("div");
   o.style.display = "flex", o.style.justifyContent = "center", o.style.margin = "4px 0 0 0";
   const a = (H) => {
-    u.style.backgroundColor = H ? de : "";
-  }, l = () => u.style.backgroundColor === de, u = document.createElement("button");
-  u.appendChild(re(En)), u.style.border = "0", u.style.borderRadius = "0", u.style.marginRight = "16px", u.style.height = "24px", u.style.borderRadius = "4px", u.onclick = () => a(!l()), o.appendChild(u);
+    u.style.backgroundColor = H ? me : "";
+  }, l = () => u.style.backgroundColor === me, u = document.createElement("button");
+  u.appendChild(se(Nn)), u.style.border = "0", u.style.borderRadius = "0", u.style.marginRight = "16px", u.style.height = "24px", u.style.borderRadius = "4px", u.onclick = () => a(!l()), o.appendChild(u);
   const c = () => (s.value = String(Math.max(0, Number(s.value) - 1)), t(), Number(s.min) < Number(s.value)), f = () => {
     if (u.style.backgroundColor !== "" && Number(s.value) == Number(s.max))
       for (; c(); )
@@ -34,20 +34,20 @@ const In = ({
         Math.min(Number(s.max), Number(s.value) + 1)
       );
     return t(), Number(s.value) < Number(s.max);
-  }, h = document.createElement("button");
-  h.appendChild(re(Mn)), h.onclick = c, h.style.border = "0", h.style.height = "24px", h.style.borderRadius = "4px";
+  }, p = document.createElement("button");
+  p.appendChild(se(Ln)), p.onclick = c, p.style.border = "0", p.style.height = "24px", p.style.borderRadius = "4px";
   const d = () => {
-    ye !== void 0 && (clearInterval(ye), ye = void 0, y.onclick = null, w.style.backgroundColor = "");
+    be !== void 0 && (clearInterval(be), be = void 0, y.onclick = null, T.style.backgroundColor = "");
   }, y = document.createElement("button");
-  y.appendChild(re(kn)), y.style.border = "0", y.style.height = "24px", y.style.borderRadius = "4px", y.onclick = d;
-  const C = () => w.style.backgroundColor === de, E = () => {
-    C() || (w.style.backgroundColor = de, ye = setInterval(() => {
+  y.appendChild(se($n)), y.style.border = "0", y.style.height = "24px", y.style.borderRadius = "4px", y.onclick = d;
+  const C = () => T.style.backgroundColor === me, E = () => {
+    C() || (T.style.backgroundColor = me, be = setInterval(() => {
       f();
     }, e));
-  }, w = document.createElement("button");
-  w.appendChild(re(xn)), w.style.border = "0", w.style.height = "24px", w.style.borderRadius = "4px", w.onclick = E;
-  const I = document.createElement("button");
-  return I.appendChild(re(Sn)), I.style.border = "0", I.style.height = "24px", I.style.borderRadius = "4px", I.onclick = f, o.appendChild(h), o.appendChild(y), o.appendChild(w), o.appendChild(I), r.appendChild(o), {
+  }, T = document.createElement("button");
+  T.appendChild(se(Pn)), T.style.border = "0", T.style.height = "24px", T.style.borderRadius = "4px", T.onclick = E;
+  const S = document.createElement("button");
+  return S.appendChild(se(An)), S.style.border = "0", S.style.height = "24px", S.style.borderRadius = "4px", S.onclick = f, o.appendChild(p), o.appendChild(y), o.appendChild(T), o.appendChild(S), r.appendChild(o), {
     container: r,
     titleDiv: i,
     slider: s,
@@ -60,7 +60,7 @@ const In = ({
     setLoopEnabled: a
   };
 };
-class Yr {
+class ci {
   constructor(e, t = {}) {
     g(this, "map");
     g(this, "options");
@@ -90,10 +90,10 @@ class Yr {
       play: u,
       pause: c,
       isPlaying: f,
-      isLoopEnabled: h,
+      isLoopEnabled: p,
       setLoopEnabled: d
-    } = In(r);
-    this.container = i, this.containerTitle = s, this.temporalSlider = o, this.next = a, this.prev = l, this.play = u, this.pause = c, this.isPlaying = f, this.isLoopEnabled = h, this.setLoopEnabled = d, this.goto = (y) => {
+    } = Dn(r);
+    this.container = i, this.containerTitle = s, this.temporalSlider = o, this.next = a, this.prev = l, this.play = u, this.pause = c, this.isPlaying = f, this.isLoopEnabled = p, this.setLoopEnabled = d, this.goto = (y) => {
       o.value = String(
         Math.min(this.temporalFrames.length - 1, Math.max(0, y))
       ), this.refresh();
@@ -108,7 +108,7 @@ class Yr {
     var e;
     (e = this.container.parentNode) == null || e.removeChild(this.container), this.map = void 0;
   }
-  getDefaultPosition() {
+  getPosition() {
     return "bottom-left";
   }
   refresh() {
@@ -150,19 +150,19 @@ function Ut(n, ...e) {
       n[r] = t[r];
   return n;
 }
-class _ extends Error {
+class B extends Error {
   constructor(e, t) {
     super(t), this.message = t, this.key = e;
   }
 }
-class it {
+class ot {
   constructor(e, t = []) {
     this.parent = e, this.bindings = {};
     for (const [r, i] of t)
       this.bindings[r] = i;
   }
   concat(e) {
-    return new it(this, e);
+    return new ot(this, e);
   }
   get(e) {
     if (this.bindings[e])
@@ -175,103 +175,103 @@ class it {
     return this.bindings[e] ? !0 : this.parent ? this.parent.has(e) : !1;
   }
 }
-const Se = { kind: "null" }, p = { kind: "number" }, b = { kind: "string" }, m = { kind: "boolean" }, F = { kind: "color" }, Ie = { kind: "projectionDefinition" }, Q = { kind: "object" }, v = { kind: "value" }, Tn = { kind: "error" }, Te = { kind: "collator" }, Le = { kind: "formatted" }, $e = { kind: "padding" }, ce = { kind: "resolvedImage" }, Ne = { kind: "variableAnchorOffsetCollection" };
-function L(n, e) {
+const $e = { kind: "null" }, h = { kind: "number" }, v = { kind: "string" }, m = { kind: "boolean" }, z = { kind: "color" }, Pe = { kind: "projectionDefinition" }, K = { kind: "object" }, b = { kind: "value" }, Fn = { kind: "error" }, Ne = { kind: "collator" }, Le = { kind: "formatted" }, Ae = { kind: "padding" }, pe = { kind: "resolvedImage" }, De = { kind: "variableAnchorOffsetCollection" };
+function P(n, e) {
   return {
     kind: "array",
     itemType: n,
     N: e
   };
 }
-function x(n) {
+function k(n) {
   if (n.kind === "array") {
-    const e = x(n.itemType);
+    const e = k(n.itemType);
     return typeof n.N == "number" ? `array<${e}, ${n.N}>` : n.itemType.kind === "value" ? "array" : `array<${e}>`;
   } else
     return n.kind;
 }
-const Ln = [
-  Se,
-  p,
-  b,
-  m,
-  F,
-  Ie,
-  Le,
-  Q,
-  L(v),
+const Bn = [
   $e,
-  ce,
-  Ne
+  h,
+  v,
+  m,
+  z,
+  Pe,
+  Le,
+  K,
+  P(b),
+  Ae,
+  pe,
+  De
 ];
-function se(n, e) {
+function le(n, e) {
   if (e.kind === "error")
     return null;
   if (n.kind === "array") {
-    if (e.kind === "array" && (e.N === 0 && e.itemType.kind === "value" || !se(n.itemType, e.itemType)) && (typeof n.N != "number" || n.N === e.N))
+    if (e.kind === "array" && (e.N === 0 && e.itemType.kind === "value" || !le(n.itemType, e.itemType)) && (typeof n.N != "number" || n.N === e.N))
       return null;
   } else {
     if (n.kind === e.kind)
       return null;
     if (n.kind === "value") {
-      for (const t of Ln)
-        if (!se(t, e))
+      for (const t of Bn)
+        if (!le(t, e))
           return null;
     }
   }
-  return `Expected ${x(n)} but found ${x(e)} instead.`;
+  return `Expected ${k(n)} but found ${k(e)} instead.`;
 }
-function st(n, e) {
+function at(n, e) {
   return e.some((t) => t.kind === n.kind);
 }
-function U(n, e) {
+function G(n, e) {
   return e.some((t) => t === "null" ? n === null : t === "array" ? Array.isArray(n) : t === "object" ? n && !Array.isArray(n) && typeof n == "object" : t === typeof n);
 }
-function G(n, e) {
+function J(n, e) {
   return n.kind === "array" && e.kind === "array" ? n.itemType.kind === e.itemType.kind && typeof n.N == "number" : n.kind === e.kind;
 }
-const Xt = 0.96422, Zt = 1, Gt = 0.82521, Jt = 4 / 29, K = 6 / 29, Yt = 3 * K * K, $n = K * K * K, Nn = Math.PI / 180, Dn = 180 / Math.PI;
+const Gt = 0.96422, Xt = 1, Zt = 0.82521, Jt = 4 / 29, ee = 6 / 29, Yt = 3 * ee * ee, zn = ee * ee * ee, jn = Math.PI / 180, Rn = 180 / Math.PI;
 function Qt(n) {
   return n = n % 360, n < 0 && (n += 360), n;
 }
 function Kt([n, e, t, r]) {
-  n = je(n), e = je(e), t = je(t);
+  n = qe(n), e = qe(e), t = qe(t);
   let i, s;
-  const o = Re((0.2225045 * n + 0.7168786 * e + 0.0606169 * t) / Zt);
-  n === e && e === t ? i = s = o : (i = Re((0.4360747 * n + 0.3850649 * e + 0.1430804 * t) / Xt), s = Re((0.0139322 * n + 0.0971045 * e + 0.7141733 * t) / Gt));
+  const o = Ve((0.2225045 * n + 0.7168786 * e + 0.0606169 * t) / Xt);
+  n === e && e === t ? i = s = o : (i = Ve((0.4360747 * n + 0.3850649 * e + 0.1430804 * t) / Gt), s = Ve((0.0139322 * n + 0.0971045 * e + 0.7141733 * t) / Zt));
   const a = 116 * o - 16;
   return [a < 0 ? 0 : a, 500 * (i - o), 200 * (o - s), r];
 }
-function je(n) {
+function qe(n) {
   return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
 }
-function Re(n) {
-  return n > $n ? Math.pow(n, 1 / 3) : n / Yt + Jt;
+function Ve(n) {
+  return n > zn ? Math.pow(n, 1 / 3) : n / Yt + Jt;
 }
 function en([n, e, t, r]) {
   let i = (n + 16) / 116, s = isNaN(e) ? i : i + e / 500, o = isNaN(t) ? i : i - t / 200;
-  return i = Zt * qe(i), s = Xt * qe(s), o = Gt * qe(o), [
-    Oe(3.1338561 * s - 1.6168667 * i - 0.4906146 * o),
+  return i = Xt * Ue(i), s = Gt * Ue(s), o = Zt * Ue(o), [
+    We(3.1338561 * s - 1.6168667 * i - 0.4906146 * o),
     // D50 -> sRGB
-    Oe(-0.9787684 * s + 1.9161415 * i + 0.033454 * o),
-    Oe(0.0719453 * s - 0.2289914 * i + 1.4052427 * o),
+    We(-0.9787684 * s + 1.9161415 * i + 0.033454 * o),
+    We(0.0719453 * s - 0.2289914 * i + 1.4052427 * o),
     r
   ];
 }
-function Oe(n) {
+function We(n) {
   return n = n <= 304e-5 ? 12.92 * n : 1.055 * Math.pow(n, 1 / 2.4) - 0.055, n < 0 ? 0 : n > 1 ? 1 : n;
 }
-function qe(n) {
-  return n > K ? n * n * n : Yt * (n - Jt);
+function Ue(n) {
+  return n > ee ? n * n * n : Yt * (n - Jt);
 }
-function An(n) {
+function Hn(n) {
   const [e, t, r, i] = Kt(n), s = Math.sqrt(t * t + r * r);
-  return [Math.round(s * 1e4) ? Qt(Math.atan2(r, t) * Dn) : NaN, s, e, i];
-}
-function Pn([n, e, t, r]) {
-  return n = isNaN(n) ? 0 : n * Nn, en([t, Math.cos(n) * e, Math.sin(n) * e, r]);
+  return [Math.round(s * 1e4) ? Qt(Math.atan2(r, t) * Rn) : NaN, s, e, i];
 }
 function _n([n, e, t, r]) {
+  return n = isNaN(n) ? 0 : n * jn, en([t, Math.cos(n) * e, Math.sin(n) * e, r]);
+}
+function On([n, e, t, r]) {
   n = Qt(n), e /= 100, t /= 100;
   function i(s) {
     const o = (s + n / 30) % 12, a = e * Math.min(t, 1 - t);
@@ -279,10 +279,10 @@ function _n([n, e, t, r]) {
   }
   return [i(0), i(8), i(4), r];
 }
-function Fn(n) {
+function qn(n) {
   if (n = n.toLowerCase().trim(), n === "transparent")
     return [0, 0, 0, 0];
-  const e = Bn[n];
+  const e = Vn[n];
   if (e) {
     const [i, s, o] = e;
     return [i / 255, s / 255, o / 255, 1];
@@ -291,10 +291,10 @@ function Fn(n) {
     const s = n.length < 6 ? 1 : 2;
     let o = 1;
     return [
-      ge(n.slice(o, o += s)),
-      ge(n.slice(o, o += s)),
-      ge(n.slice(o, o += s)),
-      ge(n.slice(o, o + s) || "ff")
+      ve(n.slice(o, o += s)),
+      ve(n.slice(o, o += s)),
+      ve(n.slice(o, o += s)),
+      ve(n.slice(o, o + s) || "ff")
     ];
   }
   if (n.startsWith("rgb")) {
@@ -313,7 +313,7 @@ function Fn(n) {
         // <numeric>
         f,
         // %         (optional)
-        h,
+        p,
         // ,         (optional)
         d,
         // <numeric>
@@ -323,20 +323,20 @@ function Fn(n) {
         // ,|/       (optional)
         E,
         // <numeric> (optional)
-        w
+        T
         // %         (optional)
-      ] = s, I = [u || " ", h || " ", C].join("");
-      if (I === "  " || I === "  /" || I === ",," || I === ",,,") {
-        const H = [l, f, y].join(""), pe = H === "%%%" ? 100 : H === "" ? 255 : 0;
-        if (pe) {
-          const Mt = [
-            J(+a / pe, 0, 1),
-            J(+c / pe, 0, 1),
-            J(+d / pe, 0, 1),
-            E ? St(+E, w) : 1
+      ] = s, S = [u || " ", p || " ", C].join("");
+      if (S === "  " || S === "  /" || S === ",," || S === ",,,") {
+        const H = [l, f, y].join(""), ge = H === "%%%" ? 100 : H === "" ? 255 : 0;
+        if (ge) {
+          const Tt = [
+            Y(+a / ge, 0, 1),
+            Y(+c / ge, 0, 1),
+            Y(+d / ge, 0, 1),
+            E ? St(+E, T) : 1
           ];
-          if (It(Mt))
-            return Mt;
+          if ($t(Tt))
+            return Tt;
         }
       }
       return;
@@ -361,34 +361,34 @@ function Fn(n) {
       // ,|/       (optional)
       f,
       // <numeric> (optional)
-      h
+      p
       // %         (optional)
     ] = r, d = [o || " ", l || " ", c].join("");
     if (d === "  " || d === "  /" || d === ",," || d === ",,,") {
       const y = [
         +s,
-        J(+a, 0, 100),
-        J(+u, 0, 100),
-        f ? St(+f, h) : 1
+        Y(+a, 0, 100),
+        Y(+u, 0, 100),
+        f ? St(+f, p) : 1
       ];
-      if (It(y))
-        return _n(y);
+      if ($t(y))
+        return On(y);
     }
   }
 }
-function ge(n) {
+function ve(n) {
   return parseInt(n.padEnd(2, n), 16) / 255;
 }
 function St(n, e) {
-  return J(e ? n / 100 : n, 0, 1);
+  return Y(e ? n / 100 : n, 0, 1);
 }
-function J(n, e, t) {
+function Y(n, e, t) {
   return Math.min(Math.max(e, n), t);
 }
-function It(n) {
+function $t(n) {
   return !n.some(Number.isNaN);
 }
-const Bn = {
+const Vn = {
   aliceblue: [240, 248, 255],
   antiquewhite: [250, 235, 215],
   aqua: [0, 255, 255],
@@ -538,16 +538,16 @@ const Bn = {
   yellow: [255, 255, 0],
   yellowgreen: [154, 205, 50]
 };
-function q(n, e, t) {
+function V(n, e, t) {
   return n + t * (e - n);
 }
-function oe(n, e, t) {
-  return n.map((r, i) => q(r, e[i], t));
+function ue(n, e, t) {
+  return n.map((r, i) => V(r, e[i], t));
 }
-function zn(n) {
+function Wn(n) {
   return n === "rgb" || n === "hcl" || n === "lab";
 }
-class k {
+class w {
   /**
    * @param r Red component premultiplied by `alpha` 0..1
    * @param g Green component premultiplied by `alpha` 0..1
@@ -572,13 +572,13 @@ class k {
    * @returns A `Color` instance, or `undefined` if the input is not a valid color string.
    */
   static parse(e) {
-    if (e instanceof k)
+    if (e instanceof w)
       return e;
     if (typeof e != "string")
       return;
-    const t = Fn(e);
+    const t = qn(e);
     if (t)
-      return new k(...t, !1);
+      return new w(...t, !1);
   }
   /**
    * Used in color interpolation and by 'to-rgba' expression.
@@ -595,7 +595,7 @@ class k {
    * @returns Gien color, with reversed alpha blending, in HCL color space.
    */
   get hcl() {
-    return this.overwriteGetter("hcl", An(this.rgb));
+    return this.overwriteGetter("hcl", Hn(this.rgb));
   }
   /**
    * Used in color interpolation.
@@ -646,36 +646,36 @@ class k {
   static interpolate(e, t, r, i = "rgb") {
     switch (i) {
       case "rgb": {
-        const [s, o, a, l] = oe(e.rgb, t.rgb, r);
-        return new k(s, o, a, l, !1);
+        const [s, o, a, l] = ue(e.rgb, t.rgb, r);
+        return new w(s, o, a, l, !1);
       }
       case "hcl": {
-        const [s, o, a, l] = e.hcl, [u, c, f, h] = t.hcl;
+        const [s, o, a, l] = e.hcl, [u, c, f, p] = t.hcl;
         let d, y;
         if (!isNaN(s) && !isNaN(u)) {
           let H = u - s;
           u > s && H > 180 ? H -= 360 : u < s && s - u > 180 && (H += 360), d = s + r * H;
         } else isNaN(s) ? isNaN(u) ? d = NaN : (d = u, (a === 1 || a === 0) && (y = c)) : (d = s, (f === 1 || f === 0) && (y = o));
-        const [C, E, w, I] = Pn([
+        const [C, E, T, S] = _n([
           d,
-          y ?? q(o, c, r),
-          q(a, f, r),
-          q(l, h, r)
+          y ?? V(o, c, r),
+          V(a, f, r),
+          V(l, p, r)
         ]);
-        return new k(C, E, w, I, !1);
+        return new w(C, E, T, S, !1);
       }
       case "lab": {
-        const [s, o, a, l] = en(oe(e.lab, t.lab, r));
-        return new k(s, o, a, l, !1);
+        const [s, o, a, l] = en(ue(e.lab, t.lab, r));
+        return new w(s, o, a, l, !1);
       }
     }
   }
 }
-k.black = new k(0, 0, 0, 1);
-k.white = new k(1, 1, 1, 1);
-k.transparent = new k(0, 0, 0, 0);
-k.red = new k(1, 0, 0, 1);
-class ot {
+w.black = new w(0, 0, 0, 1);
+w.white = new w(1, 1, 1, 1);
+w.transparent = new w(0, 0, 0, 0);
+w.red = new w(1, 0, 0, 1);
+class lt {
   constructor(e, t, r) {
     e ? this.sensitivity = t ? "variant" : "case" : this.sensitivity = t ? "accent" : "base", this.locale = r, this.collator = new Intl.Collator(this.locale ? this.locale : [], { sensitivity: this.sensitivity, usage: "search" });
   }
@@ -686,29 +686,29 @@ class ot {
     return new Intl.Collator(this.locale ? this.locale : []).resolvedOptions().locale;
   }
 }
-class Ze {
+class Ye {
   constructor(e, t, r, i, s) {
     this.text = e, this.image = t, this.scale = r, this.fontStack = i, this.textColor = s;
   }
 }
-class B {
+class j {
   constructor(e) {
     this.sections = e;
   }
   static fromString(e) {
-    return new B([new Ze(e, null, null, null, null)]);
+    return new j([new Ye(e, null, null, null, null)]);
   }
   isEmpty() {
     return this.sections.length === 0 ? !0 : !this.sections.some((e) => e.text.length !== 0 || e.image && e.image.name.length !== 0);
   }
   static factory(e) {
-    return e instanceof B ? e : B.fromString(e);
+    return e instanceof j ? e : j.fromString(e);
   }
   toString() {
     return this.sections.length === 0 ? "" : this.sections.map((e) => e.text).join("");
   }
 }
-class T {
+class $ {
   constructor(e) {
     this.values = e.slice();
   }
@@ -718,10 +718,10 @@ class T {
    * @returns A `Padding` instance, or `undefined` if the input is not a valid padding value.
    */
   static parse(e) {
-    if (e instanceof T)
+    if (e instanceof $)
       return e;
     if (typeof e == "number")
-      return new T([e, e, e, e]);
+      return new $([e, e, e, e]);
     if (Array.isArray(e) && !(e.length < 1 || e.length > 4)) {
       for (const t of e)
         if (typeof t != "number")
@@ -737,14 +737,14 @@ class T {
           e = [e[0], e[1], e[2], e[1]];
           break;
       }
-      return new T(e);
+      return new $(e);
     }
   }
   toString() {
     return JSON.stringify(this.values);
   }
   static interpolate(e, t, r) {
-    return new T(oe(e.values, t.values, r));
+    return new $(ue(e.values, t.values, r));
   }
 }
 class M {
@@ -755,21 +755,21 @@ class M {
     return this.message;
   }
 }
-const Hn = /* @__PURE__ */ new Set(["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"]);
-class N {
+const Un = /* @__PURE__ */ new Set(["center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"]);
+class L {
   constructor(e) {
     this.values = e.slice();
   }
   static parse(e) {
-    if (e instanceof N)
+    if (e instanceof L)
       return e;
     if (!(!Array.isArray(e) || e.length < 1 || e.length % 2 !== 0)) {
       for (let t = 0; t < e.length; t += 2) {
         const r = e[t], i = e[t + 1];
-        if (typeof r != "string" || !Hn.has(r) || !Array.isArray(i) || i.length !== 2 || typeof i[0] != "number" || typeof i[1] != "number")
+        if (typeof r != "string" || !Un.has(r) || !Array.isArray(i) || i.length !== 2 || typeof i[0] != "number" || typeof i[1] != "number")
           return;
       }
-      return new N(e);
+      return new L(e);
     }
   }
   toString() {
@@ -785,12 +785,12 @@ class N {
         throw new M(`Cannot interpolate values containing mismatched anchors. from[${a}]: ${i[a]}, to[${a}]: ${s[a]}`);
       o.push(i[a]);
       const [l, u] = i[a + 1], [c, f] = s[a + 1];
-      o.push([q(l, c, r), q(u, f, r)]);
+      o.push([V(l, c, r), V(u, f, r)]);
     }
-    return new N(o);
+    return new L(o);
   }
 }
-class R {
+class O {
   constructor(e) {
     this.name = e.name, this.available = e.available;
   }
@@ -798,104 +798,104 @@ class R {
     return this.name;
   }
   static fromString(e) {
-    return e ? new R({ name: e, available: !1 }) : null;
+    return e ? new O({ name: e, available: !1 }) : null;
   }
 }
-class $ {
+class N {
   constructor(e, t, r) {
     this.from = e, this.to = t, this.transition = r;
   }
   static interpolate(e, t, r) {
-    return new $(e, t, r);
+    return new N(e, t, r);
   }
   static parse(e) {
-    if (e instanceof $)
+    if (e instanceof N)
       return e;
     if (Array.isArray(e) && e.length === 3 && typeof e[0] == "string" && typeof e[1] == "string" && typeof e[2] == "number")
-      return new $(e[0], e[1], e[2]);
+      return new N(e[0], e[1], e[2]);
     if (typeof e == "object" && typeof e.from == "string" && typeof e.to == "string" && typeof e.transition == "number")
-      return new $(e.from, e.to, e.transition);
+      return new N(e.from, e.to, e.transition);
     if (typeof e == "string")
-      return new $(e, e, 1);
+      return new N(e, e, 1);
   }
 }
 function tn(n, e, t, r) {
   return typeof n == "number" && n >= 0 && n <= 255 && typeof e == "number" && e >= 0 && e <= 255 && typeof t == "number" && t >= 0 && t <= 255 ? typeof r > "u" || typeof r == "number" && r >= 0 && r <= 1 ? null : `Invalid rgba value [${[n, e, t, r].join(", ")}]: 'a' must be between 0 and 1.` : `Invalid rgba value [${(typeof r == "number" ? [n, e, t, r] : [n, e, t]).join(", ")}]: 'r', 'g', and 'b' must be between 0 and 255.`;
 }
-function ae(n) {
-  if (n === null || typeof n == "string" || typeof n == "boolean" || typeof n == "number" || n instanceof $ || n instanceof k || n instanceof ot || n instanceof B || n instanceof T || n instanceof N || n instanceof R)
+function ce(n) {
+  if (n === null || typeof n == "string" || typeof n == "boolean" || typeof n == "number" || n instanceof N || n instanceof w || n instanceof lt || n instanceof j || n instanceof $ || n instanceof L || n instanceof O)
     return !0;
   if (Array.isArray(n)) {
     for (const e of n)
-      if (!ae(e))
+      if (!ce(e))
         return !1;
     return !0;
   } else if (typeof n == "object") {
     for (const e in n)
-      if (!ae(n[e]))
+      if (!ce(n[e]))
         return !1;
     return !0;
   } else
     return !1;
 }
-function S(n) {
+function I(n) {
   if (n === null)
-    return Se;
+    return $e;
   if (typeof n == "string")
-    return b;
+    return v;
   if (typeof n == "boolean")
     return m;
   if (typeof n == "number")
-    return p;
-  if (n instanceof k)
-    return F;
-  if (n instanceof $)
-    return Ie;
-  if (n instanceof ot)
-    return Te;
-  if (n instanceof B)
-    return Le;
-  if (n instanceof T)
-    return $e;
+    return h;
+  if (n instanceof w)
+    return z;
   if (n instanceof N)
+    return Pe;
+  if (n instanceof lt)
     return Ne;
-  if (n instanceof R)
-    return ce;
+  if (n instanceof j)
+    return Le;
+  if (n instanceof $)
+    return Ae;
+  if (n instanceof L)
+    return De;
+  if (n instanceof O)
+    return pe;
   if (Array.isArray(n)) {
     const e = n.length;
     let t;
     for (const r of n) {
-      const i = S(r);
+      const i = I(r);
       if (!t)
         t = i;
       else {
         if (t === i)
           continue;
-        t = v;
+        t = b;
         break;
       }
     }
-    return L(t || v, e);
+    return P(t || b, e);
   } else
-    return Q;
+    return K;
 }
-function ie(n) {
+function oe(n) {
   const e = typeof n;
-  return n === null ? "" : e === "string" || e === "number" || e === "boolean" ? String(n) : n instanceof k || n instanceof $ || n instanceof B || n instanceof T || n instanceof N || n instanceof R ? n.toString() : JSON.stringify(n);
+  return n === null ? "" : e === "string" || e === "number" || e === "boolean" ? String(n) : n instanceof w || n instanceof N || n instanceof j || n instanceof $ || n instanceof L || n instanceof O ? n.toString() : JSON.stringify(n);
 }
-class ee {
+class ne {
   constructor(e, t) {
     this.type = e, this.value = t;
   }
   static parse(e, t) {
     if (e.length !== 2)
       return t.error(`'literal' expression requires exactly one argument, but found ${e.length - 1} instead.`);
-    if (!ae(e[1]))
+    if (!ce(e[1]))
       return t.error("invalid value");
     const r = e[1];
-    let i = S(r);
+    let i = I(r);
     const s = t.expectedType;
-    return i.kind === "array" && i.N === 0 && s && s.kind === "array" && (typeof s.N != "number" || s.N === 0) && (i = s), new ee(i, r);
+    return i.kind === "array" && i.N === 0 && s && s.kind === "array" && (typeof s.N != "number" || s.N === 0) && (i = s), new ne(i, r);
   }
   evaluate() {
     return this.value;
@@ -906,13 +906,13 @@ class ee {
     return !0;
   }
 }
-const me = {
-  string: b,
-  number: p,
+const we = {
+  string: v,
+  number: h,
   boolean: m,
-  object: Q
+  object: K
 };
-class A {
+class D {
   constructor(e, t) {
     this.type = e, this.args = t;
   }
@@ -925,38 +925,38 @@ class A {
       let a;
       if (e.length > 2) {
         const u = e[1];
-        if (typeof u != "string" || !(u in me) || u === "object")
+        if (typeof u != "string" || !(u in we) || u === "object")
           return t.error('The item type argument of "array" must be one of string, number, boolean', 1);
-        a = me[u], r++;
+        a = we[u], r++;
       } else
-        a = v;
+        a = b;
       let l;
       if (e.length > 3) {
         if (e[2] !== null && (typeof e[2] != "number" || e[2] < 0 || e[2] !== Math.floor(e[2])))
           return t.error('The length argument to "array" must be a positive integer literal', 2);
         l = e[2], r++;
       }
-      i = L(a, l);
+      i = P(a, l);
     } else {
-      if (!me[s])
+      if (!we[s])
         throw new Error(`Types doesn't contain name = ${s}`);
-      i = me[s];
+      i = we[s];
     }
     const o = [];
     for (; r < e.length; r++) {
-      const a = t.parse(e[r], r, v);
+      const a = t.parse(e[r], r, b);
       if (!a)
         return null;
       o.push(a);
     }
-    return new A(i, o);
+    return new D(i, o);
   }
   evaluate(e) {
     for (let t = 0; t < this.args.length; t++) {
       const r = this.args[t].evaluate(e);
-      if (se(this.type, S(r))) {
+      if (le(this.type, I(r))) {
         if (t === this.args.length - 1)
-          throw new M(`Expected value to be of type ${x(this.type)}, but found ${x(S(r))} instead.`);
+          throw new M(`Expected value to be of type ${k(this.type)}, but found ${k(I(r))} instead.`);
       } else return r;
     }
     throw new Error();
@@ -968,13 +968,13 @@ class A {
     return this.args.every((e) => e.outputDefined());
   }
 }
-const Tt = {
+const Pt = {
   "to-boolean": m,
-  "to-color": F,
-  "to-number": p,
-  "to-string": b
+  "to-color": z,
+  "to-number": h,
+  "to-string": v
 };
-class O {
+class q {
   constructor(e, t) {
     this.type = e, this.args = t;
   }
@@ -982,18 +982,18 @@ class O {
     if (e.length < 2)
       return t.error("Expected at least one argument.");
     const r = e[0];
-    if (!Tt[r])
+    if (!Pt[r])
       throw new Error(`Can't parse ${r} as it is not part of the known types`);
     if ((r === "to-boolean" || r === "to-string") && e.length !== 2)
       return t.error("Expected one argument.");
-    const i = Tt[r], s = [];
+    const i = Pt[r], s = [];
     for (let o = 1; o < e.length; o++) {
-      const a = t.parse(e[o], o, v);
+      const a = t.parse(e[o], o, b);
       if (!a)
         return null;
       s.push(a);
     }
-    return new O(i, s);
+    return new q(i, s);
   }
   evaluate(e) {
     switch (this.type.kind) {
@@ -1002,14 +1002,14 @@ class O {
       case "color": {
         let t, r;
         for (const i of this.args) {
-          if (t = i.evaluate(e), r = null, t instanceof k)
+          if (t = i.evaluate(e), r = null, t instanceof w)
             return t;
           if (typeof t == "string") {
             const s = e.parseColor(t);
             if (s)
               return s;
           } else if (Array.isArray(t) && (t.length < 3 || t.length > 4 ? r = `Invalid rgba value ${JSON.stringify(t)}: expected an array containing either three or four numeric values.` : r = tn(t[0], t[1], t[2], t[3]), !r))
-            return new k(t[0] / 255, t[1] / 255, t[2] / 255, t[3]);
+            return new w(t[0] / 255, t[1] / 255, t[2] / 255, t[3]);
         }
         throw new M(r || `Could not parse color from value '${typeof t == "string" ? t : JSON.stringify(t)}'`);
       }
@@ -1017,7 +1017,7 @@ class O {
         let t;
         for (const r of this.args) {
           t = r.evaluate(e);
-          const i = T.parse(t);
+          const i = $.parse(t);
           if (i)
             return i;
         }
@@ -1027,7 +1027,7 @@ class O {
         let t;
         for (const r of this.args) {
           t = r.evaluate(e);
-          const i = N.parse(t);
+          const i = L.parse(t);
           if (i)
             return i;
         }
@@ -1045,13 +1045,13 @@ class O {
         throw new M(`Could not convert ${JSON.stringify(t)} to number.`);
       }
       case "formatted":
-        return B.fromString(ie(this.args[0].evaluate(e)));
+        return j.fromString(oe(this.args[0].evaluate(e)));
       case "resolvedImage":
-        return R.fromString(ie(this.args[0].evaluate(e)));
+        return O.fromString(oe(this.args[0].evaluate(e)));
       case "projectionDefinition":
         return this.args[0].evaluate(e);
       default:
-        return ie(this.args[0].evaluate(e));
+        return oe(this.args[0].evaluate(e));
     }
   }
   eachChild(e) {
@@ -1061,7 +1061,7 @@ class O {
     return this.args.every((e) => e.outputDefined());
   }
 }
-function jn(n, e) {
+function Gn(n, e) {
   if (n.length <= 1)
     return [n];
   const r = [];
@@ -1078,7 +1078,7 @@ function nn(n) {
     s = n[t], o = n[i], e += (o.x - s.x) * (s.y + o.y);
   return e;
 }
-function Rn(n) {
+function Xn(n) {
   const e = n.length;
   for (let t = 0, r; t < e; t++) {
     const i = nn(n[t]);
@@ -1091,7 +1091,7 @@ function Rn(n) {
   }
   return !1;
 }
-const Lt = ["Unknown", "Point", "LineString", "Polygon"], On = {
+const Nt = ["Unknown", "Point", "LineString", "Polygon"], Zn = {
   Unknown: "Unknown",
   Point: "Point",
   MultiPoint: "Point",
@@ -1108,14 +1108,14 @@ class rn {
     return this.feature && "id" in this.feature ? this.feature.id : null;
   }
   geometryDollarType() {
-    return this.feature ? typeof this.feature.type == "number" ? Lt[this.feature.type] : On[this.feature.type] : null;
+    return this.feature ? typeof this.feature.type == "number" ? Nt[this.feature.type] : Zn[this.feature.type] : null;
   }
   geometryType() {
     let e = this.feature.type;
-    if (typeof e != "number" || (e = Lt[this.feature.type], e === "Unknown"))
+    if (typeof e != "number" || (e = Nt[this.feature.type], e === "Unknown"))
       return e;
     const t = this.geometry();
-    return t.length === 1 ? e : e !== "Polygon" ? `Multi${e}` : Rn(t) ? "MultiPolygon" : "Polygon";
+    return t.length === 1 ? e : e !== "Polygon" ? `Multi${e}` : Xn(t) ? "MultiPolygon" : "Polygon";
   }
   geometry() {
     return this.feature && "geometry" in this.feature ? this.feature.geometry : null;
@@ -1128,11 +1128,11 @@ class rn {
   }
   parseColor(e) {
     let t = this._parseColorCache[e];
-    return t || (t = this._parseColorCache[e] = k.parse(e)), t;
+    return t || (t = this._parseColorCache[e] = w.parse(e)), t;
   }
 }
-class De {
-  constructor(e, t, r = [], i, s = new it(), o = []) {
+class Fe {
+  constructor(e, t, r = [], i, s = new ot(), o = []) {
     this.registry = e, this.path = r, this.key = r.map((a) => `[${a}]`).join(""), this.scope = s, this.errors = o, this.expectedType = i, this._isConstant = t;
   }
   /**
@@ -1148,7 +1148,7 @@ class De {
   _parse(e, t) {
     (e === null || typeof e == "string" || typeof e == "boolean" || typeof e == "number") && (e = ["literal", e]);
     function r(i, s, o) {
-      return o === "assert" ? new A(s, [i]) : o === "coerce" ? new O(s, [i]) : i;
+      return o === "assert" ? new D(s, [i]) : o === "coerce" ? new q(s, [i]) : i;
     }
     if (Array.isArray(e)) {
       if (e.length === 0)
@@ -1176,10 +1176,10 @@ class De {
           else if (this.checkSubtype(a, l))
             return null;
         }
-        if (!(o instanceof ee) && o.type.kind !== "resolvedImage" && this._isConstant(o)) {
+        if (!(o instanceof ne) && o.type.kind !== "resolvedImage" && this._isConstant(o)) {
           const a = new rn();
           try {
-            o = new ee(o.type, o.evaluate(a));
+            o = new ne(o.type, o.evaluate(a));
           } catch (l) {
             return this.error(l.message), null;
           }
@@ -1199,7 +1199,7 @@ class De {
    */
   concat(e, t, r) {
     const i = typeof e == "number" ? this.path.concat(e) : this.path, s = r ? this.scope.concat(r) : this.scope;
-    return new De(this.registry, this._isConstant, i, t || null, s, this.errors);
+    return new Fe(this.registry, this._isConstant, i, t || null, s, this.errors);
   }
   /**
    * Push a parsing (or type checking) error into the `this.errors`
@@ -1210,7 +1210,7 @@ class De {
    */
   error(e, ...t) {
     const r = `${this.key}${t.map((i) => `[${i}]`).join("")}`;
-    this.errors.push(new _(r, e));
+    this.errors.push(new B(r, e));
   }
   /**
    * Returns null if `t` is a subtype of `expected`; otherwise returns an
@@ -1220,11 +1220,11 @@ class De {
    * @returns null if `t` is a subtype of `expected`; otherwise returns an error message
    */
   checkSubtype(e, t) {
-    const r = se(e, t);
+    const r = le(e, t);
     return r && this.error(r), r;
   }
 }
-class Ae {
+class Be {
   constructor(e, t) {
     this.type = t.type, this.bindings = [].concat(e), this.result = t;
   }
@@ -1252,13 +1252,13 @@ class Ae {
       r.push([o, a]);
     }
     const i = t.parse(e[e.length - 1], e.length - 1, t.expectedType, r);
-    return i ? new Ae(r, i) : null;
+    return i ? new Be(r, i) : null;
   }
   outputDefined() {
     return this.result.outputDefined();
   }
 }
-class Pe {
+class ze {
   constructor(e, t) {
     this.type = t.type, this.name = e, this.boundExpression = t;
   }
@@ -1266,7 +1266,7 @@ class Pe {
     if (e.length !== 2 || typeof e[1] != "string")
       return t.error("'var' expression requires exactly one string literal argument.");
     const r = e[1];
-    return t.scope.has(r) ? new Pe(r, t.scope.get(r)) : t.error(`Unknown variable "${r}". Make sure "${r}" has been bound in an enclosing "let" expression before using it.`, 1);
+    return t.scope.has(r) ? new ze(r, t.scope.get(r)) : t.error(`Unknown variable "${r}". Make sure "${r}" has been bound in an enclosing "let" expression before using it.`, 1);
   }
   evaluate(e) {
     return this.boundExpression.evaluate(e);
@@ -1277,18 +1277,18 @@ class Pe {
     return !1;
   }
 }
-class at {
+class ut {
   constructor(e, t, r) {
     this.type = e, this.index = t, this.input = r;
   }
   static parse(e, t) {
     if (e.length !== 3)
       return t.error(`Expected 2 arguments, but found ${e.length - 1} instead.`);
-    const r = t.parse(e[1], 1, p), i = t.parse(e[2], 2, L(t.expectedType || v));
+    const r = t.parse(e[1], 1, h), i = t.parse(e[2], 2, P(t.expectedType || b));
     if (!r || !i)
       return null;
     const s = i.type;
-    return new at(s.itemType, r, i);
+    return new ut(s.itemType, r, i);
   }
   evaluate(e) {
     const t = this.index.evaluate(e), r = this.input.evaluate(e);
@@ -1307,24 +1307,24 @@ class at {
     return !1;
   }
 }
-class lt {
+class ct {
   constructor(e, t) {
     this.type = m, this.needle = e, this.haystack = t;
   }
   static parse(e, t) {
     if (e.length !== 3)
       return t.error(`Expected 2 arguments, but found ${e.length - 1} instead.`);
-    const r = t.parse(e[1], 1, v), i = t.parse(e[2], 2, v);
-    return !r || !i ? null : st(r.type, [m, b, p, Se, v]) ? new lt(r, i) : t.error(`Expected first argument to be of type boolean, string, number or null, but found ${x(r.type)} instead`);
+    const r = t.parse(e[1], 1, b), i = t.parse(e[2], 2, b);
+    return !r || !i ? null : at(r.type, [m, v, h, $e, b]) ? new ct(r, i) : t.error(`Expected first argument to be of type boolean, string, number or null, but found ${k(r.type)} instead`);
   }
   evaluate(e) {
     const t = this.needle.evaluate(e), r = this.haystack.evaluate(e);
     if (!r)
       return !1;
-    if (!U(t, ["boolean", "string", "number", "null"]))
-      throw new M(`Expected first argument to be of type boolean, string, number or null, but found ${x(S(t))} instead.`);
-    if (!U(r, ["string", "array"]))
-      throw new M(`Expected second argument to be of type array or string, but found ${x(S(r))} instead.`);
+    if (!G(t, ["boolean", "string", "number", "null"]))
+      throw new M(`Expected first argument to be of type boolean, string, number or null, but found ${k(I(t))} instead.`);
+    if (!G(r, ["string", "array"]))
+      throw new M(`Expected second argument to be of type array or string, but found ${k(I(r))} instead.`);
     return r.indexOf(t) >= 0;
   }
   eachChild(e) {
@@ -1334,36 +1334,36 @@ class lt {
     return !0;
   }
 }
-class Ce {
+class xe {
   constructor(e, t, r) {
-    this.type = p, this.needle = e, this.haystack = t, this.fromIndex = r;
+    this.type = h, this.needle = e, this.haystack = t, this.fromIndex = r;
   }
   static parse(e, t) {
     if (e.length <= 2 || e.length >= 5)
       return t.error(`Expected 3 or 4 arguments, but found ${e.length - 1} instead.`);
-    const r = t.parse(e[1], 1, v), i = t.parse(e[2], 2, v);
+    const r = t.parse(e[1], 1, b), i = t.parse(e[2], 2, b);
     if (!r || !i)
       return null;
-    if (!st(r.type, [m, b, p, Se, v]))
-      return t.error(`Expected first argument to be of type boolean, string, number or null, but found ${x(r.type)} instead`);
+    if (!at(r.type, [m, v, h, $e, b]))
+      return t.error(`Expected first argument to be of type boolean, string, number or null, but found ${k(r.type)} instead`);
     if (e.length === 4) {
-      const s = t.parse(e[3], 3, p);
-      return s ? new Ce(r, i, s) : null;
+      const s = t.parse(e[3], 3, h);
+      return s ? new xe(r, i, s) : null;
     } else
-      return new Ce(r, i);
+      return new xe(r, i);
   }
   evaluate(e) {
     const t = this.needle.evaluate(e), r = this.haystack.evaluate(e);
-    if (!U(t, ["boolean", "string", "number", "null"]))
-      throw new M(`Expected first argument to be of type boolean, string, number or null, but found ${x(S(t))} instead.`);
+    if (!G(t, ["boolean", "string", "number", "null"]))
+      throw new M(`Expected first argument to be of type boolean, string, number or null, but found ${k(I(t))} instead.`);
     let i;
-    if (this.fromIndex && (i = this.fromIndex.evaluate(e)), U(r, ["string"])) {
+    if (this.fromIndex && (i = this.fromIndex.evaluate(e)), G(r, ["string"])) {
       const s = r.indexOf(t, i);
       return s === -1 ? -1 : [...r.slice(0, s)].length;
     } else {
-      if (U(r, ["array"]))
+      if (G(r, ["array"]))
         return r.indexOf(t, i);
-      throw new M(`Expected second argument to be of type array or string, but found ${x(S(r))} instead.`);
+      throw new M(`Expected second argument to be of type array or string, but found ${k(I(r))} instead.`);
     }
   }
   eachChild(e) {
@@ -1373,7 +1373,7 @@ class Ce {
     return !1;
   }
 }
-class ut {
+class ft {
   constructor(e, t, r, i, s, o) {
     this.inputType = e, this.type = t, this.input = r, this.cases = i, this.outputs = s, this.otherwise = o;
   }
@@ -1389,22 +1389,22 @@ class ut {
       let c = e[u];
       const f = e[u + 1];
       Array.isArray(c) || (c = [c]);
-      const h = t.concat(u);
+      const p = t.concat(u);
       if (c.length === 0)
-        return h.error("Expected at least one branch label.");
+        return p.error("Expected at least one branch label.");
       for (const y of c) {
         if (typeof y != "number" && typeof y != "string")
-          return h.error("Branch labels must be numbers or strings.");
+          return p.error("Branch labels must be numbers or strings.");
         if (typeof y == "number" && Math.abs(y) > Number.MAX_SAFE_INTEGER)
-          return h.error(`Branch labels must be integers no larger than ${Number.MAX_SAFE_INTEGER}.`);
+          return p.error(`Branch labels must be integers no larger than ${Number.MAX_SAFE_INTEGER}.`);
         if (typeof y == "number" && Math.floor(y) !== y)
-          return h.error("Numeric branch labels must be integer values.");
+          return p.error("Numeric branch labels must be integer values.");
         if (!r)
-          r = S(y);
-        else if (h.checkSubtype(r, S(y)))
+          r = I(y);
+        else if (p.checkSubtype(r, I(y)))
           return null;
         if (typeof s[String(y)] < "u")
-          return h.error("Branch labels must be unique.");
+          return p.error("Branch labels must be unique.");
         s[String(y)] = o.length;
       }
       const d = t.parse(f, u, i);
@@ -1412,15 +1412,15 @@ class ut {
         return null;
       i = i || d.type, o.push(d);
     }
-    const a = t.parse(e[1], 1, v);
+    const a = t.parse(e[1], 1, b);
     if (!a)
       return null;
     const l = t.parse(e[e.length - 1], e.length - 1, i);
-    return !l || a.type.kind !== "value" && t.concat(1).checkSubtype(r, a.type) ? null : new ut(r, i, a, s, o, l);
+    return !l || a.type.kind !== "value" && t.concat(1).checkSubtype(r, a.type) ? null : new ft(r, i, a, s, o, l);
   }
   evaluate(e) {
     const t = this.input.evaluate(e);
-    return (S(t) === this.inputType && this.outputs[this.cases[t]] || this.otherwise).evaluate(e);
+    return (I(t) === this.inputType && this.outputs[this.cases[t]] || this.otherwise).evaluate(e);
   }
   eachChild(e) {
     e(this.input), this.outputs.forEach(e), e(this.otherwise);
@@ -1429,7 +1429,7 @@ class ut {
     return this.outputs.every((e) => e.outputDefined()) && this.otherwise.outputDefined();
   }
 }
-class ct {
+class ht {
   constructor(e, t, r) {
     this.type = e, this.branches = t, this.otherwise = r;
   }
@@ -1455,7 +1455,7 @@ class ct {
       return null;
     if (!r)
       throw new Error("Can't infer output type");
-    return new ct(r, i, s);
+    return new ht(r, i, s);
   }
   evaluate(e) {
     for (const [t, r] of this.branches)
@@ -1472,32 +1472,32 @@ class ct {
     return this.branches.every(([e, t]) => t.outputDefined()) && this.otherwise.outputDefined();
   }
 }
-class we {
+class Me {
   constructor(e, t, r, i) {
     this.type = e, this.input = t, this.beginIndex = r, this.endIndex = i;
   }
   static parse(e, t) {
     if (e.length <= 2 || e.length >= 5)
       return t.error(`Expected 3 or 4 arguments, but found ${e.length - 1} instead.`);
-    const r = t.parse(e[1], 1, v), i = t.parse(e[2], 2, p);
+    const r = t.parse(e[1], 1, b), i = t.parse(e[2], 2, h);
     if (!r || !i)
       return null;
-    if (!st(r.type, [L(v), b, v]))
-      return t.error(`Expected first argument to be of type array or string, but found ${x(r.type)} instead`);
+    if (!at(r.type, [P(b), v, b]))
+      return t.error(`Expected first argument to be of type array or string, but found ${k(r.type)} instead`);
     if (e.length === 4) {
-      const s = t.parse(e[3], 3, p);
-      return s ? new we(r.type, r, i, s) : null;
+      const s = t.parse(e[3], 3, h);
+      return s ? new Me(r.type, r, i, s) : null;
     } else
-      return new we(r.type, r, i);
+      return new Me(r.type, r, i);
   }
   evaluate(e) {
     const t = this.input.evaluate(e), r = this.beginIndex.evaluate(e);
     let i;
-    if (this.endIndex && (i = this.endIndex.evaluate(e)), U(t, ["string"]))
+    if (this.endIndex && (i = this.endIndex.evaluate(e)), G(t, ["string"]))
       return [...t].slice(r, i).join("");
-    if (U(t, ["array"]))
+    if (G(t, ["array"]))
       return t.slice(r, i);
-    throw new M(`Expected first argument to be of type array or string, but found ${x(S(t))} instead.`);
+    throw new M(`Expected first argument to be of type array or string, but found ${k(I(t))} instead.`);
   }
   eachChild(e) {
     e(this.input), e(this.beginIndex), this.endIndex && e(this.endIndex);
@@ -1506,7 +1506,7 @@ class we {
     return !1;
   }
 }
-function _e(n, e) {
+function je(n, e) {
   const t = n.length - 1;
   let r = 0, i = t, s = 0, o, a;
   for (; r <= i; )
@@ -1520,7 +1520,7 @@ function _e(n, e) {
       throw new M("Input is not a number.");
   return 0;
 }
-class Fe {
+class Re {
   constructor(e, t, r) {
     this.type = e, this.input = t, this.labels = [], this.outputs = [];
     for (const [i, s] of r)
@@ -1531,7 +1531,7 @@ class Fe {
       return t.error(`Expected at least 4 arguments, but found only ${e.length - 1}.`);
     if ((e.length - 1) % 2 !== 0)
       return t.error("Expected an even number of arguments.");
-    const r = t.parse(e[1], 1, p);
+    const r = t.parse(e[1], 1, h);
     if (!r)
       return null;
     const i = [];
@@ -1548,7 +1548,7 @@ class Fe {
         return null;
       s = s || f.type, i.push([a, f]);
     }
-    return new Fe(s, r, i);
+    return new Re(s, r, i);
   }
   evaluate(e) {
     const t = this.labels, r = this.outputs;
@@ -1560,7 +1560,7 @@ class Fe {
     const s = t.length;
     if (i >= t[s - 1])
       return r[s - 1].evaluate(e);
-    const o = _e(t, i);
+    const o = je(t, i);
     return r[o].evaluate(e);
   }
   eachChild(e) {
@@ -1572,13 +1572,13 @@ class Fe {
     return this.outputs.every((e) => e.outputDefined());
   }
 }
-function qn(n) {
+function Jn(n) {
   return n && n.__esModule && Object.prototype.hasOwnProperty.call(n, "default") ? n.default : n;
 }
-var We, $t;
-function Wn() {
-  if ($t) return We;
-  $t = 1, We = n;
+var Ge, Lt;
+function Yn() {
+  if (Lt) return Ge;
+  Lt = 1, Ge = n;
   function n(e, t, r, i) {
     this.cx = 3 * e, this.bx = 3 * (r - e) - this.cx, this.ax = 1 - this.cx - this.bx, this.cy = 3 * t, this.by = 3 * (i - t) - this.cy, this.ay = 1 - this.cy - this.by, this.p1x = e, this.p1y = t, this.p2x = r, this.p2y = i;
   }
@@ -1610,10 +1610,10 @@ function Wn() {
     solve: function(e, t) {
       return this.sampleCurveY(this.solveCurveX(e, t));
     }
-  }, We;
+  }, Ge;
 }
-var Vn = Wn(), Un = /* @__PURE__ */ qn(Vn);
-class D {
+var Qn = Yn(), Kn = /* @__PURE__ */ Jn(Qn);
+class A {
   constructor(e, t, r, i, s) {
     this.type = e, this.operator = t, this.interpolation = r, this.input = i, this.labels = [], this.outputs = [];
     for (const [o, a] of s)
@@ -1622,12 +1622,12 @@ class D {
   static interpolationFactor(e, t, r, i) {
     let s = 0;
     if (e.name === "exponential")
-      s = Ve(t, e.base, r, i);
+      s = Xe(t, e.base, r, i);
     else if (e.name === "linear")
-      s = Ve(t, 1, r, i);
+      s = Xe(t, 1, r, i);
     else if (e.name === "cubic-bezier") {
       const o = e.controlPoints;
-      s = new Un(o[0], o[1], o[2], o[3]).solve(Ve(t, 1, r, i));
+      s = new Kn(o[0], o[1], o[2], o[3]).solve(Xe(t, 1, r, i));
     }
     return s;
   }
@@ -1659,23 +1659,23 @@ class D {
       return t.error(`Expected at least 4 arguments, but found only ${e.length - 1}.`);
     if ((e.length - 1) % 2 !== 0)
       return t.error("Expected an even number of arguments.");
-    if (s = t.parse(s, 2, p), !s)
+    if (s = t.parse(s, 2, h), !s)
       return null;
     const a = [];
     let l = null;
-    r === "interpolate-hcl" || r === "interpolate-lab" ? l = F : t.expectedType && t.expectedType.kind !== "value" && (l = t.expectedType);
+    r === "interpolate-hcl" || r === "interpolate-lab" ? l = z : t.expectedType && t.expectedType.kind !== "value" && (l = t.expectedType);
     for (let u = 0; u < o.length; u += 2) {
-      const c = o[u], f = o[u + 1], h = u + 3, d = u + 4;
+      const c = o[u], f = o[u + 1], p = u + 3, d = u + 4;
       if (typeof c != "number")
-        return t.error('Input/output pairs for "interpolate" expressions must be defined using literal numeric values (not computed expressions) for the input values.', h);
+        return t.error('Input/output pairs for "interpolate" expressions must be defined using literal numeric values (not computed expressions) for the input values.', p);
       if (a.length && a[a.length - 1][0] >= c)
-        return t.error('Input/output pairs for "interpolate" expressions must be arranged with input values in strictly ascending order.', h);
+        return t.error('Input/output pairs for "interpolate" expressions must be arranged with input values in strictly ascending order.', p);
       const y = t.parse(f, d, l);
       if (!y)
         return null;
       l = l || y.type, a.push([c, y]);
     }
-    return !G(l, p) && !G(l, Ie) && !G(l, F) && !G(l, $e) && !G(l, Ne) && !G(l, L(p)) ? t.error(`Type ${x(l)} is not interpolatable.`) : new D(l, r, i, s, a);
+    return !J(l, h) && !J(l, Pe) && !J(l, z) && !J(l, Ae) && !J(l, De) && !J(l, P(h)) ? t.error(`Type ${k(l)} is not interpolatable.`) : new A(l, r, i, s, a);
   }
   evaluate(e) {
     const t = this.labels, r = this.outputs;
@@ -1687,27 +1687,27 @@ class D {
     const s = t.length;
     if (i >= t[s - 1])
       return r[s - 1].evaluate(e);
-    const o = _e(t, i), a = t[o], l = t[o + 1], u = D.interpolationFactor(this.interpolation, i, a, l), c = r[o].evaluate(e), f = r[o + 1].evaluate(e);
+    const o = je(t, i), a = t[o], l = t[o + 1], u = A.interpolationFactor(this.interpolation, i, a, l), c = r[o].evaluate(e), f = r[o + 1].evaluate(e);
     switch (this.operator) {
       case "interpolate":
         switch (this.type.kind) {
           case "number":
-            return q(c, f, u);
+            return V(c, f, u);
           case "color":
-            return k.interpolate(c, f, u);
+            return w.interpolate(c, f, u);
           case "padding":
-            return T.interpolate(c, f, u);
-          case "variableAnchorOffsetCollection":
-            return N.interpolate(c, f, u);
-          case "array":
-            return oe(c, f, u);
-          case "projectionDefinition":
             return $.interpolate(c, f, u);
+          case "variableAnchorOffsetCollection":
+            return L.interpolate(c, f, u);
+          case "array":
+            return ue(c, f, u);
+          case "projectionDefinition":
+            return N.interpolate(c, f, u);
         }
       case "interpolate-hcl":
-        return k.interpolate(c, f, u, "hcl");
+        return w.interpolate(c, f, u, "hcl");
       case "interpolate-lab":
-        return k.interpolate(c, f, u, "lab");
+        return w.interpolate(c, f, u, "lab");
     }
   }
   eachChild(e) {
@@ -1719,18 +1719,18 @@ class D {
     return this.outputs.every((e) => e.outputDefined());
   }
 }
-function Ve(n, e, t, r) {
+function Xe(n, e, t, r) {
   const i = r - t, s = n - t;
   return i === 0 ? 0 : e === 1 ? s / i : (Math.pow(e, s) - 1) / (Math.pow(e, i) - 1);
 }
-const Xn = {
-  color: k.interpolate,
-  number: q,
-  padding: T.interpolate,
-  variableAnchorOffsetCollection: N.interpolate,
-  array: oe
+const er = {
+  color: w.interpolate,
+  number: V,
+  padding: $.interpolate,
+  variableAnchorOffsetCollection: L.interpolate,
+  array: ue
 };
-class le {
+class fe {
   constructor(e, t) {
     this.type = e, this.args = t;
   }
@@ -1749,12 +1749,12 @@ class le {
     }
     if (!r)
       throw new Error("No output type");
-    return i && s.some((a) => se(i, a.type)) ? new le(v, s) : new le(r, s);
+    return i && s.some((a) => le(i, a.type)) ? new fe(b, s) : new fe(r, s);
   }
   evaluate(e) {
     let t = null, r = 0, i;
     for (const s of this.args)
-      if (r++, t = s.evaluate(e), t && t instanceof R && !t.available && (i || (i = t.name), t = null, r === this.args.length && (t = i)), t !== null)
+      if (r++, t = s.evaluate(e), t && t instanceof O && !t.available && (i || (i = t.name), t = null, r === this.args.length && (t = i)), t !== null)
         break;
     return t;
   }
@@ -1765,46 +1765,46 @@ class le {
     return this.args.every((e) => e.outputDefined());
   }
 }
-function Nt(n, e) {
+function At(n, e) {
   return n === "==" || n === "!=" ? e.kind === "boolean" || e.kind === "string" || e.kind === "number" || e.kind === "null" || e.kind === "value" : e.kind === "string" || e.kind === "number" || e.kind === "value";
 }
-function Zn(n, e, t) {
+function tr(n, e, t) {
   return e === t;
 }
-function Gn(n, e, t) {
+function nr(n, e, t) {
   return e !== t;
 }
-function Jn(n, e, t) {
+function rr(n, e, t) {
   return e < t;
 }
-function Yn(n, e, t) {
+function ir(n, e, t) {
   return e > t;
 }
-function Qn(n, e, t) {
+function sr(n, e, t) {
   return e <= t;
 }
-function Kn(n, e, t) {
+function or(n, e, t) {
   return e >= t;
 }
 function sn(n, e, t, r) {
   return r.compare(e, t) === 0;
 }
-function er(n, e, t, r) {
+function ar(n, e, t, r) {
   return !sn(n, e, t, r);
 }
-function tr(n, e, t, r) {
+function lr(n, e, t, r) {
   return r.compare(e, t) < 0;
 }
-function nr(n, e, t, r) {
+function ur(n, e, t, r) {
   return r.compare(e, t) > 0;
 }
-function rr(n, e, t, r) {
+function cr(n, e, t, r) {
   return r.compare(e, t) <= 0;
 }
-function ir(n, e, t, r) {
+function fr(n, e, t, r) {
   return r.compare(e, t) >= 0;
 }
-function te(n, e, t) {
+function re(n, e, t) {
   const r = n !== "==" && n !== "!=";
   return class on {
     constructor(s, o, a) {
@@ -1814,24 +1814,24 @@ function te(n, e, t) {
       if (s.length !== 3 && s.length !== 4)
         return o.error("Expected two or three arguments.");
       const a = s[0];
-      let l = o.parse(s[1], 1, v);
+      let l = o.parse(s[1], 1, b);
       if (!l)
         return null;
-      if (!Nt(a, l.type))
-        return o.concat(1).error(`"${a}" comparisons are not supported for type '${x(l.type)}'.`);
-      let u = o.parse(s[2], 2, v);
+      if (!At(a, l.type))
+        return o.concat(1).error(`"${a}" comparisons are not supported for type '${k(l.type)}'.`);
+      let u = o.parse(s[2], 2, b);
       if (!u)
         return null;
-      if (!Nt(a, u.type))
-        return o.concat(2).error(`"${a}" comparisons are not supported for type '${x(u.type)}'.`);
+      if (!At(a, u.type))
+        return o.concat(2).error(`"${a}" comparisons are not supported for type '${k(u.type)}'.`);
       if (l.type.kind !== u.type.kind && l.type.kind !== "value" && u.type.kind !== "value")
-        return o.error(`Cannot compare types '${x(l.type)}' and '${x(u.type)}'.`);
-      r && (l.type.kind === "value" && u.type.kind !== "value" ? l = new A(u.type, [l]) : l.type.kind !== "value" && u.type.kind === "value" && (u = new A(l.type, [u])));
+        return o.error(`Cannot compare types '${k(l.type)}' and '${k(u.type)}'.`);
+      r && (l.type.kind === "value" && u.type.kind !== "value" ? l = new D(u.type, [l]) : l.type.kind !== "value" && u.type.kind === "value" && (u = new D(l.type, [u])));
       let c = null;
       if (s.length === 4) {
         if (l.type.kind !== "string" && u.type.kind !== "string" && l.type.kind !== "value" && u.type.kind !== "value")
           return o.error("Cannot use collator to compare non-string types.");
-        if (c = o.parse(s[3], 3, Te), !c)
+        if (c = o.parse(s[3], 3, Ne), !c)
           return null;
       }
       return new on(l, u, c);
@@ -1839,12 +1839,12 @@ function te(n, e, t) {
     evaluate(s) {
       const o = this.lhs.evaluate(s), a = this.rhs.evaluate(s);
       if (r && this.hasUntypedArgument) {
-        const l = S(o), u = S(a);
+        const l = I(o), u = I(a);
         if (l.kind !== u.kind || !(l.kind === "string" || l.kind === "number"))
           throw new M(`Expected arguments for "${n}" to be (string, string) or (number, number), but found (${l.kind}, ${u.kind}) instead.`);
       }
       if (this.collator && !r && this.hasUntypedArgument) {
-        const l = S(o), u = S(a);
+        const l = I(o), u = I(a);
         if (l.kind !== "string" || u.kind !== "string")
           return e(s, o, a);
       }
@@ -1858,10 +1858,10 @@ function te(n, e, t) {
     }
   };
 }
-const sr = te("==", Zn, sn), or = te("!=", Gn, er), ar = te("<", Jn, tr), lr = te(">", Yn, nr), ur = te("<=", Qn, rr), cr = te(">=", Kn, ir);
-class Be {
+const hr = re("==", tr, sn), pr = re("!=", nr, ar), dr = re("<", rr, lr), yr = re(">", ir, ur), gr = re("<=", sr, cr), mr = re(">=", or, fr);
+class He {
   constructor(e, t, r) {
-    this.type = Te, this.locale = r, this.caseSensitive = e, this.diacriticSensitive = t;
+    this.type = Ne, this.locale = r, this.caseSensitive = e, this.diacriticSensitive = t;
   }
   static parse(e, t) {
     if (e.length !== 2)
@@ -1876,10 +1876,10 @@ class Be {
     if (!s)
       return null;
     let o = null;
-    return r.locale && (o = t.parse(r.locale, 1, b), !o) ? null : new Be(i, s, o);
+    return r.locale && (o = t.parse(r.locale, 1, v), !o) ? null : new He(i, s, o);
   }
   evaluate(e) {
-    return new ot(this.caseSensitive.evaluate(e), this.diacriticSensitive.evaluate(e), this.locale ? this.locale.evaluate(e) : null);
+    return new lt(this.caseSensitive.evaluate(e), this.diacriticSensitive.evaluate(e), this.locale ? this.locale.evaluate(e) : null);
   }
   eachChild(e) {
     e(this.caseSensitive), e(this.diacriticSensitive), this.locale && e(this.locale);
@@ -1888,30 +1888,30 @@ class Be {
     return !1;
   }
 }
-class ft {
+class pt {
   constructor(e, t, r, i, s) {
-    this.type = b, this.number = e, this.locale = t, this.currency = r, this.minFractionDigits = i, this.maxFractionDigits = s;
+    this.type = v, this.number = e, this.locale = t, this.currency = r, this.minFractionDigits = i, this.maxFractionDigits = s;
   }
   static parse(e, t) {
     if (e.length !== 3)
       return t.error("Expected two arguments.");
-    const r = t.parse(e[1], 1, p);
+    const r = t.parse(e[1], 1, h);
     if (!r)
       return null;
     const i = e[2];
     if (typeof i != "object" || Array.isArray(i))
       return t.error("NumberFormat options argument must be an object.");
     let s = null;
-    if (i.locale && (s = t.parse(i.locale, 1, b), !s))
+    if (i.locale && (s = t.parse(i.locale, 1, v), !s))
       return null;
     let o = null;
-    if (i.currency && (o = t.parse(i.currency, 1, b), !o))
+    if (i.currency && (o = t.parse(i.currency, 1, v), !o))
       return null;
     let a = null;
-    if (i["min-fraction-digits"] && (a = t.parse(i["min-fraction-digits"], 1, p), !a))
+    if (i["min-fraction-digits"] && (a = t.parse(i["min-fraction-digits"], 1, h), !a))
       return null;
     let l = null;
-    return i["max-fraction-digits"] && (l = t.parse(i["max-fraction-digits"], 1, p), !l) ? null : new ft(r, s, o, a, l);
+    return i["max-fraction-digits"] && (l = t.parse(i["max-fraction-digits"], 1, h), !l) ? null : new pt(r, s, o, a, l);
   }
   evaluate(e) {
     return new Intl.NumberFormat(this.locale ? this.locale.evaluate(e) : [], {
@@ -1928,7 +1928,7 @@ class ft {
     return !1;
   }
 }
-class ht {
+class dt {
   constructor(e) {
     this.type = Le, this.sections = e;
   }
@@ -1945,18 +1945,18 @@ class ht {
       if (s && typeof a == "object" && !Array.isArray(a)) {
         s = !1;
         let l = null;
-        if (a["font-scale"] && (l = t.parse(a["font-scale"], 1, p), !l))
+        if (a["font-scale"] && (l = t.parse(a["font-scale"], 1, h), !l))
           return null;
         let u = null;
-        if (a["text-font"] && (u = t.parse(a["text-font"], 1, L(b)), !u))
+        if (a["text-font"] && (u = t.parse(a["text-font"], 1, P(v)), !u))
           return null;
         let c = null;
-        if (a["text-color"] && (c = t.parse(a["text-color"], 1, F), !c))
+        if (a["text-color"] && (c = t.parse(a["text-color"], 1, z), !c))
           return null;
         const f = i[i.length - 1];
         f.scale = l, f.font = u, f.textColor = c;
       } else {
-        const l = t.parse(e[o], 1, v);
+        const l = t.parse(e[o], 1, b);
         if (!l)
           return null;
         const u = l.type.kind;
@@ -1965,14 +1965,14 @@ class ht {
         s = !0, i.push({ content: l, scale: null, font: null, textColor: null });
       }
     }
-    return new ht(i);
+    return new dt(i);
   }
   evaluate(e) {
     const t = (r) => {
       const i = r.content.evaluate(e);
-      return S(i) === ce ? new Ze("", i, null, null, null) : new Ze(ie(i), null, r.scale ? r.scale.evaluate(e) : null, r.font ? r.font.evaluate(e).join(",") : null, r.textColor ? r.textColor.evaluate(e) : null);
+      return I(i) === pe ? new Ye("", i, null, null, null) : new Ye(oe(i), null, r.scale ? r.scale.evaluate(e) : null, r.font ? r.font.evaluate(e).join(",") : null, r.textColor ? r.textColor.evaluate(e) : null);
     };
-    return new B(this.sections.map(t));
+    return new j(this.sections.map(t));
   }
   eachChild(e) {
     for (const t of this.sections)
@@ -1982,18 +1982,18 @@ class ht {
     return !1;
   }
 }
-class pt {
+class yt {
   constructor(e) {
-    this.type = ce, this.input = e;
+    this.type = pe, this.input = e;
   }
   static parse(e, t) {
     if (e.length !== 2)
       return t.error("Expected two arguments.");
-    const r = t.parse(e[1], 1, b);
-    return r ? new pt(r) : t.error("No image name provided.");
+    const r = t.parse(e[1], 1, v);
+    return r ? new yt(r) : t.error("No image name provided.");
   }
   evaluate(e) {
-    const t = this.input.evaluate(e), r = R.fromString(t);
+    const t = this.input.evaluate(e), r = O.fromString(t);
     return r && e.availableImages && (r.available = e.availableImages.indexOf(t) > -1), r;
   }
   eachChild(e) {
@@ -2003,15 +2003,15 @@ class pt {
     return !1;
   }
 }
-class dt {
+class gt {
   constructor(e) {
-    this.type = p, this.input = e;
+    this.type = h, this.input = e;
   }
   static parse(e, t) {
     if (e.length !== 2)
       return t.error(`Expected 1 argument, but found ${e.length - 1} instead.`);
     const r = t.parse(e[1], 1);
-    return r ? r.type.kind !== "array" && r.type.kind !== "string" && r.type.kind !== "value" ? t.error(`Expected argument of type string or array, but found ${x(r.type)} instead.`) : new dt(r) : null;
+    return r ? r.type.kind !== "array" && r.type.kind !== "string" && r.type.kind !== "value" ? t.error(`Expected argument of type string or array, but found ${k(r.type)} instead.`) : new gt(r) : null;
   }
   evaluate(e) {
     const t = this.input.evaluate(e);
@@ -2019,7 +2019,7 @@ class dt {
       return [...t].length;
     if (Array.isArray(t))
       return t.length;
-    throw new M(`Expected value to be of type string or array, but found ${x(S(t))} instead.`);
+    throw new M(`Expected value to be of type string or array, but found ${k(I(t))} instead.`);
   }
   eachChild(e) {
     e(this.input);
@@ -2028,96 +2028,96 @@ class dt {
     return !1;
   }
 }
-const z = 8192;
-function fr(n, e) {
-  const t = hr(n[0]), r = dr(n[1]), i = Math.pow(2, e.z);
-  return [Math.round(t * i * z), Math.round(r * i * z)];
+const R = 8192;
+function br(n, e) {
+  const t = vr(n[0]), r = Cr(n[1]), i = Math.pow(2, e.z);
+  return [Math.round(t * i * R), Math.round(r * i * R)];
 }
-function yt(n, e) {
-  const t = Math.pow(2, e.z), r = (n[0] / z + e.x) / t, i = (n[1] / z + e.y) / t;
-  return [pr(r), yr(i)];
+function mt(n, e) {
+  const t = Math.pow(2, e.z), r = (n[0] / R + e.x) / t, i = (n[1] / R + e.y) / t;
+  return [wr(r), kr(i)];
 }
-function hr(n) {
+function vr(n) {
   return (180 + n) / 360;
 }
-function pr(n) {
+function wr(n) {
   return n * 360 - 180;
 }
-function dr(n) {
+function Cr(n) {
   return (180 - 180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + n * Math.PI / 360))) / 360;
 }
-function yr(n) {
+function kr(n) {
   return 360 / Math.PI * Math.atan(Math.exp((180 - n * 360) * Math.PI / 180)) - 90;
 }
-function fe(n, e) {
+function de(n, e) {
   n[0] = Math.min(n[0], e[0]), n[1] = Math.min(n[1], e[1]), n[2] = Math.max(n[2], e[0]), n[3] = Math.max(n[3], e[1]);
 }
-function ue(n, e) {
+function he(n, e) {
   return !(n[0] <= e[0] || n[2] >= e[2] || n[1] <= e[1] || n[3] >= e[3]);
 }
-function gr(n, e, t) {
+function xr(n, e, t) {
   return e[1] > n[1] != t[1] > n[1] && n[0] < (t[0] - e[0]) * (n[1] - e[1]) / (t[1] - e[1]) + e[0];
 }
-function mr(n, e, t) {
+function Mr(n, e, t) {
   const r = n[0] - e[0], i = n[1] - e[1], s = n[0] - t[0], o = n[1] - t[1];
   return r * o - s * i === 0 && r * s <= 0 && i * o <= 0;
 }
-function ze(n, e, t, r) {
+function _e(n, e, t, r) {
   const i = [e[0] - n[0], e[1] - n[1]], s = [r[0] - t[0], r[1] - t[1]];
-  return wr(s, i) === 0 ? !1 : !!(Dt(n, e, t, r) && Dt(t, r, n, e));
+  return Sr(s, i) === 0 ? !1 : !!(Dt(n, e, t, r) && Dt(t, r, n, e));
 }
-function vr(n, e, t) {
+function Er(n, e, t) {
   for (const r of t)
     for (let i = 0; i < r.length - 1; ++i)
-      if (ze(n, e, r[i], r[i + 1]))
+      if (_e(n, e, r[i], r[i + 1]))
         return !0;
   return !1;
 }
-function ne(n, e, t = !1) {
+function ie(n, e, t = !1) {
   let r = !1;
   for (const i of e)
     for (let s = 0; s < i.length - 1; s++) {
-      if (mr(n, i[s], i[s + 1]))
+      if (Mr(n, i[s], i[s + 1]))
         return t;
-      gr(n, i[s], i[s + 1]) && (r = !r);
+      xr(n, i[s], i[s + 1]) && (r = !r);
     }
   return r;
 }
-function br(n, e) {
+function Ir(n, e) {
   for (const t of e)
-    if (ne(n, t))
+    if (ie(n, t))
       return !0;
   return !1;
 }
 function an(n, e) {
   for (const t of n)
-    if (!ne(t, e))
+    if (!ie(t, e))
       return !1;
   for (let t = 0; t < n.length - 1; ++t)
-    if (vr(n[t], n[t + 1], e))
+    if (Er(n[t], n[t + 1], e))
       return !1;
   return !0;
 }
-function Cr(n, e) {
+function Tr(n, e) {
   for (const t of e)
     if (an(n, t))
       return !0;
   return !1;
 }
-function wr(n, e) {
+function Sr(n, e) {
   return n[0] * e[1] - n[1] * e[0];
 }
 function Dt(n, e, t, r) {
   const i = n[0] - t[0], s = n[1] - t[1], o = e[0] - t[0], a = e[1] - t[1], l = r[0] - t[0], u = r[1] - t[1], c = i * u - l * s, f = o * u - l * a;
   return c > 0 && f < 0 || c < 0 && f > 0;
 }
-function gt(n, e, t) {
+function bt(n, e, t) {
   const r = [];
   for (let i = 0; i < n.length; i++) {
     const s = [];
     for (let o = 0; o < n[i].length; o++) {
-      const a = fr(n[i][o], t);
-      fe(e, a), s.push(a);
+      const a = br(n[i][o], t);
+      de(e, a), s.push(a);
     }
     r.push(s);
   }
@@ -2126,7 +2126,7 @@ function gt(n, e, t) {
 function ln(n, e, t) {
   const r = [];
   for (let i = 0; i < n.length; i++) {
-    const s = gt(n[i], e, t);
+    const s = bt(n[i], e, t);
     r.push(s);
   }
   return r;
@@ -2137,13 +2137,13 @@ function un(n, e, t, r) {
     let s = n[0] - t[0] > i ? -r : t[0] - n[0] > i ? r : 0;
     s === 0 && (s = n[0] - t[2] > i ? -r : t[2] - n[0] > i ? r : 0), n[0] += s;
   }
-  fe(e, n);
+  de(e, n);
 }
-function kr(n) {
+function $r(n) {
   n[0] = n[1] = 1 / 0, n[2] = n[3] = -1 / 0;
 }
-function At(n, e, t, r) {
-  const i = Math.pow(2, r.z) * z, s = [r.x * z, r.y * z], o = [];
+function Ft(n, e, t, r) {
+  const i = Math.pow(2, r.z) * R, s = [r.x * R, r.y * R], o = [];
   for (const a of n)
     for (const l of a) {
       const u = [l.x + s[0], l.y + s[1]];
@@ -2151,60 +2151,60 @@ function At(n, e, t, r) {
     }
   return o;
 }
-function Pt(n, e, t, r) {
-  const i = Math.pow(2, r.z) * z, s = [r.x * z, r.y * z], o = [];
+function Bt(n, e, t, r) {
+  const i = Math.pow(2, r.z) * R, s = [r.x * R, r.y * R], o = [];
   for (const a of n) {
     const l = [];
     for (const u of a) {
       const c = [u.x + s[0], u.y + s[1]];
-      fe(e, c), l.push(c);
+      de(e, c), l.push(c);
     }
     o.push(l);
   }
   if (e[2] - e[0] <= i / 2) {
-    kr(e);
+    $r(e);
     for (const a of o)
       for (const l of a)
         un(l, e, t, i);
   }
   return o;
 }
-function xr(n, e) {
+function Pr(n, e) {
   const t = [1 / 0, 1 / 0, -1 / 0, -1 / 0], r = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i = n.canonicalID();
   if (e.type === "Polygon") {
-    const s = gt(e.coordinates, r, i), o = At(n.geometry(), t, r, i);
-    if (!ue(t, r))
+    const s = bt(e.coordinates, r, i), o = Ft(n.geometry(), t, r, i);
+    if (!he(t, r))
       return !1;
     for (const a of o)
-      if (!ne(a, s))
+      if (!ie(a, s))
         return !1;
   }
   if (e.type === "MultiPolygon") {
-    const s = ln(e.coordinates, r, i), o = At(n.geometry(), t, r, i);
-    if (!ue(t, r))
+    const s = ln(e.coordinates, r, i), o = Ft(n.geometry(), t, r, i);
+    if (!he(t, r))
       return !1;
     for (const a of o)
-      if (!br(a, s))
+      if (!Ir(a, s))
         return !1;
   }
   return !0;
 }
-function Er(n, e) {
+function Nr(n, e) {
   const t = [1 / 0, 1 / 0, -1 / 0, -1 / 0], r = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i = n.canonicalID();
   if (e.type === "Polygon") {
-    const s = gt(e.coordinates, r, i), o = Pt(n.geometry(), t, r, i);
-    if (!ue(t, r))
+    const s = bt(e.coordinates, r, i), o = Bt(n.geometry(), t, r, i);
+    if (!he(t, r))
       return !1;
     for (const a of o)
       if (!an(a, s))
         return !1;
   }
   if (e.type === "MultiPolygon") {
-    const s = ln(e.coordinates, r, i), o = Pt(n.geometry(), t, r, i);
-    if (!ue(t, r))
+    const s = ln(e.coordinates, r, i), o = Bt(n.geometry(), t, r, i);
+    if (!he(t, r))
       return !1;
     for (const a of o)
-      if (!Cr(a, s))
+      if (!Tr(a, s))
         return !1;
   }
   return !0;
@@ -2216,7 +2216,7 @@ class X {
   static parse(e, t) {
     if (e.length !== 2)
       return t.error(`'within' expression requires exactly one argument, but found ${e.length - 1} instead.`);
-    if (ae(e[1])) {
+    if (ce(e[1])) {
       const r = e[1];
       if (r.type === "FeatureCollection") {
         const i = [];
@@ -2243,9 +2243,9 @@ class X {
   evaluate(e) {
     if (e.geometry() != null && e.canonicalID() != null) {
       if (e.geometryDollarType() === "Point")
-        return xr(e, this.geometries);
+        return Pr(e, this.geometries);
       if (e.geometryDollarType() === "LineString")
-        return Er(e, this.geometries);
+        return Nr(e, this.geometries);
     }
     return !1;
   }
@@ -2291,11 +2291,11 @@ class cn {
     t[e] = s;
   }
 }
-const Mr = 6378.137, _t = 1 / 298.257223563, Ft = _t * (2 - _t), Bt = Math.PI / 180;
-class mt {
+const Lr = 6378.137, zt = 1 / 298.257223563, jt = zt * (2 - zt), Rt = Math.PI / 180;
+class vt {
   constructor(e) {
-    const t = Bt * Mr * 1e3, r = Math.cos(e * Bt), i = 1 / (1 - Ft * (1 - r * r)), s = Math.sqrt(i);
-    this.kx = t * s * r, this.ky = t * s * i * (1 - Ft);
+    const t = Rt * Lr * 1e3, r = Math.cos(e * Rt), i = 1 / (1 - jt * (1 - r * r)), s = Math.sqrt(i);
+    this.kx = t * s * r, this.ky = t * s * i * (1 - jt);
   }
   /**
    * Given two points of the form [longitude, latitude], returns the distance.
@@ -2326,9 +2326,9 @@ class mt {
   pointOnLine(e, t) {
     let r = 1 / 0, i, s, o, a;
     for (let l = 0; l < e.length - 1; l++) {
-      let u = e[l][0], c = e[l][1], f = this.wrap(e[l + 1][0] - u) * this.kx, h = (e[l + 1][1] - c) * this.ky, d = 0;
-      (f !== 0 || h !== 0) && (d = (this.wrap(t[0] - u) * this.kx * f + (t[1] - c) * this.ky * h) / (f * f + h * h), d > 1 ? (u = e[l + 1][0], c = e[l + 1][1]) : d > 0 && (u += f / this.kx * d, c += h / this.ky * d)), f = this.wrap(t[0] - u) * this.kx, h = (t[1] - c) * this.ky;
-      const y = f * f + h * h;
+      let u = e[l][0], c = e[l][1], f = this.wrap(e[l + 1][0] - u) * this.kx, p = (e[l + 1][1] - c) * this.ky, d = 0;
+      (f !== 0 || p !== 0) && (d = (this.wrap(t[0] - u) * this.kx * f + (t[1] - c) * this.ky * p) / (f * f + p * p), d > 1 ? (u = e[l + 1][0], c = e[l + 1][1]) : d > 0 && (u += f / this.kx * d, c += p / this.ky * d)), f = this.wrap(t[0] - u) * this.kx, p = (t[1] - c) * this.ky;
+      const y = f * f + p * p;
       y < r && (r = y, i = u, s = c, o = l, a = d);
     }
     return {
@@ -2345,20 +2345,20 @@ class mt {
     return e;
   }
 }
-const Ge = 100, Je = 50;
+const Qe = 100, Ke = 50;
 function fn(n, e) {
   return e[0] - n[0];
 }
-function ke(n) {
+function Ee(n) {
   return n[1] - n[0] + 1;
 }
-function j(n, e) {
+function _(n, e) {
   return n[1] >= n[0] && n[1] < e;
 }
-function Ye(n, e) {
+function et(n, e) {
   if (n[0] > n[1])
     return [null, null];
-  const t = ke(n);
+  const t = Ee(n);
   if (e) {
     if (t === 2)
       return [n, null];
@@ -2376,55 +2376,55 @@ function Ye(n, e) {
     [n[0] + r + 1, n[1]]
   ];
 }
-function Qe(n, e) {
-  if (!j(e, n.length))
+function tt(n, e) {
+  if (!_(e, n.length))
     return [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   const t = [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   for (let r = e[0]; r <= e[1]; ++r)
-    fe(t, n[r]);
+    de(t, n[r]);
   return t;
 }
-function Ke(n) {
+function nt(n) {
   const e = [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   for (const t of n)
     for (const r of t)
-      fe(e, r);
+      de(e, r);
   return e;
 }
-function zt(n) {
+function Ht(n) {
   return n[0] !== -1 / 0 && n[1] !== -1 / 0 && n[2] !== 1 / 0 && n[3] !== 1 / 0;
 }
-function vt(n, e, t) {
-  if (!zt(n) || !zt(e))
+function wt(n, e, t) {
+  if (!Ht(n) || !Ht(e))
     return NaN;
   let r = 0, i = 0;
   return n[2] < e[0] && (r = e[0] - n[2]), n[0] > e[2] && (r = n[0] - e[2]), n[1] > e[3] && (i = n[1] - e[3]), n[3] < e[1] && (i = e[1] - n[3]), t.distance([0, 0], [r, i]);
 }
-function V(n, e, t) {
+function U(n, e, t) {
   const r = t.pointOnLine(e, n);
   return t.distance(n, r.point);
 }
-function bt(n, e, t, r, i) {
-  const s = Math.min(V(n, [t, r], i), V(e, [t, r], i)), o = Math.min(V(t, [n, e], i), V(r, [n, e], i));
+function Ct(n, e, t, r, i) {
+  const s = Math.min(U(n, [t, r], i), U(e, [t, r], i)), o = Math.min(U(t, [n, e], i), U(r, [n, e], i));
   return Math.min(s, o);
 }
-function Sr(n, e, t, r, i) {
-  if (!(j(e, n.length) && j(r, t.length)))
+function Ar(n, e, t, r, i) {
+  if (!(_(e, n.length) && _(r, t.length)))
     return 1 / 0;
   let o = 1 / 0;
   for (let a = e[0]; a < e[1]; ++a) {
     const l = n[a], u = n[a + 1];
     for (let c = r[0]; c < r[1]; ++c) {
-      const f = t[c], h = t[c + 1];
-      if (ze(l, u, f, h))
+      const f = t[c], p = t[c + 1];
+      if (_e(l, u, f, p))
         return 0;
-      o = Math.min(o, bt(l, u, f, h, i));
+      o = Math.min(o, Ct(l, u, f, p, i));
     }
   }
   return o;
 }
-function Ir(n, e, t, r, i) {
-  if (!(j(e, n.length) && j(r, t.length)))
+function Dr(n, e, t, r, i) {
+  if (!(_(e, n.length) && _(r, t.length)))
     return NaN;
   let o = 1 / 0;
   for (let a = e[0]; a <= e[1]; ++a)
@@ -2433,13 +2433,13 @@ function Ir(n, e, t, r, i) {
         return o;
   return o;
 }
-function Tr(n, e, t) {
-  if (ne(n, e, !0))
+function Fr(n, e, t) {
+  if (ie(n, e, !0))
     return 0;
   let r = 1 / 0;
   for (const i of e) {
     const s = i[0], o = i[i.length - 1];
-    if (s !== o && (r = Math.min(r, V(n, [o, s], t)), r === 0))
+    if (s !== o && (r = Math.min(r, U(n, [o, s], t)), r === 0))
       return r;
     const a = t.pointOnLine(i, n);
     if (r = Math.min(r, t.distance(n, a.point)), r === 0)
@@ -2447,99 +2447,99 @@ function Tr(n, e, t) {
   }
   return r;
 }
-function Lr(n, e, t, r) {
-  if (!j(e, n.length))
+function Br(n, e, t, r) {
+  if (!_(e, n.length))
     return NaN;
   for (let s = e[0]; s <= e[1]; ++s)
-    if (ne(n[s], t, !0))
+    if (ie(n[s], t, !0))
       return 0;
   let i = 1 / 0;
   for (let s = e[0]; s < e[1]; ++s) {
     const o = n[s], a = n[s + 1];
     for (const l of t)
       for (let u = 0, c = l.length, f = c - 1; u < c; f = u++) {
-        const h = l[f], d = l[u];
-        if (ze(o, a, h, d))
+        const p = l[f], d = l[u];
+        if (_e(o, a, p, d))
           return 0;
-        i = Math.min(i, bt(o, a, h, d, r));
+        i = Math.min(i, Ct(o, a, p, d, r));
       }
   }
   return i;
 }
-function Ht(n, e) {
+function _t(n, e) {
   for (const t of n)
     for (const r of t)
-      if (ne(r, e, !0))
+      if (ie(r, e, !0))
         return !0;
   return !1;
 }
-function $r(n, e, t, r = 1 / 0) {
-  const i = Ke(n), s = Ke(e);
-  if (r !== 1 / 0 && vt(i, s, t) >= r)
+function zr(n, e, t, r = 1 / 0) {
+  const i = nt(n), s = nt(e);
+  if (r !== 1 / 0 && wt(i, s, t) >= r)
     return r;
-  if (ue(i, s)) {
-    if (Ht(n, e))
+  if (he(i, s)) {
+    if (_t(n, e))
       return 0;
-  } else if (Ht(e, n))
+  } else if (_t(e, n))
     return 0;
   let o = 1 / 0;
   for (const a of n)
     for (let l = 0, u = a.length, c = u - 1; l < u; c = l++) {
-      const f = a[c], h = a[l];
+      const f = a[c], p = a[l];
       for (const d of e)
         for (let y = 0, C = d.length, E = C - 1; y < C; E = y++) {
-          const w = d[E], I = d[y];
-          if (ze(f, h, w, I))
+          const T = d[E], S = d[y];
+          if (_e(f, p, T, S))
             return 0;
-          o = Math.min(o, bt(f, h, w, I, t));
+          o = Math.min(o, Ct(f, p, T, S, t));
         }
     }
   return o;
 }
-function jt(n, e, t, r, i, s) {
+function Ot(n, e, t, r, i, s) {
   if (!s)
     return;
-  const o = vt(Qe(r, s), i, t);
+  const o = wt(tt(r, s), i, t);
   o < e && n.push([o, s, [0, 0]]);
 }
-function ve(n, e, t, r, i, s, o) {
+function Ce(n, e, t, r, i, s, o) {
   if (!s || !o)
     return;
-  const a = vt(Qe(r, s), Qe(i, o), t);
+  const a = wt(tt(r, s), tt(i, o), t);
   a < e && n.push([a, s, o]);
 }
-function xe(n, e, t, r, i = 1 / 0) {
+function Ie(n, e, t, r, i = 1 / 0) {
   let s = Math.min(r.distance(n[0], t[0][0]), i);
   if (s === 0)
     return s;
-  const o = new cn([[0, [0, n.length - 1], [0, 0]]], fn), a = Ke(t);
+  const o = new cn([[0, [0, n.length - 1], [0, 0]]], fn), a = nt(t);
   for (; o.length > 0; ) {
     const l = o.pop();
     if (l[0] >= s)
       continue;
-    const u = l[1], c = e ? Je : Ge;
-    if (ke(u) <= c) {
-      if (!j(u, n.length))
+    const u = l[1], c = e ? Ke : Qe;
+    if (Ee(u) <= c) {
+      if (!_(u, n.length))
         return NaN;
       if (e) {
-        const f = Lr(n, u, t, r);
+        const f = Br(n, u, t, r);
         if (isNaN(f) || f === 0)
           return f;
         s = Math.min(s, f);
       } else
         for (let f = u[0]; f <= u[1]; ++f) {
-          const h = Tr(n[f], t, r);
-          if (s = Math.min(s, h), s === 0)
+          const p = Fr(n[f], t, r);
+          if (s = Math.min(s, p), s === 0)
             return 0;
         }
     } else {
-      const f = Ye(u, e);
-      jt(o, s, r, n, a, f[0]), jt(o, s, r, n, a, f[1]);
+      const f = et(u, e);
+      Ot(o, s, r, n, a, f[0]), Ot(o, s, r, n, a, f[1]);
     }
   }
   return s;
 }
-function Ee(n, e, t, r, i, s = 1 / 0) {
+function Te(n, e, t, r, i, s = 1 / 0) {
   let o = Math.min(s, i.distance(n[0], t[0]));
   if (o === 0)
     return o;
@@ -2548,48 +2548,48 @@ function Ee(n, e, t, r, i, s = 1 / 0) {
     const l = a.pop();
     if (l[0] >= o)
       continue;
-    const u = l[1], c = l[2], f = e ? Je : Ge, h = r ? Je : Ge;
-    if (ke(u) <= f && ke(c) <= h) {
-      if (!j(u, n.length) && j(c, t.length))
+    const u = l[1], c = l[2], f = e ? Ke : Qe, p = r ? Ke : Qe;
+    if (Ee(u) <= f && Ee(c) <= p) {
+      if (!_(u, n.length) && _(c, t.length))
         return NaN;
       let d;
       if (e && r)
-        d = Sr(n, u, t, c, i), o = Math.min(o, d);
+        d = Ar(n, u, t, c, i), o = Math.min(o, d);
       else if (e && !r) {
         const y = n.slice(u[0], u[1] + 1);
         for (let C = c[0]; C <= c[1]; ++C)
-          if (d = V(t[C], y, i), o = Math.min(o, d), o === 0)
+          if (d = U(t[C], y, i), o = Math.min(o, d), o === 0)
             return o;
       } else if (!e && r) {
         const y = t.slice(c[0], c[1] + 1);
         for (let C = u[0]; C <= u[1]; ++C)
-          if (d = V(n[C], y, i), o = Math.min(o, d), o === 0)
+          if (d = U(n[C], y, i), o = Math.min(o, d), o === 0)
             return o;
       } else
-        d = Ir(n, u, t, c, i), o = Math.min(o, d);
+        d = Dr(n, u, t, c, i), o = Math.min(o, d);
     } else {
-      const d = Ye(u, e), y = Ye(c, r);
-      ve(a, o, i, n, t, d[0], y[0]), ve(a, o, i, n, t, d[0], y[1]), ve(a, o, i, n, t, d[1], y[0]), ve(a, o, i, n, t, d[1], y[1]);
+      const d = et(u, e), y = et(c, r);
+      Ce(a, o, i, n, t, d[0], y[0]), Ce(a, o, i, n, t, d[0], y[1]), Ce(a, o, i, n, t, d[1], y[0]), Ce(a, o, i, n, t, d[1], y[1]);
     }
   }
   return o;
 }
-function Nr(n, e) {
-  const t = n.geometry(), r = t.flat().map((o) => yt([o.x, o.y], n.canonical));
+function jr(n, e) {
+  const t = n.geometry(), r = t.flat().map((o) => mt([o.x, o.y], n.canonical));
   if (t.length === 0)
     return NaN;
-  const i = new mt(r[0][1]);
+  const i = new vt(r[0][1]);
   let s = 1 / 0;
   for (const o of e) {
     switch (o.type) {
       case "Point":
-        s = Math.min(s, Ee(r, !1, [o.coordinates], !1, i, s));
+        s = Math.min(s, Te(r, !1, [o.coordinates], !1, i, s));
         break;
       case "LineString":
-        s = Math.min(s, Ee(r, !1, o.coordinates, !0, i, s));
+        s = Math.min(s, Te(r, !1, o.coordinates, !0, i, s));
         break;
       case "Polygon":
-        s = Math.min(s, xe(r, !1, o.coordinates, i, s));
+        s = Math.min(s, Ie(r, !1, o.coordinates, i, s));
         break;
     }
     if (s === 0)
@@ -2597,22 +2597,22 @@ function Nr(n, e) {
   }
   return s;
 }
-function Dr(n, e) {
-  const t = n.geometry(), r = t.flat().map((o) => yt([o.x, o.y], n.canonical));
+function Rr(n, e) {
+  const t = n.geometry(), r = t.flat().map((o) => mt([o.x, o.y], n.canonical));
   if (t.length === 0)
     return NaN;
-  const i = new mt(r[0][1]);
+  const i = new vt(r[0][1]);
   let s = 1 / 0;
   for (const o of e) {
     switch (o.type) {
       case "Point":
-        s = Math.min(s, Ee(r, !0, [o.coordinates], !1, i, s));
+        s = Math.min(s, Te(r, !0, [o.coordinates], !1, i, s));
         break;
       case "LineString":
-        s = Math.min(s, Ee(r, !0, o.coordinates, !0, i, s));
+        s = Math.min(s, Te(r, !0, o.coordinates, !0, i, s));
         break;
       case "Polygon":
-        s = Math.min(s, xe(r, !0, o.coordinates, i, s));
+        s = Math.min(s, Ie(r, !0, o.coordinates, i, s));
         break;
     }
     if (s === 0)
@@ -2620,23 +2620,23 @@ function Dr(n, e) {
   }
   return s;
 }
-function Ar(n, e) {
+function Hr(n, e) {
   const t = n.geometry();
   if (t.length === 0 || t[0].length === 0)
     return NaN;
-  const r = jn(t).map((o) => o.map((a) => a.map((l) => yt([l.x, l.y], n.canonical)))), i = new mt(r[0][0][0][1]);
+  const r = Gn(t).map((o) => o.map((a) => a.map((l) => mt([l.x, l.y], n.canonical)))), i = new vt(r[0][0][0][1]);
   let s = 1 / 0;
   for (const o of e)
     for (const a of r) {
       switch (o.type) {
         case "Point":
-          s = Math.min(s, xe([o.coordinates], !1, a, i, s));
+          s = Math.min(s, Ie([o.coordinates], !1, a, i, s));
           break;
         case "LineString":
-          s = Math.min(s, xe(o.coordinates, !0, a, i, s));
+          s = Math.min(s, Ie(o.coordinates, !0, a, i, s));
           break;
         case "Polygon":
-          s = Math.min(s, $r(a, o.coordinates, i, s));
+          s = Math.min(s, zr(a, o.coordinates, i, s));
           break;
       }
       if (s === 0)
@@ -2644,7 +2644,7 @@ function Ar(n, e) {
     }
   return s;
 }
-function Ue(n) {
+function Ze(n) {
   return n.type === "MultiPolygon" ? n.coordinates.map((e) => ({
     type: "Polygon",
     coordinates: e
@@ -2658,30 +2658,30 @@ function Ue(n) {
 }
 class Z {
   constructor(e, t) {
-    this.type = p, this.geojson = e, this.geometries = t;
+    this.type = h, this.geojson = e, this.geometries = t;
   }
   static parse(e, t) {
     if (e.length !== 2)
       return t.error(`'distance' expression requires exactly one argument, but found ${e.length - 1} instead.`);
-    if (ae(e[1])) {
+    if (ce(e[1])) {
       const r = e[1];
       if (r.type === "FeatureCollection")
-        return new Z(r, r.features.map((i) => Ue(i.geometry)).flat());
+        return new Z(r, r.features.map((i) => Ze(i.geometry)).flat());
       if (r.type === "Feature")
-        return new Z(r, Ue(r.geometry));
+        return new Z(r, Ze(r.geometry));
       if ("type" in r && "coordinates" in r)
-        return new Z(r, Ue(r));
+        return new Z(r, Ze(r));
     }
     return t.error("'distance' expression requires valid geojson object that contains polygon geometry type.");
   }
   evaluate(e) {
     if (e.geometry() != null && e.canonicalID() != null) {
       if (e.geometryType() === "Point")
-        return Nr(e, this.geometries);
+        return jr(e, this.geometries);
       if (e.geometryType() === "LineString")
-        return Dr(e, this.geometries);
+        return Rr(e, this.geometries);
       if (e.geometryType() === "Polygon")
-        return Ar(e, this.geometries);
+        return Hr(e, this.geometries);
     }
     return NaN;
   }
@@ -2691,46 +2691,46 @@ class Z {
     return !0;
   }
 }
-const Ct = {
+const kt = {
   // special forms
-  "==": sr,
-  "!=": or,
-  ">": lr,
-  "<": ar,
-  ">=": cr,
-  "<=": ur,
-  array: A,
-  at,
-  boolean: A,
-  case: ct,
-  coalesce: le,
-  collator: Be,
-  format: ht,
-  image: pt,
-  in: lt,
-  "index-of": Ce,
-  interpolate: D,
-  "interpolate-hcl": D,
-  "interpolate-lab": D,
-  length: dt,
-  let: Ae,
-  literal: ee,
-  match: ut,
-  number: A,
-  "number-format": ft,
-  object: A,
-  slice: we,
-  step: Fe,
-  string: A,
-  "to-boolean": O,
-  "to-color": O,
-  "to-number": O,
-  "to-string": O,
-  var: Pe,
+  "==": hr,
+  "!=": pr,
+  ">": yr,
+  "<": dr,
+  ">=": mr,
+  "<=": gr,
+  array: D,
+  at: ut,
+  boolean: D,
+  case: ht,
+  coalesce: fe,
+  collator: He,
+  format: dt,
+  image: yt,
+  in: ct,
+  "index-of": xe,
+  interpolate: A,
+  "interpolate-hcl": A,
+  "interpolate-lab": A,
+  length: gt,
+  let: Be,
+  literal: ne,
+  match: ft,
+  number: D,
+  "number-format": pt,
+  object: D,
+  slice: Me,
+  step: Re,
+  string: D,
+  "to-boolean": q,
+  "to-color": q,
+  "to-number": q,
+  "to-string": q,
+  var: ze,
   within: X,
   distance: Z
 };
-class P {
+class F {
   constructor(e, t, r, i) {
     this.name = e, this.type = t, this._evaluate = r, this.args = i;
   }
@@ -2744,25 +2744,25 @@ class P {
     return !1;
   }
   static parse(e, t) {
-    const r = e[0], i = P.definitions[r];
+    const r = e[0], i = F.definitions[r];
     if (!i)
       return t.error(`Unknown expression "${r}". If you wanted a literal array, use ["literal", [...]].`, 0);
     const s = Array.isArray(i) ? i[0] : i.type, o = Array.isArray(i) ? [[i[1], i[2]]] : i.overloads, a = o.filter(([u]) => !Array.isArray(u) || // varags
     u.length === e.length - 1);
     let l = null;
     for (const [u, c] of a) {
-      l = new De(t.registry, Me, t.path, null, t.scope);
+      l = new Fe(t.registry, Se, t.path, null, t.scope);
       const f = [];
-      let h = !1;
+      let p = !1;
       for (let d = 1; d < e.length; d++) {
         const y = e[d], C = Array.isArray(u) ? u[d - 1] : u.type, E = l.parse(y, 1 + f.length, C);
         if (!E) {
-          h = !0;
+          p = !0;
           break;
         }
         f.push(E);
       }
-      if (!h) {
+      if (!p) {
         if (Array.isArray(u) && u.length !== f.length) {
           l.error(`Expected ${u.length} arguments, but found ${f.length} instead.`);
           continue;
@@ -2772,44 +2772,44 @@ class P {
           l.concat(d + 1).checkSubtype(y, C.type);
         }
         if (l.errors.length === 0)
-          return new P(r, s, c, f);
+          return new F(r, s, c, f);
       }
     }
     if (a.length === 1)
       t.errors.push(...l.errors);
     else {
-      const c = (a.length ? a : o).map(([h]) => _r(h)).join(" | "), f = [];
-      for (let h = 1; h < e.length; h++) {
-        const d = t.parse(e[h], 1 + f.length);
+      const c = (a.length ? a : o).map(([p]) => Or(p)).join(" | "), f = [];
+      for (let p = 1; p < e.length; p++) {
+        const d = t.parse(e[p], 1 + f.length);
         if (!d)
           return null;
-        f.push(x(d.type));
+        f.push(k(d.type));
       }
       t.error(`Expected arguments of type ${c}, but found (${f.join(", ")}) instead.`);
     }
     return null;
   }
   static register(e, t) {
-    P.definitions = t;
+    F.definitions = t;
     for (const r in t)
-      e[r] = P;
+      e[r] = F;
   }
 }
-function Rt(n, [e, t, r, i]) {
+function qt(n, [e, t, r, i]) {
   e = e.evaluate(n), t = t.evaluate(n), r = r.evaluate(n);
   const s = i ? i.evaluate(n) : 1, o = tn(e, t, r, s);
   if (o)
     throw new M(o);
-  return new k(e / 255, t / 255, r / 255, s, !1);
+  return new w(e / 255, t / 255, r / 255, s, !1);
 }
-function Ot(n, e) {
+function Vt(n, e) {
   return n in e;
 }
-function Xe(n, e) {
+function Je(n, e) {
   const t = e[n];
   return typeof t > "u" ? null : t;
 }
-function Pr(n, e, t, r) {
+function _r(n, e, t, r) {
   for (; t <= r; ) {
     const i = t + r >> 1;
     if (e[i] === n)
@@ -2821,106 +2821,106 @@ function Pr(n, e, t, r) {
 function W(n) {
   return { type: n };
 }
-P.register(Ct, {
+F.register(kt, {
   error: [
-    Tn,
-    [b],
+    Fn,
+    [v],
     (n, [e]) => {
       throw new M(e.evaluate(n));
     }
   ],
   typeof: [
-    b,
-    [v],
-    (n, [e]) => x(S(e.evaluate(n)))
+    v,
+    [b],
+    (n, [e]) => k(I(e.evaluate(n)))
   ],
   "to-rgba": [
-    L(p, 4),
-    [F],
+    P(h, 4),
+    [z],
     (n, [e]) => {
       const [t, r, i, s] = e.evaluate(n).rgb;
       return [t * 255, r * 255, i * 255, s];
     }
   ],
   rgb: [
-    F,
-    [p, p, p],
-    Rt
+    z,
+    [h, h, h],
+    qt
   ],
   rgba: [
-    F,
-    [p, p, p, p],
-    Rt
+    z,
+    [h, h, h, h],
+    qt
   ],
   has: {
     type: m,
     overloads: [
       [
-        [b],
-        (n, [e]) => Ot(e.evaluate(n), n.properties())
+        [v],
+        (n, [e]) => Vt(e.evaluate(n), n.properties())
       ],
       [
-        [b, Q],
-        (n, [e, t]) => Ot(e.evaluate(n), t.evaluate(n))
+        [v, K],
+        (n, [e, t]) => Vt(e.evaluate(n), t.evaluate(n))
       ]
     ]
   },
   get: {
-    type: v,
+    type: b,
     overloads: [
       [
-        [b],
-        (n, [e]) => Xe(e.evaluate(n), n.properties())
+        [v],
+        (n, [e]) => Je(e.evaluate(n), n.properties())
       ],
       [
-        [b, Q],
-        (n, [e, t]) => Xe(e.evaluate(n), t.evaluate(n))
+        [v, K],
+        (n, [e, t]) => Je(e.evaluate(n), t.evaluate(n))
       ]
     ]
   },
   "feature-state": [
-    v,
-    [b],
-    (n, [e]) => Xe(e.evaluate(n), n.featureState || {})
+    b,
+    [v],
+    (n, [e]) => Je(e.evaluate(n), n.featureState || {})
   ],
   properties: [
-    Q,
+    K,
     [],
     (n) => n.properties()
   ],
   "geometry-type": [
-    b,
+    v,
     [],
     (n) => n.geometryType()
   ],
   id: [
-    v,
+    b,
     [],
     (n) => n.id()
   ],
   zoom: [
-    p,
+    h,
     [],
     (n) => n.globals.zoom
   ],
   "heatmap-density": [
-    p,
+    h,
     [],
     (n) => n.globals.heatmapDensity || 0
   ],
   "line-progress": [
-    p,
+    h,
     [],
     (n) => n.globals.lineProgress || 0
   ],
   accumulated: [
-    v,
+    b,
     [],
     (n) => n.globals.accumulated === void 0 ? null : n.globals.accumulated
   ],
   "+": [
-    p,
-    W(p),
+    h,
+    W(h),
     (n, e) => {
       let t = 0;
       for (const r of e)
@@ -2929,8 +2929,8 @@ P.register(Ct, {
     }
   ],
   "*": [
-    p,
-    W(p),
+    h,
+    W(h),
     (n, e) => {
       let t = 1;
       for (const r of e)
@@ -2939,149 +2939,149 @@ P.register(Ct, {
     }
   ],
   "-": {
-    type: p,
+    type: h,
     overloads: [
       [
-        [p, p],
+        [h, h],
         (n, [e, t]) => e.evaluate(n) - t.evaluate(n)
       ],
       [
-        [p],
+        [h],
         (n, [e]) => -e.evaluate(n)
       ]
     ]
   },
   "/": [
-    p,
-    [p, p],
+    h,
+    [h, h],
     (n, [e, t]) => e.evaluate(n) / t.evaluate(n)
   ],
   "%": [
-    p,
-    [p, p],
+    h,
+    [h, h],
     (n, [e, t]) => e.evaluate(n) % t.evaluate(n)
   ],
   ln2: [
-    p,
+    h,
     [],
     () => Math.LN2
   ],
   pi: [
-    p,
+    h,
     [],
     () => Math.PI
   ],
   e: [
-    p,
+    h,
     [],
     () => Math.E
   ],
   "^": [
-    p,
-    [p, p],
+    h,
+    [h, h],
     (n, [e, t]) => Math.pow(e.evaluate(n), t.evaluate(n))
   ],
   sqrt: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.sqrt(e.evaluate(n))
   ],
   log10: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.log(e.evaluate(n)) / Math.LN10
   ],
   ln: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.log(e.evaluate(n))
   ],
   log2: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.log(e.evaluate(n)) / Math.LN2
   ],
   sin: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.sin(e.evaluate(n))
   ],
   cos: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.cos(e.evaluate(n))
   ],
   tan: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.tan(e.evaluate(n))
   ],
   asin: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.asin(e.evaluate(n))
   ],
   acos: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.acos(e.evaluate(n))
   ],
   atan: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.atan(e.evaluate(n))
   ],
   min: [
-    p,
-    W(p),
+    h,
+    W(h),
     (n, e) => Math.min(...e.map((t) => t.evaluate(n)))
   ],
   max: [
-    p,
-    W(p),
+    h,
+    W(h),
     (n, e) => Math.max(...e.map((t) => t.evaluate(n)))
   ],
   abs: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.abs(e.evaluate(n))
   ],
   round: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => {
       const t = e.evaluate(n);
       return t < 0 ? -Math.round(-t) : Math.round(t);
     }
   ],
   floor: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.floor(e.evaluate(n))
   ],
   ceil: [
-    p,
-    [p],
+    h,
+    [h],
     (n, [e]) => Math.ceil(e.evaluate(n))
   ],
   "filter-==": [
     m,
-    [b, v],
+    [v, b],
     (n, [e, t]) => n.properties()[e.value] === t.value
   ],
   "filter-id-==": [
     m,
-    [v],
+    [b],
     (n, [e]) => n.id() === e.value
   ],
   "filter-type-==": [
     m,
-    [b],
+    [v],
     (n, [e]) => n.geometryDollarType() === e.value
   ],
   "filter-<": [
     m,
-    [b, v],
+    [v, b],
     (n, [e, t]) => {
       const r = n.properties()[e.value], i = t.value;
       return typeof r == typeof i && r < i;
@@ -3089,7 +3089,7 @@ P.register(Ct, {
   ],
   "filter-id-<": [
     m,
-    [v],
+    [b],
     (n, [e]) => {
       const t = n.id(), r = e.value;
       return typeof t == typeof r && t < r;
@@ -3097,7 +3097,7 @@ P.register(Ct, {
   ],
   "filter->": [
     m,
-    [b, v],
+    [v, b],
     (n, [e, t]) => {
       const r = n.properties()[e.value], i = t.value;
       return typeof r == typeof i && r > i;
@@ -3105,7 +3105,7 @@ P.register(Ct, {
   ],
   "filter-id->": [
     m,
-    [v],
+    [b],
     (n, [e]) => {
       const t = n.id(), r = e.value;
       return typeof t == typeof r && t > r;
@@ -3113,7 +3113,7 @@ P.register(Ct, {
   ],
   "filter-<=": [
     m,
-    [b, v],
+    [v, b],
     (n, [e, t]) => {
       const r = n.properties()[e.value], i = t.value;
       return typeof r == typeof i && r <= i;
@@ -3121,7 +3121,7 @@ P.register(Ct, {
   ],
   "filter-id-<=": [
     m,
-    [v],
+    [b],
     (n, [e]) => {
       const t = n.id(), r = e.value;
       return typeof t == typeof r && t <= r;
@@ -3129,7 +3129,7 @@ P.register(Ct, {
   ],
   "filter->=": [
     m,
-    [b, v],
+    [v, b],
     (n, [e, t]) => {
       const r = n.properties()[e.value], i = t.value;
       return typeof r == typeof i && r >= i;
@@ -3137,7 +3137,7 @@ P.register(Ct, {
   ],
   "filter-id->=": [
     m,
-    [v],
+    [b],
     (n, [e]) => {
       const t = n.id(), r = e.value;
       return typeof t == typeof r && t >= r;
@@ -3145,7 +3145,7 @@ P.register(Ct, {
   ],
   "filter-has": [
     m,
-    [v],
+    [b],
     (n, [e]) => e.value in n.properties()
   ],
   "filter-has-id": [
@@ -3155,25 +3155,25 @@ P.register(Ct, {
   ],
   "filter-type-in": [
     m,
-    [L(b)],
+    [P(v)],
     (n, [e]) => e.value.indexOf(n.geometryDollarType()) >= 0
   ],
   "filter-id-in": [
     m,
-    [L(v)],
+    [P(b)],
     (n, [e]) => e.value.indexOf(n.id()) >= 0
   ],
   "filter-in-small": [
     m,
-    [b, L(v)],
+    [v, P(b)],
     // assumes v is an array literal
     (n, [e, t]) => t.value.indexOf(n.properties()[e.value]) >= 0
   ],
   "filter-in-large": [
     m,
-    [b, L(v)],
+    [v, P(b)],
     // assumes v is a array literal with values sorted in ascending order and of a single type
-    (n, [e, t]) => Pr(n.properties()[e.value], t.value, 0, t.value.length - 1)
+    (n, [e, t]) => _r(n.properties()[e.value], t.value, 0, t.value.length - 1)
   ],
   all: {
     type: m,
@@ -3218,7 +3218,7 @@ P.register(Ct, {
   ],
   "is-supported-script": [
     m,
-    [b],
+    [v],
     // At parse time this will always return true, so we need to exclude this expression with isGlobalPropertyConstant
     (n, [e]) => {
       const t = n.globals && n.globals.isSupportedScript;
@@ -3226,48 +3226,48 @@ P.register(Ct, {
     }
   ],
   upcase: [
-    b,
-    [b],
+    v,
+    [v],
     (n, [e]) => e.evaluate(n).toUpperCase()
   ],
   downcase: [
-    b,
-    [b],
+    v,
+    [v],
     (n, [e]) => e.evaluate(n).toLowerCase()
   ],
   concat: [
-    b,
-    W(v),
-    (n, e) => e.map((t) => ie(t.evaluate(n))).join("")
+    v,
+    W(b),
+    (n, e) => e.map((t) => oe(t.evaluate(n))).join("")
   ],
   "resolved-locale": [
-    b,
-    [Te],
+    v,
+    [Ne],
     (n, [e]) => e.evaluate(n).resolvedLocale()
   ]
 });
-function _r(n) {
-  return Array.isArray(n) ? `(${n.map(x).join(", ")})` : `(${x(n.type)}...)`;
+function Or(n) {
+  return Array.isArray(n) ? `(${n.map(k).join(", ")})` : `(${k(n.type)}...)`;
 }
-function Me(n) {
-  if (n instanceof Pe)
-    return Me(n.boundExpression);
-  if (n instanceof P && n.name === "error")
+function Se(n) {
+  if (n instanceof ze)
+    return Se(n.boundExpression);
+  if (n instanceof F && n.name === "error")
     return !1;
-  if (n instanceof Be)
+  if (n instanceof He)
     return !1;
   if (n instanceof X)
     return !1;
   if (n instanceof Z)
     return !1;
-  const e = n instanceof O || n instanceof A;
+  const e = n instanceof q || n instanceof D;
   let t = !0;
   return n.eachChild((r) => {
-    e ? t = t && Me(r) : t = t && r instanceof ee;
-  }), t ? wt(n) && xt(n, ["zoom", "heatmap-density", "line-progress", "accumulated", "is-supported-script"]) : !1;
+    e ? t = t && Se(r) : t = t && r instanceof ne;
+  }), t ? xt(n) && Et(n, ["zoom", "heatmap-density", "line-progress", "accumulated", "is-supported-script"]) : !1;
 }
-function wt(n) {
-  if (n instanceof P) {
+function xt(n) {
+  if (n instanceof F) {
     if (n.name === "get" && n.args.length === 1)
       return !1;
     if (n.name === "feature-state")
@@ -3283,69 +3283,69 @@ function wt(n) {
     return !1;
   let e = !0;
   return n.eachChild((t) => {
-    e && !wt(t) && (e = !1);
+    e && !xt(t) && (e = !1);
   }), e;
 }
-function kt(n) {
-  if (n instanceof P && n.name === "feature-state")
+function Mt(n) {
+  if (n instanceof F && n.name === "feature-state")
     return !1;
   let e = !0;
   return n.eachChild((t) => {
-    e && !kt(t) && (e = !1);
+    e && !Mt(t) && (e = !1);
   }), e;
 }
-function xt(n, e) {
-  if (n instanceof P && e.indexOf(n.name) >= 0)
+function Et(n, e) {
+  if (n instanceof F && e.indexOf(n.name) >= 0)
     return !1;
   let t = !0;
   return n.eachChild((r) => {
-    t && !xt(r, e) && (t = !1);
+    t && !Et(r, e) && (t = !1);
   }), t;
 }
-function et(n) {
+function rt(n) {
   return { result: "success", value: n };
 }
-function Y(n) {
+function Q(n) {
   return { result: "error", value: n };
 }
-function Fr(n) {
+function qr(n) {
   return n["property-type"] === "data-driven" || n["property-type"] === "cross-faded-data-driven";
 }
-function Br(n) {
+function Vr(n) {
   return !!n.expression && n.expression.parameters.indexOf("zoom") > -1;
 }
 function hn(n) {
   return !!n.expression && n.expression.interpolated;
 }
-function Et(n) {
+function It(n) {
   return n instanceof Number ? "number" : n instanceof String ? "string" : n instanceof Boolean ? "boolean" : Array.isArray(n) ? "array" : n === null ? "null" : typeof n;
 }
 function pn(n) {
   return typeof n == "object" && n !== null && !Array.isArray(n);
 }
-function zr(n) {
+function Wr(n) {
   return n;
 }
 function dn(n, e) {
   const t = e.type === "color", r = n.stops && typeof n.stops[0][0] == "object", i = r || n.property !== void 0, s = r || !i, o = n.type || (hn(e) ? "exponential" : "interval");
   if (t || e.type === "padding") {
-    const c = t ? k.parse : T.parse;
+    const c = t ? w.parse : $.parse;
     n = Ut({}, n), n.stops && (n.stops = n.stops.map((f) => [f[0], c(f[1])])), n.default ? n.default = c(n.default) : n.default = c(e.default);
   }
-  if (n.colorSpace && !zn(n.colorSpace))
+  if (n.colorSpace && !Wn(n.colorSpace))
     throw new Error(`Unknown color space: "${n.colorSpace}"`);
   let a, l, u;
   if (o === "exponential")
-    a = qt;
+    a = Wt;
   else if (o === "interval")
-    a = jr;
+    a = Gr;
   else if (o === "categorical") {
-    a = Hr, l = /* @__PURE__ */ Object.create(null);
+    a = Ur, l = /* @__PURE__ */ Object.create(null);
     for (const c of n.stops)
       l[c[0]] = c[1];
     u = typeof n.stops[0][0];
   } else if (o === "identity")
-    a = Rr;
+    a = Xr;
   else
     throw new Error(`Unknown function type "${o}"`);
   if (r) {
@@ -3360,18 +3360,18 @@ function dn(n, e) {
         stops: []
       }, f.push(E)), c[E].stops.push([C[0].value, C[1]]);
     }
-    const h = [];
+    const p = [];
     for (const y of f)
-      h.push([c[y].zoom, dn(c[y], e)]);
+      p.push([c[y].zoom, dn(c[y], e)]);
     const d = { name: "linear" };
     return {
       kind: "composite",
       interpolationType: d,
-      interpolationFactor: D.interpolationFactor.bind(void 0, d),
-      zoomStops: h.map((y) => y[0]),
+      interpolationFactor: A.interpolationFactor.bind(void 0, d),
+      zoomStops: p.map((y) => y[0]),
       evaluate({ zoom: y }, C) {
-        return qt({
-          stops: h,
+        return Wt({
+          stops: p,
           base: n.base
         }, e, y).evaluate(y, C);
       }
@@ -3381,7 +3381,7 @@ function dn(n, e) {
     return {
       kind: "camera",
       interpolationType: c,
-      interpolationFactor: D.interpolationFactor.bind(void 0, c),
+      interpolationFactor: A.interpolationFactor.bind(void 0, c),
       zoomStops: n.stops.map((f) => f[0]),
       evaluate: ({ zoom: f }) => a(n, e, f, l, u)
     };
@@ -3389,12 +3389,12 @@ function dn(n, e) {
     return {
       kind: "source",
       evaluate(c, f) {
-        const h = f && f.properties ? f.properties[n.property] : void 0;
-        return h === void 0 ? he(n.default, e.default) : a(n, e, h, l, u);
+        const p = f && f.properties ? f.properties[n.property] : void 0;
+        return p === void 0 ? ye(n.default, e.default) : a(n, e, p, l, u);
       }
     };
 }
-function he(n, e, t) {
+function ye(n, e, t) {
   if (n !== void 0)
     return n;
   if (e !== void 0)
@@ -3402,65 +3402,65 @@ function he(n, e, t) {
   if (t !== void 0)
     return t;
 }
-function Hr(n, e, t, r, i) {
+function Ur(n, e, t, r, i) {
   const s = typeof t === i ? r[t] : void 0;
-  return he(s, n.default, e.default);
+  return ye(s, n.default, e.default);
 }
-function jr(n, e, t) {
-  if (Et(t) !== "number")
-    return he(n.default, e.default);
+function Gr(n, e, t) {
+  if (It(t) !== "number")
+    return ye(n.default, e.default);
   const r = n.stops.length;
   if (r === 1 || t <= n.stops[0][0])
     return n.stops[0][1];
   if (t >= n.stops[r - 1][0])
     return n.stops[r - 1][1];
-  const i = _e(n.stops.map((s) => s[0]), t);
+  const i = je(n.stops.map((s) => s[0]), t);
   return n.stops[i][1];
 }
-function qt(n, e, t) {
+function Wt(n, e, t) {
   const r = n.base !== void 0 ? n.base : 1;
-  if (Et(t) !== "number")
-    return he(n.default, e.default);
+  if (It(t) !== "number")
+    return ye(n.default, e.default);
   const i = n.stops.length;
   if (i === 1 || t <= n.stops[0][0])
     return n.stops[0][1];
   if (t >= n.stops[i - 1][0])
     return n.stops[i - 1][1];
-  const s = _e(n.stops.map((c) => c[0]), t), o = Or(t, r, n.stops[s][0], n.stops[s + 1][0]), a = n.stops[s][1], l = n.stops[s + 1][1], u = Xn[e.type] || zr;
+  const s = je(n.stops.map((c) => c[0]), t), o = Zr(t, r, n.stops[s][0], n.stops[s + 1][0]), a = n.stops[s][1], l = n.stops[s + 1][1], u = er[e.type] || Wr;
   return typeof a.evaluate == "function" ? {
     evaluate(...c) {
-      const f = a.evaluate.apply(void 0, c), h = l.evaluate.apply(void 0, c);
-      if (!(f === void 0 || h === void 0))
-        return u(f, h, o, n.colorSpace);
+      const f = a.evaluate.apply(void 0, c), p = l.evaluate.apply(void 0, c);
+      if (!(f === void 0 || p === void 0))
+        return u(f, p, o, n.colorSpace);
     }
   } : u(a, l, o, n.colorSpace);
 }
-function Rr(n, e, t) {
+function Xr(n, e, t) {
   switch (e.type) {
     case "color":
-      t = k.parse(t);
+      t = w.parse(t);
       break;
     case "formatted":
-      t = B.fromString(t.toString());
+      t = j.fromString(t.toString());
       break;
     case "resolvedImage":
-      t = R.fromString(t.toString());
+      t = O.fromString(t.toString());
       break;
     case "padding":
-      t = T.parse(t);
+      t = $.parse(t);
       break;
     default:
-      Et(t) !== e.type && (e.type !== "enum" || !e.values[t]) && (t = void 0);
+      It(t) !== e.type && (e.type !== "enum" || !e.values[t]) && (t = void 0);
   }
-  return he(t, n.default, e.default);
+  return ye(t, n.default, e.default);
 }
-function Or(n, e, t, r) {
+function Zr(n, e, t, r) {
   const i = r - t, s = n - t;
   return i === 0 ? 0 : e === 1 ? s / i : (Math.pow(e, s) - 1) / (Math.pow(e, i) - 1);
 }
 class yn {
   constructor(e, t) {
-    this.expression = e, this._warningHistory = {}, this._evaluator = new rn(), this._defaultValue = t ? Ur(t) : null, this._enumValues = t && t.type === "enum" ? t.values : null;
+    this.expression = e, this._warningHistory = {}, this._evaluator = new rn(), this._defaultValue = t ? Kr(t) : null, this._enumValues = t && t.type === "enum" ? t.values : null;
   }
   evaluateWithoutErrorHandling(e, t, r, i, s, o) {
     return this._evaluator.globals = e, this._evaluator.feature = t, this._evaluator.featureState = r, this._evaluator.canonical = i, this._evaluator.availableImages = s || null, this._evaluator.formattedSection = o, this.expression.evaluate(this._evaluator);
@@ -3480,15 +3480,15 @@ class yn {
   }
 }
 function gn(n) {
-  return Array.isArray(n) && n.length > 0 && typeof n[0] == "string" && n[0] in Ct;
+  return Array.isArray(n) && n.length > 0 && typeof n[0] == "string" && n[0] in kt;
 }
 function mn(n, e) {
-  const t = new De(Ct, Me, [], e ? Vr(e) : void 0), r = t.parse(n, void 0, void 0, void 0, e && e.type === "string" ? { typeAnnotation: "coerce" } : void 0);
-  return r ? et(new yn(r, e)) : Y(t.errors);
+  const t = new Fe(kt, Se, [], e ? Qr(e) : void 0), r = t.parse(n, void 0, void 0, void 0, e && e.type === "string" ? { typeAnnotation: "coerce" } : void 0);
+  return r ? rt(new yn(r, e)) : Q(t.errors);
 }
-class tt {
+class it {
   constructor(e, t) {
-    this.kind = e, this._styleExpression = t, this.isStateDependent = e !== "constant" && !kt(t.expression);
+    this.kind = e, this._styleExpression = t, this.isStateDependent = e !== "constant" && !Mt(t.expression);
   }
   evaluateWithoutErrorHandling(e, t, r, i, s, o) {
     return this._styleExpression.evaluateWithoutErrorHandling(e, t, r, i, s, o);
@@ -3497,9 +3497,9 @@ class tt {
     return this._styleExpression.evaluate(e, t, r, i, s, o);
   }
 }
-class nt {
+class st {
   constructor(e, t, r, i) {
-    this.kind = e, this.zoomStops = r, this._styleExpression = t, this.isStateDependent = e !== "camera" && !kt(t.expression), this.interpolationType = i;
+    this.kind = e, this.zoomStops = r, this._styleExpression = t, this.isStateDependent = e !== "camera" && !Mt(t.expression), this.interpolationType = i;
   }
   evaluateWithoutErrorHandling(e, t, r, i, s, o) {
     return this._styleExpression.evaluateWithoutErrorHandling(e, t, r, i, s, o);
@@ -3508,40 +3508,40 @@ class nt {
     return this._styleExpression.evaluate(e, t, r, i, s, o);
   }
   interpolationFactor(e, t, r) {
-    return this.interpolationType ? D.interpolationFactor(this.interpolationType, e, t, r) : 0;
+    return this.interpolationType ? A.interpolationFactor(this.interpolationType, e, t, r) : 0;
   }
 }
-function qr(n) {
+function Jr(n) {
   return n._styleExpression !== void 0;
 }
-function vn(n, e) {
+function bn(n, e) {
   const t = mn(n, e);
   if (t.result === "error")
     return t;
-  const r = t.value.expression, i = wt(r);
-  if (!i && !Fr(e))
-    return Y([new _("", "data expressions not supported")]);
-  const s = xt(r, ["zoom"]);
-  if (!s && !Br(e))
-    return Y([new _("", "zoom expressions not supported")]);
-  const o = be(r);
+  const r = t.value.expression, i = xt(r);
+  if (!i && !qr(e))
+    return Q([new B("", "data expressions not supported")]);
+  const s = Et(r, ["zoom"]);
+  if (!s && !Vr(e))
+    return Q([new B("", "zoom expressions not supported")]);
+  const o = ke(r);
   if (!o && !s)
-    return Y([new _("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.')]);
-  if (o instanceof _)
-    return Y([o]);
-  if (o instanceof D && !hn(e))
-    return Y([new _("", '"interpolate" expressions cannot be used with this property')]);
+    return Q([new B("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.')]);
+  if (o instanceof B)
+    return Q([o]);
+  if (o instanceof A && !hn(e))
+    return Q([new B("", '"interpolate" expressions cannot be used with this property')]);
   if (!o)
-    return et(i ? new tt("constant", t.value) : new tt("source", t.value));
-  const a = o instanceof D ? o.interpolation : void 0;
-  return et(i ? new nt("camera", t.value, o.labels, a) : new nt("composite", t.value, o.labels, a));
+    return rt(i ? new it("constant", t.value) : new it("source", t.value));
+  const a = o instanceof A ? o.interpolation : void 0;
+  return rt(i ? new st("camera", t.value, o.labels, a) : new st("composite", t.value, o.labels, a));
 }
-class He {
+class Oe {
   constructor(e, t) {
     this._parameters = e, this._specification = t, Ut(this, dn(this._parameters, this._specification));
   }
   static deserialize(e) {
-    return new He(e._parameters, e._specification);
+    return new Oe(e._parameters, e._specification);
   }
   static serialize(e) {
     return {
@@ -3550,55 +3550,55 @@ class He {
     };
   }
 }
-function Wr(n, e) {
+function Yr(n, e) {
   if (pn(n))
-    return new He(n, e);
+    return new Oe(n, e);
   if (gn(n)) {
-    const t = vn(n, e);
+    const t = bn(n, e);
     if (t.result === "error")
       throw new Error(t.value.map((r) => `${r.key}: ${r.message}`).join(", "));
     return t.value;
   } else {
     let t = n;
-    return e.type === "color" && typeof n == "string" ? t = k.parse(n) : e.type === "padding" && (typeof n == "number" || Array.isArray(n)) ? t = T.parse(n) : e.type === "variableAnchorOffsetCollection" && Array.isArray(n) ? t = N.parse(n) : e.type === "projectionDefinition" && typeof n == "string" && (t = $.parse(n)), {
+    return e.type === "color" && typeof n == "string" ? t = w.parse(n) : e.type === "padding" && (typeof n == "number" || Array.isArray(n)) ? t = $.parse(n) : e.type === "variableAnchorOffsetCollection" && Array.isArray(n) ? t = L.parse(n) : e.type === "projectionDefinition" && typeof n == "string" && (t = N.parse(n)), {
       kind: "constant",
       evaluate: () => t
     };
   }
 }
-function be(n) {
+function ke(n) {
   let e = null;
-  if (n instanceof Ae)
-    e = be(n.result);
-  else if (n instanceof le) {
+  if (n instanceof Be)
+    e = ke(n.result);
+  else if (n instanceof fe) {
     for (const t of n.args)
-      if (e = be(t), e)
+      if (e = ke(t), e)
         break;
-  } else (n instanceof Fe || n instanceof D) && n.input instanceof P && n.input.name === "zoom" && (e = n);
-  return e instanceof _ || n.eachChild((t) => {
-    const r = be(t);
-    r instanceof _ ? e = r : !e && r ? e = new _("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.') : e && r && e !== r && (e = new _("", 'Only one zoom-based "step" or "interpolate" subexpression may be used in an expression.'));
+  } else (n instanceof Re || n instanceof A) && n.input instanceof F && n.input.name === "zoom" && (e = n);
+  return e instanceof B || n.eachChild((t) => {
+    const r = ke(t);
+    r instanceof B ? e = r : !e && r ? e = new B("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.') : e && r && e !== r && (e = new B("", 'Only one zoom-based "step" or "interpolate" subexpression may be used in an expression.'));
   }), e;
 }
-function Vr(n) {
+function Qr(n) {
   const e = {
-    color: F,
-    string: b,
-    number: p,
-    enum: b,
+    color: z,
+    string: v,
+    number: h,
+    enum: v,
     boolean: m,
     formatted: Le,
-    padding: $e,
-    projectionDefinition: Ie,
-    resolvedImage: ce,
-    variableAnchorOffsetCollection: Ne
+    padding: Ae,
+    projectionDefinition: Pe,
+    resolvedImage: pe,
+    variableAnchorOffsetCollection: De
   };
-  return n.type === "array" ? L(e[n.value] || v, n.length) : e[n.type];
+  return n.type === "array" ? P(e[n.value] || b, n.length) : e[n.type];
 }
-function Ur(n) {
-  return n.type === "color" && pn(n.default) ? new k(0, 0, 0, 0) : n.type === "color" ? k.parse(n.default) || null : n.type === "padding" ? T.parse(n.default) || null : n.type === "variableAnchorOffsetCollection" ? N.parse(n.default) || null : n.type === "projectionDefinition" ? $.parse(n.default) || null : n.default === void 0 ? null : n.default;
+function Kr(n) {
+  return n.type === "color" && pn(n.default) ? new w(0, 0, 0, 0) : n.type === "color" ? w.parse(n.default) || null : n.type === "padding" ? $.parse(n.default) || null : n.type === "variableAnchorOffsetCollection" ? L.parse(n.default) || null : n.type === "projectionDefinition" ? N.parse(n.default) || null : n.default === void 0 ? null : n.default;
 }
-function bn(n) {
+function vn(n) {
   if (n === !0 || n === !1)
     return !0;
   if (!Array.isArray(n) || n.length === 0)
@@ -3622,26 +3622,26 @@ function bn(n) {
     case "any":
     case "all":
       for (const e of n.slice(1))
-        if (!bn(e) && typeof e != "boolean")
+        if (!vn(e) && typeof e != "boolean")
           return !1;
       return !0;
     default:
       return !0;
   }
 }
-const Xr = {
+const ei = {
   StyleExpression: yn,
-  StylePropertyFunction: He,
-  ZoomConstantExpression: tt,
-  ZoomDependentExpression: nt,
+  StylePropertyFunction: Oe,
+  ZoomConstantExpression: it,
+  ZoomDependentExpression: st,
   createExpression: mn,
-  createPropertyExpression: vn,
+  createPropertyExpression: bn,
   isExpression: gn,
-  isExpressionFilter: bn,
-  isZoomExpression: qr,
-  normalizePropertyExpression: Wr
+  isExpressionFilter: vn,
+  isZoomExpression: Jr,
+  normalizePropertyExpression: Yr
 };
-class Qr {
+class fi {
   constructor(e, t) {
     g(this, "map");
     g(this, "options");
@@ -3725,7 +3725,7 @@ class Qr {
       }
     }, this.options = {
       position: "top-left",
-      width: "56px",
+      width: "50px",
       // Default width
       height: "272px",
       // Default width
@@ -3803,8 +3803,8 @@ class Qr {
       const o = i.querySelector(".map_colorbar_color_box"), a = i.querySelector(".map_colorbar_label"), l = s === 0 ? e + 3 : e;
       i.style.height = `${e}px`, o.style.height = `${l}px`;
       let u = this.colorSteps.length - 1 - s;
-      const c = this.colorSteps[u].speed, f = this.colorSteps[r].speed, h = Math.abs(c - f);
-      (this.getTickMinStep() == 0 && t > 0 && s % t !== 0 || h < this.getTickMinStep()) && u < r ? a.textContent = "" : (a.textContent = `- ${c.toFixed(this.options.decimal)}`, r = u, a.style.marginTop = `${e}px`);
+      const c = this.colorSteps[u].speed, f = this.colorSteps[r].speed, p = Math.abs(c - f);
+      (this.getTickMinStep() == 0 && t > 0 && s % t !== 0 || p < this.getTickMinStep()) && u < r ? a.textContent = "" : (a.textContent = `- ${c.toFixed(this.options.decimal)}`, r = u, a.style.marginTop = `${e}px`);
     });
   }
   onAdd(e) {
@@ -3820,7 +3820,7 @@ class Qr {
   }
   refresh() {
   }
-  getDefaultPosition() {
+  getPosition() {
     return this.options.position || "top-left";
   }
   /**
@@ -3845,7 +3845,7 @@ class Qr {
     return this.map;
   }
   updateInnerContainerStyle(e, t) {
-    var h;
+    var p;
     if (!this.map)
       return;
     const r = this.map.getContainer(), i = r.offsetWidth, s = r.offsetHeight;
@@ -3861,7 +3861,7 @@ class Qr {
         getComputedStyle(r).getPropertyValue("env(safe-area-inset-right)") || "0"
       )
     ), c = l, f = u;
-    i >= 480 && (o = 15, a = 15, c = Math.max(15, l), f = Math.max(15, u)), i >= 992 && s >= 992 && (o = 40, a = 40, c = Math.max(40, l), f = Math.max(40, u)), (h = this.options.position) != null && h.endsWith("left") ? (t.style.marginLeft = `${c}px`, t.style.marginRight = `${u}px`) : (t.style.marginLeft = `${l}px`, t.style.marginRight = `${f}px`), t.style.marginTop = `${o}px`, t.style.marginBottom = `${a}px`, t.style.alignItems = "flex-start", t.style.display = "flex", t.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;
+    i >= 480 && (o = 15, a = 15, c = Math.max(15, l), f = Math.max(15, u)), i >= 992 && s >= 992 && (o = 40, a = 40, c = Math.max(40, l), f = Math.max(40, u)), (p = this.options.position) != null && p.endsWith("left") ? (t.style.marginLeft = `${c}px`, t.style.marginRight = `${u}px`) : (t.style.marginLeft = `${l}px`, t.style.marginRight = `${f}px`), t.style.marginTop = `${o}px`, t.style.marginBottom = `${a}px`, t.style.alignItems = "flex-start", t.style.display = "flex", t.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;
   }
   /**
    * Parses the "fill-color" property and extracts speed-to-color mappings.
@@ -3878,8 +3878,8 @@ class Qr {
     const i = [], [, , s, ...o] = t, a = ((l = this.options) == null ? void 0 : l.max) || 30;
     i.push({ speed: 0, color: s });
     for (let u = 0; u < o.length; u += 2) {
-      const f = o[u] * a, h = o[u + 1];
-      i.push({ speed: f, color: h });
+      const f = o[u] * a, p = o[u + 1];
+      i.push({ speed: f, color: p });
     }
     return i.sort((u, c) => c.speed - u.speed);
   }
@@ -3892,7 +3892,7 @@ class Qr {
     const r = this.propertySpec[e];
     if (!r)
       throw new Error(`Property "${e}" is not defined in the specification.`);
-    const i = Xr.createPropertyExpression(t, r);
+    const i = ei.createPropertyExpression(t, r);
     if (i.result === "success")
       switch (i.value.kind) {
         case "camera":
@@ -3907,7 +3907,7 @@ class Qr {
       throw new Error(`Invalid expression for property "${e}": ${i.value}`);
   }
 }
-class Kr {
+class hi {
   constructor(e) {
     g(this, "map");
     g(this, "options");
@@ -3980,30 +3980,188 @@ class Kr {
   updateContent(e, t = !1) {
     this.container && (t ? this.container.innerHTML = e : this.container.textContent = e);
   }
-  getDefaultPosition() {
+  getPosition() {
     return this.options.position || "top-left";
   }
 }
-const rt = 20, Wt = 6, Zr = 4, Vt = 4, Gr = (n, e) => {
-  const t = document.createElement("img");
-  return t.src = `data:image/svg+xml,${encodeURIComponent(n)}`, t.alt = e, t.style.width = `${rt}px`, t.style.height = `${rt}px`, t.style.color = "white", t;
+const x = {
+  // Color palette
+  color: {
+    text: "rgba(255, 255, 255, 1.0)",
+    // General border
+    border: "rgba(0, 36, 71, 0.4)",
+    // General border
+    borderLight: "#dee2e6",
+    // Light border for fields
+    background: "rgba(0, 36, 71, 0.6)",
+    // Buttons and panel background unified
+    hover: "rgba(0, 36, 71, 0.8)",
+    // Hover state
+    activeBackground: "rgba(0, 36, 71, 0.98)"
+  },
+  // Border radius
+  radius: {
+    sm: "3px",
+    md: "4px",
+    lg: "6px"
+  },
+  // Shadows
+  shadow: {
+    sm: "0 1px 2px rgba(0, 36, 71, 0.05)",
+    md: "0 2px 4px rgba(0, 36, 71, 0.1)"
+  },
+  // Font
+  font: {
+    family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
+    size: "10px"
+  },
+  // Transition
+  transition: "all 0.2s ease"
+}, wn = /* @__PURE__ */ new Set();
+function ti(n) {
+  n.style.setProperty("--rp-mctl-text", x.color.text), n.style.setProperty("--rp-mctl-background", x.color.background), n.style.setProperty("--rp-mctl-hover", x.color.hover), n.style.setProperty("--rp-mctl-border", x.color.border), n.style.setProperty("--rp-mctl-borderLight", x.color.borderLight), n.style.setProperty("--rp-mctl-radius-sm", x.radius.sm), n.style.setProperty("--rp-mctl-radius-md", x.radius.md), n.style.setProperty("--rp-mctl-radius-lg", x.radius.lg), n.style.setProperty("--rp-mctl-shadow-sm", x.shadow.sm), n.style.setProperty("--rp-mctl-shadow-md", x.shadow.md), n.style.setProperty("--rp-mctl-font-family", x.font.family), n.style.setProperty("--rp-mctl-font-size", x.font.size);
+}
+function ni(n) {
+  wn.add(n), ti(n);
+}
+function ri(n) {
+  wn.delete(n);
+}
+const ii = {
+  backgroundColor: "transparent",
+  padding: "5px",
+  border: "transparent",
+  boxShadow: "none",
+  borderRadius: x.radius.md,
+  display: "flex",
+  flexDirection: "column",
+  gap: "4px",
+  fontFamily: x.font.family,
+  fontSize: x.font.size,
+  color: x.color.text
 };
-class ei {
+function Cn(n, e = {}) {
+  Object.assign(n.style, ii), n.classList.add("maplibregl-ctrl", "maplibregl-ctrl-group"), e.classNames && e.classNames.forEach((t) => n.classList.add(t));
+}
+const si = {
+  display: "flex",
+  alignItems: "center",
+  gap: "4px",
+  padding: "4px 6px",
+  border: "none",
+  cursor: "pointer",
+  borderRadius: x.radius.md,
+  width: "fit-content",
+  color: x.color.text,
+  backgroundColor: x.color.background,
+  fontSize: x.font.size
+}, ae = {
+  iconWidth: 20,
+  btnPaddingX: 6,
+  btnPaddingY: 4,
+  btnGap: 4,
+  smallScreenThreshold: 768,
+  minFontSize: 6,
+  maxFontSize: 13,
+  scalingFactor: 0.5
+}, te = /* @__PURE__ */ new Map();
+function kn(n, e) {
+  te.has(n) || te.set(n, /* @__PURE__ */ new Map());
+  const t = te.get(n);
+  e.forEach((r, i) => {
+    t == null || t.set(i, r);
+  });
+}
+function xn(n, e) {
+  const t = te.get(n);
+  t && (Object.entries(e).forEach(([r]) => {
+    t.delete(r);
+  }), t.size === 0 && te.delete(n));
+}
+function Mn(n) {
+  const e = document.createElement("button");
+  if (Object.assign(e.style, si), n.backgroundColor && (e.style.backgroundColor = n.backgroundColor), n.className && (e.className = n.className), n.title && (e.title = n.title), n.onClick && (e.onclick = n.onClick), n.icon)
+    if (typeof n.icon == "string") {
+      const r = document.createElement("div");
+      r.innerHTML = n.icon, e.appendChild(r);
+    } else
+      e.appendChild(n.icon);
+  const t = document.createElement("span");
+  return t.textContent = n.label, t.style.fontSize = x.font.size, t.style.color = "inherit", e.appendChild(t), e;
+}
+function oi(n, e, t = 20) {
+  const r = document.createElement("img");
+  return r.src = `data:image/svg+xml,${encodeURIComponent(n)}`, r.alt = e, r.style.width = `${t}px`, r.style.height = `${t}px`, r.style.color = "white", r;
+}
+function ai(n) {
+  return n.split("_").map((e) => e.charAt(0).toUpperCase() + e.slice(1)).join(" ");
+}
+function li(n, e, t = ae.maxFontSize, r = ae.minFontSize) {
+  const { iconWidth: i, btnPaddingX: s, btnGap: o, scalingFactor: a } = ae, l = n - i - s * 2 - o, u = e.replace(/<[^>]+>/g, "").length;
+  if (u === 0) return r;
+  let c = Math.floor(l / (u * a));
+  return c = Math.min(t, Math.max(r, c)), c;
+}
+function En(n, e) {
+  const t = te.get(n);
+  if (!t || t.size === 0) return;
+  const r = Array.from(t.values()), { smallScreenThreshold: i } = ae, s = e < i;
+  r.forEach((l) => {
+    const u = l.querySelector("span");
+    u && (u.style.display = s ? "none" : "inline"), l.style.width = "fit-content";
+  });
+  const o = Math.max(...r.map((l) => l.offsetWidth)), a = s ? "34px" : `${o}px`;
+  if (r.forEach((l) => {
+    l.style.width = a;
+  }), !s) {
+    const l = r.map((c) => {
+      const f = c.querySelector("span");
+      return !f || !f.textContent ? null : [f, li(o, f.textContent)];
+    }).filter((c) => !!c), u = Math.max(
+      ae.minFontSize,
+      Math.min(...l.map(([, c]) => c))
+    );
+    l.forEach(([c]) => {
+      c.style.fontSize = `${u}px`;
+    });
+  }
+}
+function In(n, e) {
+  const t = n.offsetWidth, r = n.offsetHeight;
+  let i = 10, s = 10, o = Math.max(
+    0,
+    parseFloat(
+      getComputedStyle(n).getPropertyValue("env(safe-area-inset-left)") || "0"
+    )
+  ), a = Math.max(
+    0,
+    parseFloat(
+      getComputedStyle(n).getPropertyValue("env(safe-area-inset-right)") || "0"
+    )
+  ), l = o, u = a;
+  return t >= 480 && (i = 15, s = 15, l = Math.max(15, o), u = Math.max(15, a)), r >= 992 && (i = 40, s = 40), t >= 992 && (l = Math.max(40, o), u = Math.max(40, a)), e != null && e.endsWith("left") ? (l = l, u = a) : (l = o, u = u), { marginTop: i, marginBottom: s, marginLeft: l, marginRight: u };
+}
+class pi {
   constructor(e) {
     g(this, "map");
     g(this, "container");
-    g(this, "outContainer");
     g(this, "options");
     g(this, "defaultActiveId");
     g(this, "activeButtonId", null);
     g(this, "buttons", /* @__PURE__ */ new Map());
+    g(this, "instanceId");
     g(this, "listeners", {
       toggle: /* @__PURE__ */ new Set(),
       untoggle: /* @__PURE__ */ new Set()
     });
-    this.options = e;
-    const { outContainer: t, container: r } = this.createContainer();
-    this.outContainer = t, this.container = r, this.defaultActiveId = this.options.defaultActive;
+    this.options = e, this.instanceId = this.generateInstanceId(), this.container = this.createContainer(), this.defaultActiveId = this.options.defaultActive;
+  }
+  /**
+   * Generate a unique instance ID for this control
+   * @returns Unique identifier string
+   */
+  generateInstanceId() {
+    return `togglectl-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
   on(e, t) {
     this.listeners[e].add(t);
@@ -4019,68 +4177,38 @@ class ei {
         console.error(`[ToggleCtl] error in ${e} listener`, r);
       }
   }
-  // Create the outer container for the control
+  // Create the container for the control
   createContainer() {
     const e = document.createElement("div");
-    e.classList.add("maplibregl-ctrl"), e.style.height = "100%", e.style.display = "flex", e.style.flexDirection = "column", e.style.alignItems = "center", e.style.backgroundColor = "transparent";
-    const t = document.createElement("div");
-    return t.classList.add("maplibregl-ctrl", "maplibregl-ctrl-group"), t.style.backgroundColor = "transparent", t.style.padding = "5px", t.style.border = "transparent", t.style.boxShadow = "none", t.style.borderRadius = "4px", t.style.display = "flex", t.style.flexDirection = "column", t.style.gap = "4px", this.options.buttons.forEach((r) => {
-      const i = this.createButton(r);
-      t.appendChild(i), this.buttons.set(r.id, i);
-    }), this.container = t, this.updateLayout(), e.appendChild(this.container), { outContainer: e, container: t };
+    return e.id = this.instanceId, Cn(e), this.options.buttons.forEach((t) => {
+      const r = this.createButton(t);
+      e.appendChild(r), this.buttons.set(t.id, r);
+    }), this.updateLayout(), e;
   }
   updateInnerContainerStyle() {
-    var c;
     if (!this.map)
       return;
-    const e = this.map.getContainer(), t = e.offsetWidth, r = e.offsetHeight;
-    this.outContainer.style.height = `${r}px`;
-    let i = 10, s = 10, o = Math.max(
-      0,
-      parseFloat(
-        getComputedStyle(e).getPropertyValue("env(safe-area-inset-left)") || "0"
-      )
-    ), a = Math.max(
-      0,
-      parseFloat(
-        getComputedStyle(e).getPropertyValue("env(safe-area-inset-right)") || "0"
-      )
-    ), l = o, u = a;
-    t >= 480 && (i = 15, s = 15, l = Math.max(15, o), u = Math.max(15, a)), r >= 992 && (i = 40, s = 40), t >= 992 && (l = Math.max(40, o), u = Math.max(40, a)), (c = this.options.position) != null && c.endsWith("left") ? (this.container.style.marginLeft = `${l}px`, this.container.style.marginRight = `${a}px`) : (this.container.style.marginLeft = `${o}px`, this.container.style.marginRight = `${u}px`), this.container.style.marginTop = `${i}px`, this.container.style.marginBottom = `${s}px`, this.container.style.alignItems = "flex-start", this.container.style.display = "flex", this.updateLayout();
+    const e = this.map.getContainer(), { marginTop: t, marginBottom: r, marginLeft: i, marginRight: s } = In(
+      e,
+      this.getPosition()
+    );
+    this.container.style.marginTop = `${t}px`, this.container.style.marginBottom = `${r}px`, this.container.style.marginLeft = `${i}px`, this.container.style.marginRight = `${s}px`, this.container.style.alignItems = "flex-start", this.container.style.display = "flex", this.updateLayout();
   }
   // Responsive design handling
   updateLayout() {
     if (!this.map)
       return;
-    const r = this.map.getContainer().clientWidth < 768;
-    this.buttons.forEach((c) => {
-      const f = c.querySelector("span");
-      f && (f.style.display = r ? "none" : "inline"), c.style.width = "fit-content";
-    });
-    const i = Array.from(this.buttons.values()), s = Math.max(...i.map((c) => c.offsetWidth)), o = r ? "34px" : `${s}px`, a = 12, l = i.map((c) => {
-      if (c.style.width = o, r) return null;
-      const f = c.querySelector("span");
-      return !f || !f.textContent ? null : [f, this.calculateFontSize(s, f.textContent)];
-    }).filter((c) => !!c), u = Math.min(a, ...l.map(([, c]) => c));
-    l.forEach(([c]) => {
-      c.style.fontSize = `${u}px`;
-    });
-  }
-  // Function to calculate font size based on width and character count
-  calculateFontSize(e, t, r = 12, i = 6) {
-    const s = e - rt - Wt * 2 - Vt, o = t.replace(/<[^>]+>/g, "").length;
-    if (o === 0) return;
-    let l = Math.floor(s / (o * 0.5));
-    return l = Math.min(r, Math.max(i, l)), l;
+    const t = this.map.getContainer().clientWidth;
+    En(this.getPosition(), t);
   }
   // Create a single button with icon and label
   createButton(e) {
-    const t = document.createElement("button");
-    t.style.display = "flex", t.style.alignItems = "center", t.style.gap = `${Vt}px`, t.style.padding = `${Zr}px ${Wt}px`, t.style.border = "none", t.style.cursor = "pointer", t.style.borderRadius = "4px", t.style.width = "fit-content", t.style.color = "white", t.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
-    const r = Gr(e.svg, e.label);
-    t.appendChild(r);
-    const i = document.createElement("span");
-    return i.textContent = e.label, i.style.fontSize = "10px", i.style.color = "inherit", t.appendChild(i), t.onclick = () => this.handleButtonClick(e), t;
+    return Mn({
+      icon: oi(e.svg, e.label),
+      label: e.label,
+      // title: config.label,
+      onClick: () => this.handleButtonClick(e)
+    });
   }
   // Handle button click event
   handleButtonClick(e) {
@@ -4092,7 +4220,7 @@ class ei {
       r && this.options.onUntoggle && (this.options.onUntoggle(this, this.map, r), this.emit("untoggle"));
     }
     this.buttons.forEach((r, i) => {
-      i === this.activeButtonId ? r.style.backgroundColor = "rgba(0, 36, 71, 0.98)" : r.style.backgroundColor = "rgba(0, 36, 71, 0.6)";
+      i === this.activeButtonId ? r.style.backgroundColor = x.color.activeBackground : r.style.backgroundColor = x.color.background;
     }), this.map && this.options.onToggle && (this.options.onToggle(this, this.map, e), this.emit("toggle"));
   }
   // Add control to the map
@@ -4107,18 +4235,26 @@ class ei {
       const t = this.options.buttons.find((r) => r.id === this.defaultActiveId);
       this.handleButtonClick(t || this.options.buttons[0]);
     }
-    return this.container;
+    return kn(this.getPosition(), this.buttons), this.container;
   }
   // Remove control from the map
   onRemove() {
     var e;
-    this.map && (this.map.off("resize", this.updateInnerContainerStyle), this.map.off("styledata", this.updateInnerContainerStyle)), this.options.buttons.forEach((t) => {
+    xn(this.getPosition(), this.buttons), this.map && (this.map.off("resize", this.updateInnerContainerStyle), this.map.off("styledata", this.updateInnerContainerStyle)), this.options.buttons.forEach((t) => {
       t.cleanup && t.cleanup(this, this.map);
     }), (e = this.container.parentNode) == null || e.removeChild(this.container), this.map = void 0;
   }
   // Default position of the control
-  getDefaultPosition() {
-    return "top-right";
+  getPosition() {
+    var e;
+    return ((e = this.options) == null ? void 0 : e.position) || "top-right";
+  }
+  /**
+   * Get the unique instance ID for this control
+   * @returns Unique identifier string
+   */
+  getInstanceId() {
+    return this.instanceId;
   }
   // Public method to programmatically switch to a specific button
   setActiveButton(e) {
@@ -4148,36 +4284,48 @@ class ei {
     });
   }
 }
-class ti {
+class di {
   constructor(e = {}) {
     g(this, "map", null);
     g(this, "container", null);
     g(this, "panel", null);
-    g(this, "draggedElement", null);
-    // Configuration
-    g(this, "layers", []);
-    g(this, "position", "top-left");
+    g(this, "buttons", /* @__PURE__ */ new Map());
+    g(this, "feature", "wave");
+    g(this, "position");
     g(this, "collapsed", !1);
     // Runtime state
-    g(this, "layerConfigs", /* @__PURE__ */ new Map());
-    this.layers = e.layers || [], this.position = e.position || "top-left", this.collapsed = e.collapsed || !1, this.layers.forEach((t) => {
-      this.layerConfigs.set(t.id, {
-        visible: t.visible !== !1,
-        opacity: t.opacity ?? 1,
-        minzoom: t.minzoom,
-        maxzoom: t.maxzoom
-      });
+    g(this, "featureConfigGroups");
+    g(this, "layerConfigs");
+    g(this, "onChange");
+    this.position = e.position || "top-right", this.collapsed = e.collapsed || !0, this.featureConfigGroups = e.featureConfigs || {}, this.feature = e.feature || "wave", this.layerConfigs = this.featureConfigGroups[this.feature] || {}, this.onChange = e.onChange || ((t, r, i, s) => {
+      console.log("Layer config changed:", t, r, i, s);
     });
   }
   /** Called when control is added to the map */
   onAdd(e) {
-    this.map = e, this.container = document.createElement("div"), this.container.className = "maplibregl-ctrl maplibregl-ctrl-group layer-manager", this.panel = document.createElement("div"), this.panel.className = "layer-manager-panel", this.collapsed && (this.panel.style.display = "none");
+    this.map = e, this.container = document.createElement("div"), Cn(this.container, { classNames: ["layer-manager"] }), this.panel = document.createElement("div"), this.panel.className = "layer-manager-panel", this.collapsed && (this.panel.style.display = "none");
     const t = this._createHeader(), r = this._createLayersSection();
-    return this.container.appendChild(t), this.panel.appendChild(r), this.container.appendChild(this.panel), this.container;
+    return this.container.appendChild(t), this.panel.appendChild(r), this.container.appendChild(this.panel), ni(this.container), kn(this.getPosition(), this.buttons), this.map.on("resize", () => {
+      this._updateContainerPosition();
+    }), this.map.on("styledata", () => {
+      this._updateContainerPosition();
+    }), this.container;
   }
   /** Called when control is removed from the map */
   onRemove() {
-    this.container && this.container.parentNode && this.container.parentNode.removeChild(this.container), this.map = null;
+    this.map && (this.map.off("resize", this._updateContainerPosition), this.map.off("styledata", this._updateContainerPosition)), xn(this.getPosition(), this.buttons), this.container && ri(this.container), this.container && this.container.parentNode && this.container.parentNode.removeChild(this.container), this.map = null;
+  }
+  /**
+   * Update container positioning based on map dimensions and safe area insets
+   */
+  _updateContainerPosition() {
+    if (!this.map || !this.container)
+      return;
+    const e = this.map.getContainer(), { marginTop: t, marginBottom: r, marginLeft: i, marginRight: s } = In(
+      e,
+      this.getPosition()
+    );
+    this.container.style.marginTop = `${t}px`, this.container.style.marginBottom = `${r}px`, this.container.style.marginLeft = `${i}px`, this.container.style.marginRight = `${s}px`, this._updateButtonLayout();
   }
   /** Get control position */
   getPosition() {
@@ -4206,10 +4354,17 @@ class ti {
     `;
   }
   _createHeader() {
+    var r;
     const e = document.createElement("div");
-    e.className = "layer-manager-header";
-    const t = document.createElement("button");
-    return t.className = "layer-manager-toggle", t.innerHTML = this._createLayersIcon(20), t.title = "Toggle Layers", t.onclick = () => this._togglePanel(), e.appendChild(t), e;
+    e.className = "layer-manager-header", (r = this.position) != null && r.includes("left") ? e.classList.add("left") : e.classList.add("right");
+    const t = Mn({
+      icon: this._createLayersIcon(20),
+      label: "Layers Setting",
+      title: `${this.feature} Layers Settings`,
+      onClick: () => this._togglePanel(),
+      className: "layer-manager-toggle"
+    });
+    return this.buttons.set("layer-manager-toggle", t), e.appendChild(t), e;
   }
   _togglePanel() {
     this.panel && (this.panel.style.display === "none" ? (this.panel.style.display = "", this.collapsed = !1) : (this.panel.style.display = "none", this.collapsed = !0));
@@ -4218,269 +4373,104 @@ class ti {
     const e = document.createElement("div");
     e.className = "layer-manager-section";
     const t = document.createElement("div");
-    t.className = "layer-manager-title", t.innerHTML = this._createLayersIcon(16) + '<span style="vertical-align: middle;">Layers</span>';
-    const r = document.createElement("button");
-    r.className = "layer-manager-btn-collapse", r.innerHTML = "▲", r.onclick = (s) => {
-      const o = e.querySelector(".layer-manager-list");
-      o && (o.style.display === "none" ? (o.style.display = "", s.target.innerHTML = "▲") : (o.style.display = "none", s.target.innerHTML = "▼"));
-    }, t.appendChild(r), e.appendChild(t);
-    const i = document.createElement("div");
-    return i.className = "layer-manager-list", this.layers.forEach((s) => {
-      const o = this._createLayerItem(s);
-      i.appendChild(o);
-    }), e.appendChild(i), e;
-  }
-  _createLayerItem(e) {
-    var C, E;
-    const t = document.createElement("div");
-    t.className = "layer-manager-item", t.dataset.layerId = e.id;
+    t.className = "layer-manager-title", t.innerHTML = `<span style="vertical-align: middle;">${ai(this.feature)} Layers</span>`, e.appendChild(t);
     const r = document.createElement("div");
-    r.className = "layer-manager-reorder-controls";
-    const i = document.createElement("div");
-    i.className = "layer-manager-drag-handle", i.innerHTML = "⋮⋮", i.title = "Drag to reorder", i.draggable = !0, i.ondragstart = (w) => this._handleDragStart(w);
-    const s = document.createElement("button");
-    s.className = "layer-manager-btn-move-up", s.innerHTML = "▲", s.title = "Move up", s.onclick = () => this._moveLayerUp(e.id);
-    const o = document.createElement("button");
-    o.className = "layer-manager-btn-move-down", o.innerHTML = "▼", o.title = "Move down", o.onclick = () => this._moveLayerDown(e.id), r.append(i, s, o);
-    const a = document.createElement("input");
-    a.type = "checkbox", a.className = "layer-manager-checkbox", a.checked = ((C = this.layerConfigs.get(e.id)) == null ? void 0 : C.visible) ?? !0, a.onchange = (w) => this._toggleLayerVisibility(e.id, w.target.checked);
-    const l = document.createElement("label");
-    l.className = "layer-manager-label", l.textContent = e.name || e.id, l.onclick = () => a.click();
-    const u = document.createElement("div");
-    u.className = "layer-manager-controls";
-    const c = document.createElement("div");
-    c.className = "layer-manager-opacity";
-    const f = document.createElement("input");
-    f.type = "range", f.min = "0", f.max = "1", f.step = "0.05", f.value = String(((E = this.layerConfigs.get(e.id)) == null ? void 0 : E.opacity) ?? 1), f.className = "layer-manager-slider", f.oninput = (w) => this._updateLayerOpacity(e.id, parseFloat(w.target.value)), c.appendChild(f);
-    const h = document.createElement("button");
-    h.className = "layer-manager-btn-style", h.innerHTML = "⚙", h.title = "Style layer", h.onclick = () => this._toggleStyleEditor(e.id);
-    const d = document.createElement("button");
-    d.className = "layer-manager-btn-remove", d.innerHTML = "×", d.title = "Remove layer", d.onclick = () => this._removeLayer(e.id), u.append(c, h, d), t.append(r, a, l, u);
-    const y = this._createStyleEditor(e);
-    return t.appendChild(y), t.ondragover = (w) => this._handleDragOver(w), t.ondrop = (w) => this._handleDrop(w), t.ondragend = (w) => this._handleDragEnd(w), t.ondragenter = (w) => this._handleDragEnter(w), t.ondragleave = (w) => this._handleDragLeave(w), t;
+    return r.className = "layer-manager-list", Object.entries(this.layerConfigs).forEach(([i, s]) => {
+      const o = this._createLayerItem(i, s);
+      r.appendChild(o);
+    }), e.appendChild(r), e;
   }
-  _createStyleEditor(e) {
-    var h;
-    const t = document.createElement("div");
-    t.className = "layer-manager-style-editor", t.style.display = "none", t.dataset.layerId = e.id;
-    const r = (h = this.map) == null ? void 0 : h.getLayer(e.id);
-    if (!r) return t;
-    const i = r.type, s = r.paint || {}, o = document.createElement("div");
-    o.className = "layer-manager-style-title", o.innerHTML = `<span>🎨</span> Style ${e.name || e.id}`;
-    const a = document.createElement("button");
-    a.className = "layer-manager-btn-close", a.innerHTML = "×", a.onclick = () => this._toggleStyleEditor(e.id), o.appendChild(a), t.appendChild(o), i === "circle" ? (t.appendChild(this._createColorControl("Circle Color", e.id, "circle-color", s["circle-color"] || "#3388ff")), t.appendChild(this._createSliderControl("Circle Radius", e.id, "circle-radius", s["circle-radius"] || 5, 0, 20, 0.5)), t.appendChild(this._createSliderControl("Circle Opacity", e.id, "circle-opacity", s["circle-opacity"] || 1, 0, 1, 0.05)), t.appendChild(this._createSliderControl("Circle Blur", e.id, "circle-blur", s["circle-blur"] || 0, 0, 5, 0.1)), t.appendChild(this._createColorControl("Circle Stroke Color", e.id, "circle-stroke-color", s["circle-stroke-color"] || "#ffffff")), t.appendChild(this._createSliderControl("Circle Stroke Width", e.id, "circle-stroke-width", s["circle-stroke-width"] || 1, 0, 5, 0.1)), t.appendChild(this._createSliderControl("Circle Stroke Opacity", e.id, "circle-stroke-opacity", s["circle-stroke-opacity"] || 1, 0, 1, 0.05))) : i === "line" ? (t.appendChild(this._createColorControl("Line Color", e.id, "line-color", s["line-color"] || "#3388ff")), t.appendChild(this._createSliderControl("Line Width", e.id, "line-width", s["line-width"] || 2, 0, 20, 0.5)), t.appendChild(this._createSliderControl("Line Opacity", e.id, "line-opacity", s["line-opacity"] || 1, 0, 1, 0.05)), t.appendChild(this._createSliderControl("Line Blur", e.id, "line-blur", s["line-blur"] || 0, 0, 5, 0.1))) : i === "fill" ? (t.appendChild(this._createColorControl("Fill Color", e.id, "fill-color", s["fill-color"] || "#3388ff")), t.appendChild(this._createSliderControl("Fill Opacity", e.id, "fill-opacity", s["fill-opacity"] || 0.5, 0, 1, 0.05)), t.appendChild(this._createColorControl("Fill Outline Color", e.id, "fill-outline-color", s["fill-outline-color"] || "#3388ff"))) : i === "raster" && (t.appendChild(this._createSliderControl("Raster Opacity", e.id, "raster-opacity", s["raster-opacity"] || 1, 0, 1, 0.05)), t.appendChild(this._createSliderControl("Raster Brightness Min", e.id, "raster-brightness-min", s["raster-brightness-min"] || 0, -1, 1, 0.05)), t.appendChild(this._createSliderControl("Raster Brightness Max", e.id, "raster-brightness-max", s["raster-brightness-max"] || 1, -1, 1, 0.05)), t.appendChild(this._createSliderControl("Raster Saturation", e.id, "raster-saturation", s["raster-saturation"] || 0, -1, 1, 0.05)), t.appendChild(this._createSliderControl("Raster Contrast", e.id, "raster-contrast", s["raster-contrast"] || 0, -1, 1, 0.05)));
-    const l = document.createElement("div");
-    l.className = "layer-manager-style-actions";
-    const u = document.createElement("button");
-    u.className = "layer-manager-btn-apply", u.textContent = "Apply", u.onclick = () => this._applyStyles(e.id);
-    const c = document.createElement("button");
-    c.className = "layer-manager-btn-reset", c.textContent = "Reset", c.onclick = () => this._resetStyles(e.id);
-    const f = document.createElement("button");
-    return f.className = "layer-manager-btn-close-bottom", f.textContent = "Close", f.onclick = () => this._toggleStyleEditor(e.id), l.append(u, c, f), t.appendChild(l), t;
+  /** Create toggle (checkbox) item */
+  _createToggleItem(e, t) {
+    const r = document.createElement("input");
+    r.type = "checkbox", r.className = "layer-manager-checkbox", r.checked = !!t.value, r.onchange = (s) => {
+      const o = { ...t };
+      t.value = s.target.checked, this.onChange(this.feature, e, o, t);
+    };
+    const i = document.createElement("label");
+    return i.className = "layer-manager-label", i.textContent = t.label || "Unnamed Layer", i.onclick = () => r.click(), [r, i];
   }
-  _createColorControl(e, t, r, i) {
-    const s = document.createElement("div");
-    s.className = "layer-manager-style-control";
-    const o = document.createElement("label");
-    o.textContent = e;
-    const a = document.createElement("div");
-    a.className = "layer-manager-color-input";
-    const l = document.createElement("input");
-    l.type = "color", l.value = this._rgbToHex(i), l.dataset.property = r;
-    const u = document.createElement("input");
-    return u.type = "text", u.value = this._rgbToHex(i), u.readOnly = !0, l.oninput = (c) => {
-      u.value = c.target.value;
-    }, a.append(l, u), s.append(o, a), s;
-  }
-  _createSliderControl(e, t, r, i, s, o, a) {
-    const l = document.createElement("div");
-    l.className = "layer-manager-style-control";
-    const u = document.createElement("label");
-    u.textContent = e;
-    const c = document.createElement("div");
-    c.className = "layer-manager-slider-input";
-    const f = document.createElement("input");
-    f.type = "range", f.min = String(s), f.max = String(o), f.step = String(a), f.value = String(i), f.dataset.property = r, f.className = "layer-manager-slider";
-    const h = document.createElement("span");
-    return h.className = "layer-manager-value", h.textContent = i.toFixed(2), f.oninput = (d) => {
-      var C;
-      const y = parseFloat(d.target.value);
-      h.textContent = y.toFixed(2), (C = this.map) == null || C.setPaintProperty(t, r, y);
-    }, c.append(f, h), l.append(u, c), l;
-  }
-  // ========================
-  // Layer Operations
-  // ========================
-  _toggleLayerVisibility(e, t) {
-    var s;
-    const r = t ? "visible" : "none";
-    (s = this.map) == null || s.setLayoutProperty(e, "visibility", r);
-    const i = this.layerConfigs.get(e);
-    i && (i.visible = t);
-  }
-  _updateLayerOpacity(e, t) {
-    var s, o;
-    const r = this.layerConfigs.get(e);
-    r && (r.opacity = t);
-    const i = (s = this.map) == null ? void 0 : s.getLayer(e);
-    if (i) {
-      const l = `${i.type}-opacity`;
-      (o = this.map) == null || o.setPaintProperty(e, l, t);
+  /** Create select (dropdown or single choice) item */
+  _createSelectUI(e, t) {
+    const r = (t == null ? void 0 : t.mode) ?? "buttons";
+    let i;
+    if (r === "dropdown") {
+      const a = document.createElement("select");
+      a.className = "layer-manager-select", t.options.forEach((l, u) => {
+        var f;
+        const c = document.createElement("option");
+        c.value = String(l), c.textContent = ((f = t.labels) == null ? void 0 : f[u]) ?? String(l), l === t.value && (c.selected = !0), a.appendChild(c);
+      }), a.onchange = (l) => {
+        const u = { ...t };
+        t.value = l.target.value, this.onChange(this.feature, e, u, t);
+      }, i = a;
+    } else {
+      const a = document.createElement("div");
+      a.className = "layer-manager-radio-group", t.options.forEach((l, u) => {
+        var d;
+        const c = document.createElement("label");
+        c.className = "layer-manager-radio-label";
+        const f = document.createElement("input");
+        f.type = "radio", f.name = e, f.value = String(l), f.checked = l === t.value, f.onchange = (y) => {
+          const C = { ...t };
+          t.value = y.target.value, this.onChange(this.feature, e, C, t);
+        };
+        const p = document.createElement("span");
+        p.textContent = ((d = t.labels) == null ? void 0 : d[u]) ?? String(l), c.append(f, p), a.appendChild(c);
+      }), i = a;
     }
+    const s = document.createElement("fieldset");
+    s.className = "layer-manager-fieldset";
+    const o = document.createElement("legend");
+    return o.className = "layer-manager-legend", o.textContent = t.label || e, s.append(o, i), [s];
   }
-  _toggleStyleEditor(e) {
-    var i, s;
-    const t = (i = this.container) == null ? void 0 : i.querySelector(
-      `.layer-manager-style-editor[data-layer-id="${e}"]`
-    );
-    if (!t) return;
-    const r = t.style.display === "none";
-    (s = this.container) == null || s.querySelectorAll(".layer-manager-style-editor").forEach((o) => o.style.display = "none"), t.style.display = r ? "block" : "none";
-  }
-  _applyStyles(e) {
-    var i;
-    const t = (i = this.container) == null ? void 0 : i.querySelector(
-      `.layer-manager-style-editor[data-layer-id="${e}"]`
-    );
-    if (!t) return;
-    t.querySelectorAll("input[data-property]").forEach((s) => {
-      var l;
-      const o = s.dataset.property, a = s.type === "color" ? s.value : parseFloat(s.value);
-      (l = this.map) == null || l.setPaintProperty(e, o, a);
-    });
-  }
-  _resetStyles(e) {
-    var a;
-    const t = this.layers.find((l) => l.id === e);
-    if (!(t != null && t.originalStyle)) return;
-    Object.entries(t.originalStyle).forEach(([l, u]) => {
-      var c;
-      (c = this.map) == null || c.setPaintProperty(e, l, u);
-    });
-    const r = (a = this.container) == null ? void 0 : a.querySelector(`.layer-manager-item[data-layer-id="${e}"]`);
-    if (!r) return;
-    const i = r.querySelector(".layer-manager-style-editor"), s = (i == null ? void 0 : i.style.display) === "block", o = this._createStyleEditor(t);
-    s && (o.style.display = "block"), r.replaceChild(o, i);
-  }
-  _removeLayer(e) {
-    var r, i;
-    (r = this.map) == null || r.removeLayer(e);
-    const t = (i = this.container) == null ? void 0 : i.querySelector(`.layer-manager-item[data-layer-id="${e}"]`);
-    t == null || t.remove(), this.layerConfigs.delete(e), this.layers = this.layers.filter((s) => s.id !== e);
-  }
-  _rgbToHex(e) {
-    if (!e) return "#000000";
-    if (e.startsWith("#")) return e;
-    if (e.startsWith("rgb")) {
-      const t = e.match(/\d+/g);
-      if (t)
-        return "#" + t.slice(0, 3).map((r) => {
-          const i = parseInt(r).toString(16);
-          return i.length === 1 ? "0" + i : i;
-        }).join("");
+  /** Create a single layer config item */
+  _createLayerItem(e, t) {
+    const r = document.createElement("div");
+    if (r.className = "layer-manager-item", t.type === "toggle")
+      r.append(...this._createToggleItem(e, t));
+    else if (t.type === "select")
+      r.append(...this._createSelectUI(e, t));
+    else {
+      const i = document.createElement("div");
+      i.textContent = `Unsupported type: ${t.type}`, r.append(i);
     }
-    return "#000000";
+    return r;
+  }
+  _updateButtonLayout() {
+    if (!this.map || !this.container) return;
+    const e = this.map.getContainer(), t = e ? e.clientWidth : -1;
+    En(this.getPosition(), t);
+  }
+  /**
+   * Refresh the UI to reflect current feature and layer configurations
+   */
+  _refreshUI() {
+    if (!this.container || !this.panel) return;
+    const e = this.buttons.get("layer-manager-toggle");
+    e && (e.title = `${this.feature} Layers Settings`);
+    const t = this.panel.querySelector(".layer-manager-section");
+    t && t.remove();
+    const r = this._createLayersSection();
+    this.panel.appendChild(r), this._updateButtonLayout();
   }
   // ========================
   // Public API
   // ========================
-  addLayer(e) {
-    var r;
-    this.layers.push(e), this.layerConfigs.set(e.id, {
-      visible: e.visible !== !1,
-      opacity: e.opacity ?? 1,
-      minzoom: e.minzoom,
-      maxzoom: e.maxzoom
-    });
-    const t = (r = this.container) == null ? void 0 : r.querySelector(".layer-manager-list");
-    if (t) {
-      const i = this._createLayerItem(e);
-      t.appendChild(i);
-    }
-  }
-  removeLayer(e) {
-    this._removeLayer(e);
-  }
-  // ========================
-  // Drag & Drop Reordering
-  // ========================
-  _handleDragStart(e) {
-    const t = e.target.closest(".layer-manager-item");
-    t && (this.draggedElement = t, t.classList.add("dragging"), e.dataTransfer.effectAllowed = "move", e.dataTransfer.setData("text/html", t.innerHTML));
-  }
-  _handleDragOver(e) {
-    return e.preventDefault && e.preventDefault(), e.dataTransfer.dropEffect = "move", !1;
-  }
-  _handleDragEnter(e) {
-    const t = e.target.closest(".layer-manager-item");
-    t && t !== this.draggedElement && t.classList.add("drag-over");
-  }
-  _handleDragLeave(e) {
-    const t = e.target.closest(".layer-manager-item");
-    t && t.classList.remove("drag-over");
-  }
-  _handleDrop(e) {
-    var f;
-    e.stopPropagation && e.stopPropagation();
-    const t = e.target.closest(".layer-manager-item");
-    if (!t || !this.draggedElement || t === this.draggedElement) return !1;
-    const r = this.draggedElement.dataset.layerId, i = t.dataset.layerId, s = (f = this.container) == null ? void 0 : f.querySelector(".layer-manager-list"), o = Array.from((s == null ? void 0 : s.querySelectorAll(".layer-manager-item")) || []), a = o.indexOf(this.draggedElement), l = o.indexOf(t);
-    a < l ? t.parentNode.insertBefore(this.draggedElement, t.nextSibling) : t.parentNode.insertBefore(this.draggedElement, t);
-    const u = this.layers.find((h) => h.id === r);
-    this.layers = this.layers.filter((h) => h.id !== r);
-    const c = this.layers.findIndex((h) => h.id === i);
-    return this.layers.splice(a < l ? c + 1 : c, 0, u), this._updateMapLayerOrder(), t.classList.remove("drag-over"), !1;
-  }
-  _handleDragEnd(e) {
-    var r;
-    const t = e.target.closest(".layer-manager-item");
-    t && t.classList.remove("dragging"), (r = this.container) == null || r.querySelectorAll(".layer-manager-item").forEach((i) => i.classList.remove("drag-over")), this.draggedElement = null;
-  }
-  _updateMapLayerOrder() {
-    var i;
-    const e = (i = this.container) == null ? void 0 : i.querySelectorAll(".layer-manager-item");
-    if (!e || !this.map) return;
-    const t = Array.from(e).map((s) => s.dataset.layerId).reverse();
-    let r = null;
-    for (const s of t)
-      try {
-        if (this.map.getLayer(s)) {
-          if (r && this.map.getLayer(r))
-            this.map.moveLayer(s, r);
-          else {
-            const a = this.map.getStyle().layers.find((l) => !t.includes(l.id));
-            a && this.map.moveLayer(s, a.id);
-          }
-          r = s;
-        }
-      } catch (o) {
-        console.warn(`Failed to move layer ${s}:`, o);
-      }
-  }
-  _moveLayerUp(e) {
-    var u;
-    const t = (u = this.container) == null ? void 0 : u.querySelector(".layer-manager-list"), r = Array.from((t == null ? void 0 : t.querySelectorAll(".layer-manager-item")) || []), i = r.find((c) => c.dataset.layerId === e), s = r.indexOf(i);
-    if (s <= 0) return;
-    const o = r[s - 1];
-    t == null || t.insertBefore(i, o);
-    const a = this.layers.findIndex((c) => c.id === e), [l] = this.layers.splice(a, 1);
-    this.layers.splice(a - 1, 0, l), this._updateMapLayerOrder();
-  }
-  _moveLayerDown(e) {
-    var u;
-    const t = (u = this.container) == null ? void 0 : u.querySelector(".layer-manager-list"), r = Array.from((t == null ? void 0 : t.querySelectorAll(".layer-manager-item")) || []), i = r.find((c) => c.dataset.layerId === e), s = r.indexOf(i);
-    if (s >= r.length - 1) return;
-    const o = r[s + 1];
-    t == null || t.insertBefore(o, i);
-    const a = this.layers.findIndex((c) => c.id === e), [l] = this.layers.splice(a, 1);
-    this.layers.splice(a + 1, 0, l), this._updateMapLayerOrder();
+  /**
+   * Update the current feature and refresh the UI
+   * @param feature - The new feature name
+   * @param featureConfigs - Optional new feature configurations
+   */
+  updateFeature(e, t) {
+    this.feature = e, t && (this.featureConfigGroups = t), this.layerConfigs = this.featureConfigGroups[this.feature] || {}, this._refreshUI();
   }
 }
 export {
-  Qr as ColorBar,
-  ti as ConfigManager,
-  Kr as MsgCtl,
-  Yr as TemporalControl,
-  ei as ToggleCtl
+  fi as ColorBar,
+  di as ConfigManager,
+  hi as MsgCtl,
+  ci as TemporalControl,
+  pi as ToggleCtl
 };
 //# sourceMappingURL=index.js.map

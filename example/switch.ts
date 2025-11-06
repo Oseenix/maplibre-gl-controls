@@ -1,6 +1,6 @@
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { ToggleCtl, TgBtnCfg } from '../src';
+import { ToggleCtl, TgBtnCfg, ConfigManager } from '../src';
 
 // const map = new maplibregl.Map({
 // 	container: 'map',
@@ -82,6 +82,60 @@ const fullscreenHandler = (toggleCtl: ToggleCtl) => {
   });
 };
 
+// Initialize the Layer Manager
+const layerManager = new ConfigManager({
+  feature: 'wave',
+  featureConfigs: {
+    wave: {
+      pressure: {
+        type: 'toggle',
+        value: false,
+        label: 'Pressure Isobar'
+      },
+      direction: {
+        type: 'select',
+        value: 'Particle',
+        options: ['Particle', 'Arrow', 'None'],
+        labels: ['Particle', 'Arrow', 'None'],
+        label: 'Direction Indicator'
+      }
+    },
+    wind: {
+      pressure: {
+        type: 'toggle',
+        value: true,
+        label: 'Pressure Isobar'
+      },
+      direction: {
+        type: 'select',
+        value: 'Particle',
+        options: ['Particle', 'Arrow', 'None'],
+        labels: ['Particle', 'Arrow', 'None'],
+        label: 'Direction Indicator'
+      }
+    },
+    wave_period: {
+      pressure: {
+        type: 'toggle',
+        value: false,
+        label: 'Pressure Isobar'
+      },
+      direction: {
+        type: 'select',
+        value: 'Particle',
+        options: ['Particle', 'Arrow', 'None'],
+        labels: ['Particle', 'Arrow', 'None'],
+        label: 'Direction Indicator'
+      }
+    }
+  },
+  position: 'top-right',
+  collapsed: false,
+  onChange: (feature, key, preCfg, curCfg) => {
+    console.log(`Config changed for ${feature}.${key}:`, preCfg, '->', curCfg);
+  }
+});
+
 const layerToggleControl = new ToggleCtl({
   buttons: [
     {
@@ -117,6 +171,7 @@ const layerToggleControl = new ToggleCtl({
     const activeButtonId = config.id;
     const layerIds = config.layerIds;
     console.log(`Switch to ${activeButtonId} with layers:`, layerIds);
+
     if (activeButtonId === 'fullscreen') {
       const mapContainer = map.getContainer();
       if (!isFullscreen) {
@@ -132,8 +187,15 @@ const layerToggleControl = new ToggleCtl({
           ctl.updateButton('fullscreen', { svg: max_icon, label: 'Fullscreen' });
         }
       }
+    } else {
+      layerManager.updateFeature(activeButtonId);
     }
   }
 });
 
 map.addControl(layerToggleControl);
+
+// Add the layer manager to the map
+map.addControl(layerManager, 'top-right');
+
+console.log('Layer Manager initialized successfully!');

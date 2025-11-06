@@ -1,7 +1,7 @@
 
 export interface BaseConfig<T = any> {
-  key: string;
   value: T;
+  label?: string;
   enabled?: boolean;
 }
 
@@ -19,6 +19,7 @@ export interface ToggleConfig extends BaseConfig<boolean> {
 
 export interface SelectConfig<T = string> extends BaseConfig<T> {
   type: 'select';
+  mode?: 'dropdown' | 'buttons';
   options: T[];
   labels?: string[];
 }

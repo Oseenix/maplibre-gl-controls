@@ -21,25 +21,34 @@ type ToggleCtlEvent = 'toggle' | 'untoggle';
 export default class ToggleCtl implements IControl {
     private map;
     private container;
-    private outContainer;
     private options;
     private defaultActiveId;
     private activeButtonId;
     private buttons;
+    private instanceId;
     private listeners;
     constructor(options: ToggleCtlOptions);
+    /**
+     * Generate a unique instance ID for this control
+     * @returns Unique identifier string
+     */
+    private generateInstanceId;
     on(event: ToggleCtlEvent, callback: (ctl: ToggleCtl) => void): void;
     off(event: ToggleCtlEvent, callback: (ctl: ToggleCtl) => void): void;
     private emit;
     private createContainer;
     updateInnerContainerStyle(): void;
     private updateLayout;
-    private calculateFontSize;
     private createButton;
     private handleButtonClick;
     onAdd(map: MlMap): HTMLElement;
     onRemove(): void;
-    getDefaultPosition(): ControlPosition;
+    getPosition(): ControlPosition;
+    /**
+     * Get the unique instance ID for this control
+     * @returns Unique identifier string
+     */
+    getInstanceId(): string;
     setActiveButton(buttonId: string): void;
     getActiveButton(): TgBtnCfg;
     updateButton(buttonId: string, updates: Partial<TgBtnCfg>): void;

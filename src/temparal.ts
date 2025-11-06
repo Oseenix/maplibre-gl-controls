@@ -262,7 +262,7 @@ export default class TemporalControl implements IControl {
 		this.map = undefined;
 	}
 
-	getDefaultPosition(): ControlPosition {
+	getPosition(): ControlPosition {
 		return 'bottom-left';
 	}
 
