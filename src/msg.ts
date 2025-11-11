@@ -3,6 +3,7 @@ import type {
 	Map,
 	ControlPosition,
 } from 'maplibre-gl';
+import { calculateContainerPosition } from './utils/ui';
 
 // Define the options type for the MsgCtl control
 type Options = {
@@ -11,6 +12,7 @@ type Options = {
   width?: string; // Width of the control, defaults to '56px'
   height?: string; // Height of the control, defaults to '272px'
   innerHTML?: string; // Custom inner HTML content, optional
+  innerClassName?: string; // Custom class name for inner container, optional
   style?: Partial<CSSStyleDeclaration>; // Custom styles to apply, optional
 };
 
@@ -19,7 +21,6 @@ export default class MsgCtl implements IControl {
 	private options: Options;
 
   private container: HTMLElement;
-  private outContainer: HTMLElement;
 
   constructor(options: Options) {
 		this.options = {
@@ -29,11 +30,7 @@ export default class MsgCtl implements IControl {
       ...options,       // Override with user-provided options
     };
 
-
-    const { outContainer, innerContainer } = this.createContainer();
-    this.outContainer = outContainer;
-    this.container = innerContainer;
-
+    this.container = this.createContainer();
   }
 
 	private getWidth(): string {
@@ -44,93 +41,57 @@ export default class MsgCtl implements IControl {
 		return this.options.height || "24px";
 	}
 
-  // Create the control's container elements
-  private createContainer(): { outContainer: HTMLElement; innerContainer: HTMLElement } {
-    // Create outer container with MapLibre control class
-    const outContainer = document.createElement('div');
-    outContainer.className = 'maplibregl-ctrl maplibregl-ctrl-msg';
+  // Create the control's container element
+  private createContainer(): HTMLElement {
+    // Create container with MapLibre control class
+    const container = document.createElement('div');
+    container.className = 'maplibregl-ctrl maplibregl-ctrl-msg';
 
-    // Create inner container for content
-    const innerContainer = document.createElement('div');
+    // Add custom inner class name if provided
+    if (this.options.innerClassName) {
+      container.classList.add(this.options.innerClassName);
+    }
 
     // Apply default styles
-    innerContainer.style.width = this.getWidth();
-    innerContainer.style.height = this.getHeight();
-	  innerContainer.style.backgroundColor = "rgba(0, 36, 71, 0.7)";
-    innerContainer.style.padding = '5px 10px';
-    innerContainer.style.borderRadius = '3px';
-    innerContainer.style.fontFamily = 'Arial, sans-serif';
-    innerContainer.style.fontSize = '14px';
+    container.style.width = this.getWidth();
+    container.style.height = this.getHeight();
+	  container.style.backgroundColor = "rgba(0, 36, 71, 0.7)";
+    container.style.padding = '5px 10px';
+    container.style.borderRadius = '3px';
+    container.style.fontFamily = 'Arial, sans-serif';
+    container.style.fontSize = '14px';
 
     // Set content: use innerHTML if provided, otherwise fallback to msg
     if (this.options.innerHTML) {
-      innerContainer.innerHTML = this.options.innerHTML;
+      container.innerHTML = this.options.innerHTML;
     } else if (this.options.msg) {
-      innerContainer.textContent = this.options.msg;
+      container.textContent = this.options.msg;
     }
 
     // Apply custom styles if provided, merging with defaults
     if (this.options.style) {
-      Object.assign(innerContainer.style, this.options.style);
+      Object.assign(container.style, this.options.style);
     }
 
-    outContainer.appendChild(innerContainer);
-
-    return { outContainer, innerContainer };
+    return container;
   }
-
 
 	updateInnerContainerStyle(): void {
     if (!this.map) {
       return;
     }
     const parentContainer = this.map.getContainer();
-	  const parentWidth = parentContainer.offsetWidth;
-	  const parentHeight = parentContainer.offsetHeight;
+    const position = this.options.position || 'top-left';
+    
+    // Use shared utility function to calculate container position
+    const { marginTop, marginBottom, marginLeft, marginRight } = 
+      calculateContainerPosition(parentContainer, position);
 
-	  // Default styles
-	  let marginTop = 10;
-	  let marginBottom = 10;
-		let defMarginLeft = Math.max(
-		  10,
-		  parseFloat(
-		    getComputedStyle(parentContainer)
-					.getPropertyValue('env(safe-area-inset-left)') || '0'
-		  )
-		);
-    let defMarginRight = Math.max(
-		  10,
-		  parseFloat(
-		    getComputedStyle(parentContainer)
-					.getPropertyValue('env(safe-area-inset-right)') || '0'
-		  )
-		);
-		let marginLeft = defMarginLeft;
-		let marginRight = defMarginRight;
-	
-	  if (parentWidth >= 480) {
-	    marginTop = 15;
-	    marginBottom = 15;
-	    marginLeft = Math.max(15, defMarginLeft);
-	    marginRight = Math.max(15, defMarginRight);
-	  }
-
-	  if (parentWidth >= 992 && parentHeight >= 992) {
-	    marginLeft = Math.max(40, defMarginLeft);
-	    marginRight = Math.max(40, defMarginRight);
-    }
-
-    if (this.options.position?.endsWith("left")) {
-      this.container.style.marginLeft = `${marginLeft}px`;
-      this.container.style.marginRight = `${defMarginRight}px`;
-    } else {
-      this.container.style.marginLeft = `${defMarginLeft}px`;
-      this.container.style.marginRight = `${marginRight}px`;
-		}
-
-    // Apply styles to innerContainer
+    // Apply calculated margins to the container
     this.container.style.marginTop = `${marginTop}px`;
     this.container.style.marginBottom = `${marginBottom}px`;
+    this.container.style.marginLeft = `${marginLeft}px`;
+    this.container.style.marginRight = `${marginRight}px`;
   }
 
   public update(): void {
@@ -139,7 +100,7 @@ export default class MsgCtl implements IControl {
 
   onAdd(map: Map): HTMLElement {
     this.map = map;
-		map.getContainer().appendChild(this.outContainer);
+		map.getContainer().appendChild(this.container);
     this.update();
 
 		this.map.once('styledata', () => {
@@ -150,7 +111,7 @@ export default class MsgCtl implements IControl {
       this.update();
     });
 
-		return this.outContainer;
+		return this.container;
   }
 
   onRemove(): void {
@@ -159,8 +120,7 @@ export default class MsgCtl implements IControl {
       this.map.off('styledata', this.refresh);
     }
 
-    // this.container.parentNode?.removeChild(this.container);
-    this.outContainer.parentNode?.removeChild(this.outContainer);
+    this.container.parentNode?.removeChild(this.container);
 		this.map = undefined;
   }
 
@@ -191,4 +151,3 @@ export default class MsgCtl implements IControl {
     return this.options.position || 'top-left';
   };
 }
-

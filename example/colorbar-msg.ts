@@ -109,9 +109,55 @@ const colorBar = new ColorBar(waveColors, {
 
 map.addControl(colorBar, 'top-left');
 
+const msgHtml = `
+<div style="display:flex;align-items:center;gap:1px;">
+    <div>
+      <div style="font-weight:600;">Piha Beach</div>
+      <hr style="border: none; border-top: 1px solid #666; margin: 4px 0;" />
+      <div style="font-size:12px; color:#fff; margin-bottom: 4px;">
+        Nov 11, 2025 14:30
+      </div>
+      <hr style="border: none; border-top: 1px solid #666; margin: 4px 0;" />
+      <div style="display: grid; grid-template-columns: max-content 1fr; gap: 4px 8px; font-size:12px; color:#fff;">
+        <div>Surf Quality:</div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          Good <div style="width:10px;height:10px;border-radius:50%;background:#4caf50;"></div>
+        </div>
+
+        <div>Breaking Wave:</div>
+        <div>1.8 m</div>
+
+        <div>Wind Speed:</div>
+        <div>14 km/h</div>
+
+        <div>Wind Direction:</div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div>225.0&deg;</div>
+          <svg
+            viewBox="0 0 18 28"
+            height="0.75rem"
+            xmlns="http://www.w3.org/2000/svg"
+            style="transform: rotate(225deg); transition: transform 0.3s ease;"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M17.6025 17.5707C17.9909 17.0787 17.6415 16.3564 17.0152 16.3564H11.7168V0.929626C11.7168 0.515804 11.3817 0.180664 10.9679 0.180664H7.4901C7.07552 0.180664 6.73901 0.51709 6.73901 0.931641V16.3564H1.44408C0.817131 16.3564 0.465937 17.08 0.854134 17.5717L8.63969 27.4321C8.93977 27.8121 9.51647 27.8116 9.81696 27.4311L17.6025 17.5707Z"
+              fill="#2c75bd"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
 const msgShow = new MsgCtl({
   position: "bottom-right",
-  innerHTML: '<strong>Local Model</strong>',
+  innerHTML: msgHtml,
+  innerClassName: 'rp-custom-msg-ctl',
+  width: '160px',
+  height: '150px',
   style: {
     color: '#fff',
     fontSize: '14px',
@@ -195,9 +241,29 @@ decimalInput.style.width = '100px';
 const updateDecimalBtn = document.createElement('button');
 updateDecimalBtn.textContent = 'Update Decimal';
 updateDecimalBtn.style.marginLeft = '5px';
-updateMaxBtn.style.marginBottom = '5px';
+updateDecimalBtn.style.marginBottom = '5px';
 updateDecimalBtn.onclick = () => {
   colorBar.updateOptions({ decimal: parseInt(decimalInput.value) });
+};
+
+// MsgShow toggle control
+const toggleMsgShowBtn = document.createElement('button');
+toggleMsgShowBtn.textContent = 'Hide Msg';
+toggleMsgShowBtn.style.marginLeft = '5px';
+toggleMsgShowBtn.style.marginBottom = '5px';
+toggleMsgShowBtn.onclick = () => {
+  // Access the container through the map's DOM since MsgCtl doesn't expose container directly
+  const msgContainer = document.querySelector('.maplibregl-ctrl-msg') as HTMLElement;
+  if (msgContainer) {
+    const isVisible = msgContainer.style.display !== 'none';
+    if (isVisible) {
+      msgContainer.style.display = 'none';
+      toggleMsgShowBtn.textContent = 'Show Msg';
+    } else {
+      msgContainer.style.display = 'block';
+      toggleMsgShowBtn.textContent = 'Hide Msg';
+    }
+  }
 };
 
 // Add all controls to the container
@@ -219,6 +285,10 @@ updateControls.appendChild(document.createElement('br'));
 updateControls.appendChild(document.createTextNode('Decimal: '));
 updateControls.appendChild(decimalInput);
 updateControls.appendChild(updateDecimalBtn);
+updateControls.appendChild(document.createElement('br'));
+
+updateControls.appendChild(document.createTextNode('Msg Control: '));
+updateControls.appendChild(toggleMsgShowBtn);
 
 // Add the controls container to the map
 map.getContainer().appendChild(updateControls);
