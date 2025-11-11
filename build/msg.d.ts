@@ -5,13 +5,13 @@ type Options = {
     width?: string;
     height?: string;
     innerHTML?: string;
+    innerClassName?: string;
     style?: Partial<CSSStyleDeclaration>;
 };
 export default class MsgCtl implements IControl {
     private map;
     private options;
     private container;
-    private outContainer;
     constructor(options: Options);
     private getWidth;
     private getHeight;
