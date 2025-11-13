@@ -37,7 +37,8 @@
 		".": {
 			"require": "./build/index.umd.cjs",
 			"import": "./build/index.js"
-		}
+		},
+        "./index.css": "./build/index.css"
 	},
 	"dependencies": {
 		"@maplibre/maplibre-gl-style-spec": "^22.0.1"
