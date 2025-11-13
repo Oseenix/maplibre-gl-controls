@@ -1,4 +1,7 @@
 import { defineConfig } from 'vitest/config';
+import dts from 'vite-plugin-dts'
+import libCss from 'vite-plugin-libcss'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 export default defineConfig({
 	build: {
@@ -19,6 +22,16 @@ export default defineConfig({
 			},
 		},
 	},
+  plugins: [
+    // cssInjectedByJsPlugin(),
+    libCss(),
+    dts({
+      entryRoot: 'src',
+      outDir: 'build',
+      copyDtsFiles: true,
+      include: ['src'],
+    }),
+  ],
 	test: {
 		browser: {
 			provider: 'playwright', // or 'webdriverio'

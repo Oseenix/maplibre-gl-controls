@@ -30,11 +30,15 @@
 		"rollup-plugin-visualizer": "^5.13.1",
 		"typescript": "^4.9.5",
 		"vite": "^6.0.6",
+		"vite-plugin-css-injected-by-js": "^3.5.2",
+		"vite-plugin-dts": "^4.5.4",
+		"vite-plugin-libcss": "^1.1.2",
 		"vitest": "^2.1.8"
 	},
 	"main": "./build/index.umd.cjs",
 	"module": "./build/index.js",
 	"types": "./build/index.d.ts",
+    "style": "./build/index.css",
 	"files": [
 		"build"
 	],
@@ -42,8 +46,12 @@
 		".": {
 			"require": "./build/index.umd.cjs",
 			"import": "./build/index.js"
-		}
+		},
+        "./index.css": "./build/index.css"
 	},
+    "sideEffects": [
+        "*.css"
+    ],
 	"dependencies": {
 		"@maplibre/maplibre-gl-style-spec": "^22.0.1"
 	},

@@ -1,9 +1,20 @@
 /* MapLibre GL Layer Manager Styles (Theme-ready) */
 .layer-manager {
-  font-family: var(--rp-mctl-font-family);
-  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; */
+  font-family: var(--rp-mctl-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif);
   color: var(--rp-mctl-text, #333);
   border: 1px solid var(--rp-mctl-border, #ddd);
+  position: relative;
+  z-index: 10000;
+  isolation: isolate;
+}
+
+.layer-manager-panel {
+  position: relative;
+  z-index: 10001;
+  background: var(--rp-mctl-background, white);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding: 3px;
 }
 
 /* Expanded / collapsed behavior */
@@ -31,7 +42,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  border-radius: 4px;
+  border-radius: var(--rp-mctl-radius-sm, 4px);
   font-weight: 100;
   margin-bottom: 8px;
 }
@@ -52,18 +63,10 @@
   justify-content: flex-end;
 }
 
-/* Panel container */
-.layer-manager-panel {
-  background: var(--rp-mctl-background, white);
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  padding: 10px;
-}
-
 .layer-manager-section {
   background: var(--rp-mctl-background, white);
   border-radius: var(--rp-mctl-radius-sm, 4px);
-  padding: 6px 8px;
+  padding: 2px 3px;
 }
 
 /* Section title */
@@ -71,11 +74,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 2px 8px;
   background: var(--rp-mctl-background, #f8f9fa);
   border-radius: var(--rp-mctl-radius-sm, 4px);
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
   color: var(--rp-mctl-text, #333);
 }
 
@@ -87,19 +90,19 @@
 .layer-manager-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
 }
 
 .layer-manager-item {
   background: var(--rp-mctl-background, white);
-  border: 1px solid var(--rp-mctl-borderLight, #e0e0e0);
+  border: 0.1px solid var(--rp-mctl-borderLight, #e0e0e0);
   border-radius: var(--rp-mctl-radius-sm, 4px);
-  padding: 10px;
+  padding: 2px 6px;
   transition: all 0.2s;
   display: grid;
   grid-template-columns: auto auto 1fr;
   grid-template-rows: auto auto;
-  gap: 8px;
+  gap: 0px;
   align-items: center;
 }
 
@@ -109,8 +112,8 @@
 
 .layer-manager-checkbox {
   cursor: pointer;
-  width: 16px;
-  height: 16px;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
   grid-column: 2;
   grid-row: 1;
@@ -124,14 +127,15 @@
   min-width: 0;
   grid-column: 3;
   grid-row: 1;
+  margin-left: 2px;
 }
 
 /* Fieldset and legend */
 .layer-manager-fieldset {
-  border: 1px solid var(--rp-mctl-borderLight, #ccc);
+  border: 0.1px solid var(--rp-mctl-borderLight, #ccc);
   border-radius: var(--rp-mctl-radius-md, 6px);
-  padding: 8px 12px 10px;
-  margin: 6px 0;
+  padding: 0px 5px 6px;
+  margin: 2px 2px 3px;
   position: relative;
 }
 
@@ -139,7 +143,7 @@
   /* font-size: 0.9rem; */
   font-weight: 300;
   color: var(--rp-mctl-text, #333);
-  padding: 0 6px;
+  padding: 0 10px;
 }
 
 /* Select / radio */
@@ -147,14 +151,14 @@
 .layer-manager-radio-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin-top: 4px;
 }
 
 .layer-manager-radio-label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   /* font-size: 0.85rem; */
   color: var(--rp-mctl-text, #333);
 }

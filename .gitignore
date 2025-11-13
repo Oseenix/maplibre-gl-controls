@@ -5,7 +5,6 @@ example/raster.bundle.js
 example/raster.bundle.js.LICENSE.txt
 example/vector.bundle.js
 example/vector.bundle.js.LICENSE.txt
-build
 __screenshots__
 coverage
 *.swp

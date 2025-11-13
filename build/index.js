@@ -1,3 +1,4 @@
+import './index.css';
 var Tn = Object.defineProperty;
 var Sn = (n, e, t) => e in n ? Tn(n, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : n[e] = t;
 var g = (n, e, t) => Sn(n, typeof e != "symbol" ? e + "" : e, t);
