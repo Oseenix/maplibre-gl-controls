@@ -17,6 +17,11 @@
   padding: 3px;
 }
 
+/* Ensure panel overlays other elements properly */
+.layer-manager:has(.layer-manager-panel:not([style*="display: none"])) {
+  z-index: 10002; /* Increase z-index when panel is open */
+}
+
 /* Expanded / collapsed behavior */
 .layer-manager:has(.layer-manager-panel:not([style*="display: none"])) {
   max-width: 300px;
@@ -61,6 +66,12 @@
 
 .layer-manager-header.right {
   justify-content: flex-end;
+}
+
+/* For bottom positions, panel should appear above the header */
+.layer-manager.bottom .layer-manager-panel {
+  order: -1; /* Move panel above header in flex container */
+  /* margin-bottom: 5px; */
 }
 
 .layer-manager-section {

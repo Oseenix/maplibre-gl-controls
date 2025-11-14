@@ -3,7 +3,7 @@ import type {
 	Map,
 	ControlPosition,
 } from 'maplibre-gl';
-import { calculateContainerPosition } from './utils/ui';
+import { applyContainerPosition } from './utils/ui';
 
 // Define the options type for the MsgCtl control
 type Options = {
@@ -83,15 +83,9 @@ export default class MsgCtl implements IControl {
     const parentContainer = this.map.getContainer();
     const position = this.options.position || 'top-left';
     
-    // Use shared utility function to calculate container position
-    const { marginTop, marginBottom, marginLeft, marginRight } = 
-      calculateContainerPosition(parentContainer, position);
-
-    // Apply calculated margins to the container
-    this.container.style.marginTop = `${marginTop}px`;
-    this.container.style.marginBottom = `${marginBottom}px`;
-    this.container.style.marginLeft = `${marginLeft}px`;
-    this.container.style.marginRight = `${marginRight}px`;
+    // Use shared utility function to apply container position
+    // This function handles user-defined margins automatically
+    applyContainerPosition(this.container, parentContainer, position, this.options.style);
   }
 
   public update(): void {

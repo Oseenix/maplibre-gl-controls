@@ -266,12 +266,14 @@ export function applyGlobalResponsiveLayout(position: ControlPosition, container
  * Calculate container positioning based on map dimensions and safe area insets
  * @param mapContainer - The map container element
  * @param position - Control position (top-left, top-right, etc.)
- * @returns Object containing calculated margins
+ * @param userStyle - Optional user-defined styles to check for margin settings
+ * @returns Object containing calculated margins (null values indicate user has set that margin)
  */
 export function calculateContainerPosition(
   mapContainer: HTMLElement,
-  position: ControlPosition
-): { marginTop: number; marginBottom: number; marginLeft: number; marginRight: number } {
+  position: ControlPosition,
+  userStyle?: Partial<CSSStyleDeclaration>
+): { marginTop: number | null; marginBottom: number | null; marginLeft: number | null; marginRight: number | null } {
   const parentWidth = mapContainer.offsetWidth;
   const parentHeight = mapContainer.offsetHeight;
 
@@ -313,6 +315,7 @@ export function calculateContainerPosition(
     marginRight = Math.max(40, defMarginRight);
   }
 
+  // Adjust margins based on position
   if (position?.endsWith("left")) {
     marginLeft = marginLeft;
     marginRight = defMarginRight;
@@ -321,7 +324,54 @@ export function calculateContainerPosition(
     marginRight = marginRight;
   }
 
-  return { marginTop, marginBottom, marginLeft, marginRight };
+  // Check if user has defined any margin styles
+  // If user set margin, return null for all margins (don't override)
+  // If user set individual margins, return null only for those specific margins
+  const hasUserMargin = userStyle?.margin;
+  const hasUserMarginTop = userStyle?.marginTop;
+  const hasUserMarginBottom = userStyle?.marginBottom;
+  const hasUserMarginLeft = userStyle?.marginLeft;
+  const hasUserMarginRight = userStyle?.marginRight;
+
+  return {
+    marginTop: hasUserMargin || hasUserMarginTop ? null : marginTop,
+    marginBottom: hasUserMargin || hasUserMarginBottom ? null : marginBottom,
+    marginLeft: hasUserMargin || hasUserMarginLeft ? null : marginLeft,
+    marginRight: hasUserMargin || hasUserMarginRight ? null : marginRight,
+  };
+}
+
+/**
+ * Apply calculated container position to an element
+ * @param element - The element to apply positioning to
+ * @param mapContainer - The map container element
+ * @param position - Control position (top-left, top-right, etc.)
+ * @param userStyle - Optional user-defined styles to check for margin settings
+ */
+export function applyContainerPosition(
+  element: HTMLElement,
+  mapContainer: HTMLElement,
+  position: ControlPosition,
+  userStyle?: Partial<CSSStyleDeclaration>
+): void {
+  // Use shared utility function to calculate container position
+  // Pass user styles to avoid overriding user-defined margins
+  const { marginTop, marginBottom, marginLeft, marginRight } = 
+    calculateContainerPosition(mapContainer, position, userStyle);
+
+  // Only apply calculated margins if they are not null (user hasn't set that margin)
+  if (marginTop !== null) {
+    element.style.marginTop = `${marginTop}px`;
+  }
+  if (marginBottom !== null) {
+    element.style.marginBottom = `${marginBottom}px`;
+  }
+  if (marginLeft !== null) {
+    element.style.marginLeft = `${marginLeft}px`;
+  }
+  if (marginRight !== null) {
+    element.style.marginRight = `${marginRight}px`;
+  }
 }
 
 /**

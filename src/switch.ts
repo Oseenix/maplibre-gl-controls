@@ -1,5 +1,5 @@
 import type { IControl, Map as MlMap, ControlPosition } from 'maplibre-gl';
-import { createStyledButton, createSvgImage, unregisterButtonGroup, applyGlobalResponsiveLayout, registerButtonGroup, calculateContainerPosition, applyContainerStyles } from './utils/ui';
+import { createStyledButton, createSvgImage, unregisterButtonGroup, applyGlobalResponsiveLayout, registerButtonGroup, applyContainerPosition, applyContainerStyles } from './utils/ui';
 import { THEME } from './utils/theme';
 
 // Define the type for button configuration
@@ -96,18 +96,10 @@ export default class ToggleCtl implements IControl {
       return;
     }
     const parentContainer = this.map.getContainer();
+    const position = this.getPosition();
 
-    // Use shared container positioning utility
-    const { marginTop, marginBottom, marginLeft, marginRight } = calculateContainerPosition(
-      parentContainer,
-      this.getPosition()
-    );
-
-    // Apply calculated margins to container
-    this.container.style.marginTop = `${marginTop}px`;
-    this.container.style.marginBottom = `${marginBottom}px`;
-    this.container.style.marginLeft = `${marginLeft}px`;
-    this.container.style.marginRight = `${marginRight}px`;
+    // Use shared utility function to apply container position
+    applyContainerPosition(this.container, parentContainer, position);
   
     this.container.style.alignItems = 'flex-start';
     this.container.style.display = 'flex'; // Ensures `align-items` works

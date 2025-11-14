@@ -129,7 +129,10 @@ const layerManager = new ConfigManager({
       }
     }
   },
-  position: 'top-right',
+  position: 'bottom-right',
+  style: {
+    marginBottom: '10px',
+  },
   collapsed: false,
   onChange: (feature, key, preCfg, curCfg) => {
     console.log(`Config changed for ${feature}.${key}:`, preCfg, '->', curCfg);
@@ -196,6 +199,7 @@ const layerToggleControl = new ToggleCtl({
 map.addControl(layerToggleControl);
 
 // Add the layer manager to the map
-map.addControl(layerManager, 'top-right');
+// map.addControl(layerManager, 'bottom-left');
+map.addControl(layerManager, 'bottom-right');
 
 console.log('Layer Manager initialized successfully!');

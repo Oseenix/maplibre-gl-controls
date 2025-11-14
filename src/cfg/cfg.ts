@@ -9,7 +9,7 @@ import type {
 } from 'maplibre-gl';
 
 import { ControlGroup, LayerConfig, SelectConfig } from './cfg-type';
-import { createStyledButton, formatLabel, calculateContainerPosition, registerButtonGroup, unregisterButtonGroup, applyGlobalResponsiveLayout, applyContainerStyles } from '../utils/ui';
+import { createStyledButton, formatLabel, applyContainerPosition, registerButtonGroup, unregisterButtonGroup, applyGlobalResponsiveLayout, applyContainerStyles } from '../utils/ui';
 import './cfg.css';
 import { registerContainer, unregisterContainer } from '../utils/theme';
 
@@ -22,6 +22,7 @@ export default class ConfigManager implements IControl {
   private feature: string = 'wave';
   private position: ControlPosition;
   private collapsed: boolean = false;
+  private userStyle: Partial<CSSStyleDeclaration> | undefined;
 
   // Runtime state
   private featureConfigGroups: Record<string, ControlGroup>;
@@ -38,6 +39,7 @@ export default class ConfigManager implements IControl {
       preCfg: LayerConfig, curValue: LayerConfig) => void;
     position?: ControlPosition;
     collapsed?: boolean;
+    style?: Partial<CSSStyleDeclaration>;
   } = {}) {
     this.position = options.position || 'top-right';
     this.collapsed = options.collapsed || true;
@@ -47,6 +49,9 @@ export default class ConfigManager implements IControl {
     this.onChange = options.onChange || ((feature, key, preCfg, curCfg) => {
       console.log('Layer config changed:', feature, key, preCfg, curCfg);
     });
+    if (options.style) {
+      this.userStyle = options.style;
+    }
   }
 
   /** Called when control is added to the map */
@@ -56,6 +61,17 @@ export default class ConfigManager implements IControl {
     
     // Apply common container styles with additional layer-manager class
     applyContainerStyles(this.container, { classNames: ['layer-manager'] });
+
+    // Add position-specific class for styling
+    if (this.position?.startsWith('bottom')) {
+      this.container.classList.add('bottom');
+    } else if (this.position?.startsWith('top')) {
+      this.container.classList.add('top');
+    }
+        // Apply custom styles if provided, merging with defaults
+    if (this.userStyle) {
+      Object.assign(this.container.style, this.userStyle);
+    }
 
     // Create the main panel
     this.panel = document.createElement('div');
@@ -114,16 +130,10 @@ export default class ConfigManager implements IControl {
     }
     
     const mapContainer = this.map.getContainer();
-    const { marginTop, marginBottom, marginLeft, marginRight } = calculateContainerPosition(
-      mapContainer,
-      this.getPosition()
-    );
-
-    // Apply calculated margins to container
-    this.container.style.marginTop = `${marginTop}px`;
-    this.container.style.marginBottom = `${marginBottom}px`;
-    this.container.style.marginLeft = `${marginLeft}px`;
-    this.container.style.marginRight = `${marginRight}px`;
+    const position = this.getPosition();
+    
+    // Use shared utility function to apply container position
+    applyContainerPosition(this.container, mapContainer, position, this.userStyle);
 
     this._updateButtonLayout();
   }
