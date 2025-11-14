@@ -13,6 +13,7 @@ export default class ConfigManager implements IControl {
     private feature;
     private position;
     private collapsed;
+    private userStyle;
     private featureConfigGroups;
     private layerConfigs;
     private onChange;
@@ -22,6 +23,7 @@ export default class ConfigManager implements IControl {
         onChange?: (feature: string, key: string, preCfg: LayerConfig, curValue: LayerConfig) => void;
         position?: ControlPosition;
         collapsed?: boolean;
+        style?: Partial<CSSStyleDeclaration>;
     });
     /** Called when control is added to the map */
     onAdd(map: maplibregl.Map): HTMLElement;

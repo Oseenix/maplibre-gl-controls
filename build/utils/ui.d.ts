@@ -93,14 +93,23 @@ export declare function applyGlobalResponsiveLayout(position: ControlPosition, c
  * Calculate container positioning based on map dimensions and safe area insets
  * @param mapContainer - The map container element
  * @param position - Control position (top-left, top-right, etc.)
- * @returns Object containing calculated margins
+ * @param userStyle - Optional user-defined styles to check for margin settings
+ * @returns Object containing calculated margins (null values indicate user has set that margin)
  */
-export declare function calculateContainerPosition(mapContainer: HTMLElement, position: ControlPosition): {
-    marginTop: number;
-    marginBottom: number;
-    marginLeft: number;
-    marginRight: number;
+export declare function calculateContainerPosition(mapContainer: HTMLElement, position: ControlPosition, userStyle?: Partial<CSSStyleDeclaration>): {
+    marginTop: number | null;
+    marginBottom: number | null;
+    marginLeft: number | null;
+    marginRight: number | null;
 };
+/**
+ * Apply calculated container position to an element
+ * @param element - The element to apply positioning to
+ * @param mapContainer - The map container element
+ * @param position - Control position (top-left, top-right, etc.)
+ * @param userStyle - Optional user-defined styles to check for margin settings
+ */
+export declare function applyContainerPosition(element: HTMLElement, mapContainer: HTMLElement, position: ControlPosition, userStyle?: Partial<CSSStyleDeclaration>): void;
 /**
  * Apply responsive layout to button group
  * @param buttons - Array of button elements
