@@ -54,6 +54,7 @@ export const BUTTON_STYLE = {
   color: THEME.color.text,
   backgroundColor: THEME.color.background,
   fontSize: THEME.font.size,
+  whiteSpace: 'nowrap',
 } as const;
 
 // Responsive layout constants
@@ -63,8 +64,8 @@ export const RESPONSIVE_CONSTANTS = {
   btnPaddingY: 4,
   btnGap: 4,
   smallScreenThreshold: 768,
-  minFontSize: 6,
-  maxFontSize: 13,
+  minFontSize: 10,
+  maxFontSize: 16,
   scalingFactor: 0.5
 } as const;
 

@@ -9,6 +9,18 @@ import type {
 } from 'maplibre-gl';
 
 import { ControlGroup, LayerConfig, SelectConfig } from './cfg-type';
+
+export type ConfigManagerOptions = {
+  btnLabel?: string;
+  feature?: string;
+  featureConfigs?: Record<string, ControlGroup>;
+  onChange?: (
+    feature: string, key: string,
+    preCfg: LayerConfig, curValue: LayerConfig) => void;
+  position?: ControlPosition;
+  collapsed?: boolean;
+  style?: Partial<CSSStyleDeclaration>;
+};
 import { createStyledButton, formatLabel, applyContainerPosition, registerButtonGroup, unregisterButtonGroup, applyGlobalResponsiveLayout, applyContainerStyles } from '../utils/ui';
 import './cfg.css';
 import { registerContainer, unregisterContainer } from '../utils/theme';
@@ -19,6 +31,7 @@ export default class ConfigManager implements IControl {
   private panel: HTMLDivElement | null = null;
   private buttons: Map<string, HTMLButtonElement> = new Map();
 
+  private btnLabel: string = 'Settings';
   private feature: string = 'wave';
   private position: ControlPosition;
   private collapsed: boolean = false;
@@ -31,20 +44,12 @@ export default class ConfigManager implements IControl {
     feature: string, key: string,
     preCfg: LayerConfig, curCfg: LayerConfig) => void;
 
-  constructor(options: {
-    feature?: string;
-    featureConfigs?: Record<string, ControlGroup>;
-    onChange?: (
-      feature: string, key: string,
-      preCfg: LayerConfig, curValue: LayerConfig) => void;
-    position?: ControlPosition;
-    collapsed?: boolean;
-    style?: Partial<CSSStyleDeclaration>;
-  } = {}) {
+  constructor(options: ConfigManagerOptions = {}) {
     this.position = options.position || 'top-right';
     this.collapsed = options.collapsed || true;
     this.featureConfigGroups = options.featureConfigs || {};
     this.feature = options.feature || 'wave';
+    this.btnLabel = options.btnLabel || 'Settings';
     this.layerConfigs = this.featureConfigGroups[this.feature] || {};
     this.onChange = options.onChange || ((feature, key, preCfg, curCfg) => {
       console.log('Layer config changed:', feature, key, preCfg, curCfg);
@@ -178,7 +183,7 @@ export default class ConfigManager implements IControl {
 
     const button = createStyledButton({
       icon: this._createLayersIcon(20),
-      label: 'Layers Setting',
+      label: this.btnLabel,
       title: `${this.feature} Layers Settings`,
       onClick: () => this._togglePanel(),
       className: 'layer-manager-toggle'

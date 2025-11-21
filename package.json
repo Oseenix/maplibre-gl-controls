@@ -1,8 +1,8 @@
 {
-	"name": "maplibre-gl-temporal-control",
+	"name": "@oseenix/maplibre-gl-controls",
 	"type": "module",
-	"version": "1.2.0",
-	"description": "Temporal Control plugin for Maplibre GL JS",
+	"version": "2.0.1",
+	"description": "Control plugins for Maplibre GL JS",
 	"scripts": {
 		"test": "vitest src --coverage --coverage.provider=v8",
 		"build": "vite build -c vite.config.example.ts",
@@ -10,16 +10,19 @@
 		"prepare": "pnpm run build:pkg",
 		"dev": "vite -c vite.config.example.ts"
 	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com"
+	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/mug-jp/maplibre-gl-temporal-controller.git"
+		"url": "git+https://github.com/Oseenix/maplibre-gl-controls.git"
 	},
-	"author": "Kanahiro Iguchi <kanahiro.iguchi@gmail.com> (https://github.com/Kanahiro)",
+	"author": "Kanahiro Iguchi <kanahiro.iguchi@gmail.com> (https://github.com/Kanahiro), Jinze Zhou",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/mug-jp/maplibre-gl-temporal-controller/issues"
+		"url": "https://github.com/Oseenix/maplibre-gl-controls/issues"
 	},
-	"homepage": "https://github.com/mug-jp/maplibre-gl-temporal-controller#readme",
+	"homepage": "https://github.com/Oseenix/maplibre-gl-controls#readme",
 	"devDependencies": {
 		"@vitest/browser": "^2.1.8",
 		"@vitest/coverage-v8": "^2.1.8",
@@ -38,7 +41,7 @@
 	"main": "./build/index.umd.cjs",
 	"module": "./build/index.js",
 	"types": "./build/index.d.ts",
-    "style": "./build/index.css",
+	"style": "./build/index.css",
 	"files": [
 		"build"
 	],
@@ -47,11 +50,11 @@
 			"require": "./build/index.umd.cjs",
 			"import": "./build/index.js"
 		},
-        "./index.css": "./build/index.css"
+		"./index.css": "./build/index.css"
 	},
-    "sideEffects": [
-        "*.css"
-    ],
+	"sideEffects": [
+		"*.css"
+	],
 	"dependencies": {
 		"@maplibre/maplibre-gl-style-spec": "^22.0.1"
 	},

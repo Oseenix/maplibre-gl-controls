@@ -8,6 +8,8 @@ import type {
 import { expression } from "@maplibre/maplibre-gl-style-spec";
 import type { Expression } from "@maplibre/maplibre-gl-style-spec";
 
+import { applyContainerStyles, applyContainerPosition } from './utils/ui';
+
 export type Options = {
   title: string;    // show title at the top of the color bar
   unit: string;     // show unit at the bottom of the color bar
@@ -147,18 +149,20 @@ export default class ColorBar implements IControl {
     return 272;
   }
 
-	private createContainer(): { outContainer: HTMLElement; innerContainer: HTMLElement } {
-	  // Outer container
+  private createContainer(): { outContainer: HTMLElement; innerContainer: HTMLElement } {
+	  // Outer container - use shared utility for consistent styling
 	  const outContainer = document.createElement("div");
-	  outContainer.classList.add("maplibregl-ctrl");
-	
-	  // Outer container styles
-	  outContainer.style.height = "100%"; // Fixed or dynamically adjustable height
+	  applyContainerStyles(outContainer, {
+	    classNames: ['maplibregl-ctrl']
+	  });
+	  
+	  // Override specific styles for colorbar
+	  outContainer.style.height = "100%";
 	  outContainer.style.display = "flex";
 	  outContainer.style.flexDirection = "column";
 	  outContainer.style.alignItems = "center";
     outContainer.style.backgroundColor = "transparent";
-    outContainer.style.pointerEvents = "none"; // Allow clicks to pass through to map
+	  outContainer.style.pointerEvents = "none"; // Allow clicks to pass through to map
 
 	  // Inner container
     const group = this.options.position?.endsWith("left")
@@ -166,6 +170,7 @@ export default class ColorBar implements IControl {
      : "map-colorbar-right-group";
 	  const innerContainer = document.createElement("div");
 	  innerContainer.classList.add(group);
+	  innerContainer.classList.add("rp-colorBar"); // Add CSS class for responsive styling
 	
 	  // Inner container styles
 	  innerContainer.style.width = this.getWidth();
@@ -185,6 +190,7 @@ export default class ColorBar implements IControl {
 
   private createTitleDiv(title: string): HTMLElement {
     const titleDiv = document.createElement("div");
+    titleDiv.classList.add("map_colorbar_title");
     titleDiv.innerHTML = title;
     titleDiv.style.marginTop = "6px";
     titleDiv.style.marginBottom = "8px";
@@ -411,58 +417,14 @@ export default class ColorBar implements IControl {
       return;
     }
     const parentContainer = this.map.getContainer();
-	  const parentWidth = parentContainer.offsetWidth;
 	  const parentHeight = parentContainer.offsetHeight;
 
     outContainer.style.height = `${parentHeight}px`;
 
-	  // Default styles
-	  let marginTop = 10;
-	  let marginBottom = 10;
-		let defMarginLeft = Math.max(
-		  0,
-		  parseFloat(
-		    getComputedStyle(parentContainer)
-					.getPropertyValue('env(safe-area-inset-left)') || '0'
-		  )
-		);
-    let defMarginRight = Math.max(
-		  0,
-		  parseFloat(
-		    getComputedStyle(parentContainer)
-					.getPropertyValue('env(safe-area-inset-right)') || '0'
-		  )
-		);
-		let marginLeft = defMarginLeft;
-		let marginRight = defMarginRight;
-	
-	  // Update styles based on parent dimensions
-	  if (parentWidth >= 480) {
-	    marginTop = 15;
-	    marginBottom = 15;
-	    marginLeft = Math.max(15, defMarginLeft);
-	    marginRight = Math.max(15, defMarginRight);
-	  }
+    // Use shared utility for consistent container positioning
+    applyContainerPosition(container, parentContainer, this.options.position || 'top-left');
 
-	  if (parentWidth >= 992 && parentHeight >= 992) {
-	    marginTop = 40;
-	    marginBottom = 40;
-	    marginLeft = Math.max(40, defMarginLeft);
-	    marginRight = Math.max(40, defMarginRight);
-    }
-
-    if (this.options.position?.endsWith("left")) {
-      container.style.marginLeft = `${marginLeft}px`;
-      container.style.marginRight = `${defMarginRight}px`;
-    } else {
-      container.style.marginLeft = `${defMarginLeft}px`;
-      container.style.marginRight = `${marginRight}px`;
-		}
-
-    // Apply styles to innerContainer
-    container.style.marginTop = `${marginTop}px`;
-    container.style.marginBottom = `${marginBottom}px`;
-  
+    // Apply specific styles to innerContainer
     container.style.alignItems = 'flex-start';
     container.style.display = 'flex'; // Ensures `align-items` works
 	  container.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;

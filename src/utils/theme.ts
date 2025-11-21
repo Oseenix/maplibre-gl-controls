@@ -26,7 +26,7 @@ export const THEME = {
   // Font
   font: {
     family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
-    size: '10px'
+    size: '11px'
   },
 
   // Transition

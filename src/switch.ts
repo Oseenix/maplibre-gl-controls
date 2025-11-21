@@ -19,6 +19,10 @@ export type ToggleCtlOptions = {
   buttons: TgBtnCfg[];
   defaultActive: string;    // default active button
   position?: ControlPosition;
+  width?: string; // Width of the control, defaults to auto
+  height?: string; // Height of the control, defaults to auto
+  innerClassName?: string; // Custom class name for inner container, optional
+  style?: Partial<CSSStyleDeclaration>; // Custom styles to apply, optional
   onToggle?: (ctl: ToggleCtl, map: MlMap, activeConfig: TgBtnCfg) => void;
   onUntoggle?: (ctl: ToggleCtl, map: MlMap, config: TgBtnCfg) => void;
 };
@@ -80,6 +84,24 @@ export default class ToggleCtl implements IControl {
     // Apply common container styles
     applyContainerStyles(container);
 
+    // Add custom inner class name if provided
+    if (this.options.innerClassName) {
+      container.classList.add(this.options.innerClassName);
+    }
+
+    // Apply width and height if provided
+    if (this.options.width) {
+      container.style.width = this.options.width;
+    }
+    if (this.options.height) {
+      container.style.height = this.options.height;
+    }
+
+    // Apply custom styles if provided, merging with defaults
+    if (this.options.style) {
+      Object.assign(container.style, this.options.style);
+    }
+
     // Add buttons to the container
     this.options.buttons.forEach((buttonConfig) => {
       const button = this.createButton(buttonConfig);
@@ -99,7 +121,7 @@ export default class ToggleCtl implements IControl {
     const position = this.getPosition();
 
     // Use shared utility function to apply container position
-    applyContainerPosition(this.container, parentContainer, position);
+    applyContainerPosition(this.container, parentContainer, position, this.options.style);
   
     this.container.style.alignItems = 'flex-start';
     this.container.style.display = 'flex'; // Ensures `align-items` works
@@ -297,5 +319,12 @@ export default class ToggleCtl implements IControl {
       // Update config
       Object.assign(config, updates);
     })
+  }
+
+  // Update the control's styles dynamically
+  public updateStyle(newStyle: Partial<CSSStyleDeclaration>): void {
+    if (this.container) {
+      Object.assign(this.container.style, newStyle);
+    }
   }
 }

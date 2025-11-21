@@ -4,12 +4,22 @@
  */
 import type { IControl, ControlPosition } from 'maplibre-gl';
 import { ControlGroup, LayerConfig } from './cfg-type';
+export type ConfigManagerOptions = {
+    btnLabel?: string;
+    feature?: string;
+    featureConfigs?: Record<string, ControlGroup>;
+    onChange?: (feature: string, key: string, preCfg: LayerConfig, curValue: LayerConfig) => void;
+    position?: ControlPosition;
+    collapsed?: boolean;
+    style?: Partial<CSSStyleDeclaration>;
+};
 import './cfg.css';
 export default class ConfigManager implements IControl {
     private map;
     private container;
     private panel;
     private buttons;
+    private btnLabel;
     private feature;
     private position;
     private collapsed;
@@ -17,14 +27,7 @@ export default class ConfigManager implements IControl {
     private featureConfigGroups;
     private layerConfigs;
     private onChange;
-    constructor(options?: {
-        feature?: string;
-        featureConfigs?: Record<string, ControlGroup>;
-        onChange?: (feature: string, key: string, preCfg: LayerConfig, curValue: LayerConfig) => void;
-        position?: ControlPosition;
-        collapsed?: boolean;
-        style?: Partial<CSSStyleDeclaration>;
-    });
+    constructor(options?: ConfigManagerOptions);
     /** Called when control is added to the map */
     onAdd(map: maplibregl.Map): HTMLElement;
     /** Called when control is removed from the map */

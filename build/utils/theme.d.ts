@@ -19,7 +19,7 @@ export declare const THEME: {
     };
     readonly font: {
         readonly family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif";
-        readonly size: "10px";
+        readonly size: "11px";
     };
     readonly transition: "all 0.2s ease";
 };

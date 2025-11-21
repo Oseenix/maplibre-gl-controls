@@ -14,6 +14,10 @@ export type ToggleCtlOptions = {
     buttons: TgBtnCfg[];
     defaultActive: string;
     position?: ControlPosition;
+    width?: string;
+    height?: string;
+    innerClassName?: string;
+    style?: Partial<CSSStyleDeclaration>;
     onToggle?: (ctl: ToggleCtl, map: MlMap, activeConfig: TgBtnCfg) => void;
     onUntoggle?: (ctl: ToggleCtl, map: MlMap, config: TgBtnCfg) => void;
 };
@@ -53,5 +57,6 @@ export default class ToggleCtl implements IControl {
     getActiveButton(): TgBtnCfg;
     updateButton(buttonId: string, updates: Partial<TgBtnCfg>): void;
     updateButtonCallback(btnCfgs: Partial<TgBtnCfg>[]): void;
+    updateStyle(newStyle: Partial<CSSStyleDeclaration>): void;
 }
 export {};

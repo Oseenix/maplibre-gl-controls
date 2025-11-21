@@ -12,7 +12,7 @@ export declare const CONTAINER_STYLE: {
     readonly flexDirection: "column";
     readonly gap: "4px";
     readonly fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif";
-    readonly fontSize: "10px";
+    readonly fontSize: "11px";
     readonly color: "rgba(255, 255, 255, 1.0)";
 };
 /**
@@ -34,7 +34,8 @@ export declare const BUTTON_STYLE: {
     readonly width: "fit-content";
     readonly color: "rgba(255, 255, 255, 1.0)";
     readonly backgroundColor: "rgba(0, 36, 71, 0.6)";
-    readonly fontSize: "10px";
+    readonly fontSize: "11px";
+    readonly whiteSpace: "nowrap";
 };
 export declare const RESPONSIVE_CONSTANTS: {
     readonly iconWidth: 20;
@@ -42,8 +43,8 @@ export declare const RESPONSIVE_CONSTANTS: {
     readonly btnPaddingY: 4;
     readonly btnGap: 4;
     readonly smallScreenThreshold: 768;
-    readonly minFontSize: 6;
-    readonly maxFontSize: 13;
+    readonly minFontSize: 10;
+    readonly maxFontSize: 16;
     readonly scalingFactor: 0.5;
 };
 export declare function registerButtonGroup(position: ControlPosition, buttons: Map<string, HTMLButtonElement>): void;
