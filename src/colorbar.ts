@@ -20,6 +20,7 @@ export type Options = {
   decimal?: number; // Optional decimal with a default 1
   tickMinStep?: number; // Optional setup min step, with a default 0 not limit
   layerIds?: string[];  // Optional array of layer IDs affected by the color bar
+  style?: Partial<CSSStyleDeclaration>; // Custom styles to apply, optional
   onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void; // Optional click callback with current options
 };
 
@@ -120,6 +121,10 @@ export default class ColorBar implements IControl {
       this.container.addEventListener('click', this.handleContainerClick);
     }
 
+    // Apply custom styles if provided, merging with defaults
+    if (this.options.style) {
+      Object.assign(this.container.style, this.options.style);
+    }
   }
 
   private getTickMinStep(): number {
@@ -163,6 +168,7 @@ export default class ColorBar implements IControl {
 	  outContainer.style.alignItems = "center";
     outContainer.style.backgroundColor = "transparent";
 	  outContainer.style.pointerEvents = "none"; // Allow clicks to pass through to map
+	  outContainer.style.margin = "0"; // Set margin to 0, let innerContainer control its own margin
 
 	  // Inner container
     const group = this.options.position?.endsWith("left")
@@ -422,12 +428,14 @@ export default class ColorBar implements IControl {
     outContainer.style.height = `${parentHeight}px`;
 
     // Use shared utility for consistent container positioning
-    applyContainerPosition(container, parentContainer, this.options.position || 'top-left');
+    applyContainerPosition(container, parentContainer,
+      this.options.position || 'top-left',
+      this.options?.style);
 
     // Apply specific styles to innerContainer
     container.style.alignItems = 'flex-start';
     container.style.display = 'flex'; // Ensures `align-items` works
-	  container.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;
+	  container.style.height = `calc(min((100% - 50px), ${this.getHeight()}))`;
   }
 
   /**

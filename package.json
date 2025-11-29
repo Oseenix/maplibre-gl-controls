@@ -1,7 +1,7 @@
 {
 	"name": "@oseenix/maplibre-gl-controls",
 	"type": "module",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"description": "Control plugins for Maplibre GL JS",
 	"scripts": {
 		"test": "vitest src --coverage --coverage.provider=v8",

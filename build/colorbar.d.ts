@@ -10,6 +10,7 @@ export type Options = {
     decimal?: number;
     tickMinStep?: number;
     layerIds?: string[];
+    style?: Partial<CSSStyleDeclaration>;
     onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void;
 };
 interface ColorStep {

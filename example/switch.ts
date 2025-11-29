@@ -131,7 +131,7 @@ const layerManager = new ConfigManager({
   },
   position: 'bottom-right',
   style: {
-    marginBottom: '10px',
+    marginBottom: '0px',
   },
   collapsed: false,
   onChange: (feature, key, preCfg, curCfg) => {

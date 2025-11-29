@@ -79,6 +79,9 @@ const colorBar = new ColorBar(waveColors, {
   width: '50px',
   position: "top-left",
   tickMinStep: 1,
+  // style: {
+  //   marginLeft: '10px',
+  // },
   onClick: (event, bar, options) => {
     // Cycle through max values: 16, 48, 64
     const currentMax = options.max || 16;

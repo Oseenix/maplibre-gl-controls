@@ -22,8 +22,8 @@ const Dn = ({
   }), s.style.width = "80%", s.style.margin = "4px 0", r.appendChild(s);
   const o = document.createElement("div");
   o.style.display = "flex", o.style.justifyContent = "center", o.style.margin = "4px 0 0 0";
-  const a = (_) => {
-    u.style.backgroundColor = _ ? mt : "";
+  const a = (O) => {
+    u.style.backgroundColor = O ? mt : "";
   }, l = () => u.style.backgroundColor === mt, u = document.createElement("button");
   u.appendChild(st($n)), u.style.border = "0", u.style.borderRadius = "0", u.style.marginRight = "16px", u.style.height = "24px", u.style.borderRadius = "4px", u.onclick = () => a(!l()), o.appendChild(u);
   const c = () => (s.value = String(Math.max(0, Number(s.value) - 1)), e(), Number(s.min) < Number(s.value)), f = () => {
@@ -265,14 +265,14 @@ function Wt(n) {
 function Gt(n) {
   return n > tt ? n * n * n : Ke * (n - Qe);
 }
-function _n(n) {
+function On(n) {
   const [t, e, r, i] = en(n), s = Math.sqrt(e * e + r * r);
   return [Math.round(s * 1e4) ? tn(Math.atan2(r, e) * Rn) : NaN, s, t, i];
 }
-function Hn([n, t, e, r]) {
+function _n([n, t, e, r]) {
   return n = isNaN(n) ? 0 : n * jn, nn([e, Math.cos(n) * t, Math.sin(n) * t, r]);
 }
-function On([n, t, e, r]) {
+function Hn([n, t, e, r]) {
   n = tn(n), t /= 100, e /= 100;
   function i(s) {
     const o = (s + n / 30) % 12, a = t * Math.min(e, 1 - e);
@@ -328,7 +328,7 @@ function Un(n) {
         // %         (optional)
       ] = s, S = [u || " ", p || " ", w].join("");
       if (S === "  " || S === "  /" || S === ",," || S === ",,,") {
-        const _ = [l, f, y].join(""), gt = _ === "%%%" ? 100 : _ === "" ? 255 : 0;
+        const O = [l, f, y].join(""), gt = O === "%%%" ? 100 : O === "" ? 255 : 0;
         if (gt) {
           const Pe = [
             Y(+a / gt, 0, 1),
@@ -373,7 +373,7 @@ function Un(n) {
         f ? Ne(+f, p) : 1
       ];
       if ($e(y))
-        return On(y);
+        return Hn(y);
     }
   }
 }
@@ -596,7 +596,7 @@ class C {
    * @returns Gien color, with reversed alpha blending, in HCL color space.
    */
   get hcl() {
-    return this.overwriteGetter("hcl", _n(this.rgb));
+    return this.overwriteGetter("hcl", On(this.rgb));
   }
   /**
    * Used in color interpolation.
@@ -654,10 +654,10 @@ class C {
         const [s, o, a, l] = t.hcl, [u, c, f, p] = e.hcl;
         let d, y;
         if (!isNaN(s) && !isNaN(u)) {
-          let _ = u - s;
-          u > s && _ > 180 ? _ -= 360 : u < s && s - u > 180 && (_ += 360), d = s + r * _;
+          let O = u - s;
+          u > s && O > 180 ? O -= 360 : u < s && s - u > 180 && (O += 360), d = s + r * O;
         } else isNaN(s) ? isNaN(u) ? d = NaN : (d = u, (a === 1 || a === 0) && (y = c)) : (d = s, (f === 1 || f === 0) && (y = o));
-        const [w, M, T, S] = Hn([
+        const [w, M, T, S] = _n([
           d,
           y ?? q(o, c, r),
           q(a, f, r),
@@ -791,7 +791,7 @@ class L {
     return new L(o);
   }
 }
-class O {
+class H {
   constructor(t) {
     this.name = t.name, this.available = t.available;
   }
@@ -799,7 +799,7 @@ class O {
     return this.name;
   }
   static fromString(t) {
-    return t ? new O({ name: t, available: !1 }) : null;
+    return t ? new H({ name: t, available: !1 }) : null;
   }
 }
 class $ {
@@ -824,7 +824,7 @@ function rn(n, t, e, r) {
   return typeof n == "number" && n >= 0 && n <= 255 && typeof t == "number" && t >= 0 && t <= 255 && typeof e == "number" && e >= 0 && e <= 255 ? typeof r > "u" || typeof r == "number" && r >= 0 && r <= 1 ? null : `Invalid rgba value [${[n, t, e, r].join(", ")}]: 'a' must be between 0 and 1.` : `Invalid rgba value [${(typeof r == "number" ? [n, t, e, r] : [n, t, e]).join(", ")}]: 'r', 'g', and 'b' must be between 0 and 255.`;
 }
 function ct(n) {
-  if (n === null || typeof n == "string" || typeof n == "boolean" || typeof n == "number" || n instanceof $ || n instanceof C || n instanceof ue || n instanceof j || n instanceof P || n instanceof L || n instanceof O)
+  if (n === null || typeof n == "string" || typeof n == "boolean" || typeof n == "number" || n instanceof $ || n instanceof C || n instanceof ue || n instanceof j || n instanceof P || n instanceof L || n instanceof H)
     return !0;
   if (Array.isArray(n)) {
     for (const t of n)
@@ -860,7 +860,7 @@ function x(n) {
     return At;
   if (n instanceof L)
     return Dt;
-  if (n instanceof O)
+  if (n instanceof H)
     return pt;
   if (Array.isArray(n)) {
     const t = n.length;
@@ -882,7 +882,7 @@ function x(n) {
 }
 function ot(n) {
   const t = typeof n;
-  return n === null ? "" : t === "string" || t === "number" || t === "boolean" ? String(n) : n instanceof C || n instanceof $ || n instanceof j || n instanceof P || n instanceof L || n instanceof O ? n.toString() : JSON.stringify(n);
+  return n === null ? "" : t === "string" || t === "number" || t === "boolean" ? String(n) : n instanceof C || n instanceof $ || n instanceof j || n instanceof P || n instanceof L || n instanceof H ? n.toString() : JSON.stringify(n);
 }
 class nt {
   constructor(t, e) {
@@ -1048,7 +1048,7 @@ class U {
       case "formatted":
         return j.fromString(ot(this.args[0].evaluate(t)));
       case "resolvedImage":
-        return O.fromString(ot(this.args[0].evaluate(t)));
+        return H.fromString(ot(this.args[0].evaluate(t)));
       case "projectionDefinition":
         return this.args[0].evaluate(t);
       default:
@@ -1755,7 +1755,7 @@ class ft {
   evaluate(t) {
     let e = null, r = 0, i;
     for (const s of this.args)
-      if (r++, e = s.evaluate(t), e && e instanceof O && !e.available && (i || (i = e.name), e = null, r === this.args.length && (e = i)), e !== null)
+      if (r++, e = s.evaluate(t), e && e instanceof H && !e.available && (i || (i = e.name), e = null, r === this.args.length && (e = i)), e !== null)
         break;
     return e;
   }
@@ -1860,7 +1860,7 @@ function rt(n, t, e) {
   };
 }
 const hr = rt("==", er, an), pr = rt("!=", nr, ar), dr = rt("<", rr, lr), yr = rt(">", ir, ur), gr = rt("<=", sr, cr), mr = rt(">=", or, fr);
-class _t {
+class Ot {
   constructor(t, e, r) {
     this.type = $t, this.locale = r, this.caseSensitive = t, this.diacriticSensitive = e;
   }
@@ -1877,7 +1877,7 @@ class _t {
     if (!s)
       return null;
     let o = null;
-    return r.locale && (o = e.parse(r.locale, 1, v), !o) ? null : new _t(i, s, o);
+    return r.locale && (o = e.parse(r.locale, 1, v), !o) ? null : new Ot(i, s, o);
   }
   evaluate(t) {
     return new ue(this.caseSensitive.evaluate(t), this.diacriticSensitive.evaluate(t), this.locale ? this.locale.evaluate(t) : null);
@@ -1994,7 +1994,7 @@ class ge {
     return r ? new ge(r) : e.error("No image name provided.");
   }
   evaluate(t) {
-    const e = this.input.evaluate(t), r = O.fromString(e);
+    const e = this.input.evaluate(t), r = H.fromString(e);
     return r && t.availableImages && (r.available = t.availableImages.indexOf(e) > -1), r;
   }
   eachChild(t) {
@@ -2063,14 +2063,14 @@ function Ir(n, t, e) {
   const r = n[0] - t[0], i = n[1] - t[1], s = n[0] - e[0], o = n[1] - e[1];
   return r * o - s * i === 0 && r * s <= 0 && i * o <= 0;
 }
-function Ht(n, t, e, r) {
+function _t(n, t, e, r) {
   const i = [t[0] - n[0], t[1] - n[1]], s = [r[0] - e[0], r[1] - e[1]];
   return Sr(s, i) === 0 ? !1 : !!(ze(n, t, e, r) && ze(e, r, n, t));
 }
 function Mr(n, t, e) {
   for (const r of e)
     for (let i = 0; i < r.length - 1; ++i)
-      if (Ht(n, t, r[i], r[i + 1]))
+      if (_t(n, t, r[i], r[i + 1]))
         return !0;
   return !1;
 }
@@ -2292,11 +2292,11 @@ class hn {
     e[t] = s;
   }
 }
-const Lr = 6378.137, Re = 1 / 298.257223563, _e = Re * (2 - Re), He = Math.PI / 180;
+const Lr = 6378.137, Re = 1 / 298.257223563, Oe = Re * (2 - Re), _e = Math.PI / 180;
 class we {
   constructor(t) {
-    const e = He * Lr * 1e3, r = Math.cos(t * He), i = 1 / (1 - _e * (1 - r * r)), s = Math.sqrt(i);
-    this.kx = e * s * r, this.ky = e * s * i * (1 - _e);
+    const e = _e * Lr * 1e3, r = Math.cos(t * _e), i = 1 / (1 - Oe * (1 - r * r)), s = Math.sqrt(i);
+    this.kx = e * s * r, this.ky = e * s * i * (1 - Oe);
   }
   /**
    * Given two points of the form [longitude, latitude], returns the distance.
@@ -2353,7 +2353,7 @@ function pn(n, t) {
 function Mt(n) {
   return n[1] - n[0] + 1;
 }
-function H(n, t) {
+function _(n, t) {
   return n[1] >= n[0] && n[1] < t;
 }
 function ee(n, t) {
@@ -2378,7 +2378,7 @@ function ee(n, t) {
   ];
 }
 function ne(n, t) {
-  if (!H(t, n.length))
+  if (!_(t, n.length))
     return [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   const e = [1 / 0, 1 / 0, -1 / 0, -1 / 0];
   for (let r = t[0]; r <= t[1]; ++r)
@@ -2392,11 +2392,11 @@ function re(n) {
       dt(t, r);
   return t;
 }
-function Oe(n) {
+function He(n) {
   return n[0] !== -1 / 0 && n[1] !== -1 / 0 && n[2] !== 1 / 0 && n[3] !== 1 / 0;
 }
 function Ce(n, t, e) {
-  if (!Oe(n) || !Oe(t))
+  if (!He(n) || !He(t))
     return NaN;
   let r = 0, i = 0;
   return n[2] < t[0] && (r = t[0] - n[2]), n[0] > t[2] && (r = n[0] - t[2]), n[1] > t[3] && (i = n[1] - t[3]), n[3] < t[1] && (i = t[1] - n[3]), e.distance([0, 0], [r, i]);
@@ -2410,14 +2410,14 @@ function ke(n, t, e, r, i) {
   return Math.min(s, o);
 }
 function Ar(n, t, e, r, i) {
-  if (!(H(t, n.length) && H(r, e.length)))
+  if (!(_(t, n.length) && _(r, e.length)))
     return 1 / 0;
   let o = 1 / 0;
   for (let a = t[0]; a < t[1]; ++a) {
     const l = n[a], u = n[a + 1];
     for (let c = r[0]; c < r[1]; ++c) {
       const f = e[c], p = e[c + 1];
-      if (Ht(l, u, f, p))
+      if (_t(l, u, f, p))
         return 0;
       o = Math.min(o, ke(l, u, f, p, i));
     }
@@ -2425,7 +2425,7 @@ function Ar(n, t, e, r, i) {
   return o;
 }
 function Dr(n, t, e, r, i) {
-  if (!(H(t, n.length) && H(r, e.length)))
+  if (!(_(t, n.length) && _(r, e.length)))
     return NaN;
   let o = 1 / 0;
   for (let a = t[0]; a <= t[1]; ++a)
@@ -2449,7 +2449,7 @@ function Fr(n, t, e) {
   return r;
 }
 function zr(n, t, e, r) {
-  if (!H(t, n.length))
+  if (!_(t, n.length))
     return NaN;
   for (let s = t[0]; s <= t[1]; ++s)
     if (it(n[s], e, !0))
@@ -2460,7 +2460,7 @@ function zr(n, t, e, r) {
     for (const l of e)
       for (let u = 0, c = l.length, f = c - 1; u < c; f = u++) {
         const p = l[f], d = l[u];
-        if (Ht(o, a, p, d))
+        if (_t(o, a, p, d))
           return 0;
         i = Math.min(i, ke(o, a, p, d, r));
       }
@@ -2490,7 +2490,7 @@ function Br(n, t, e, r = 1 / 0) {
       for (const d of t)
         for (let y = 0, w = d.length, M = w - 1; y < w; M = y++) {
           const T = d[M], S = d[y];
-          if (Ht(f, p, T, S))
+          if (_t(f, p, T, S))
             return 0;
           o = Math.min(o, ke(f, p, T, S, e));
         }
@@ -2520,7 +2520,7 @@ function xt(n, t, e, r, i = 1 / 0) {
       continue;
     const u = l[1], c = t ? te : Kt;
     if (Mt(u) <= c) {
-      if (!H(u, n.length))
+      if (!_(u, n.length))
         return NaN;
       if (t) {
         const f = zr(n, u, e, r);
@@ -2551,7 +2551,7 @@ function Tt(n, t, e, r, i, s = 1 / 0) {
       continue;
     const u = l[1], c = l[2], f = t ? te : Kt, p = r ? te : Kt;
     if (Mt(u) <= f && Mt(c) <= p) {
-      if (!H(u, n.length) && H(c, e.length))
+      if (!_(u, n.length) && _(c, e.length))
         return NaN;
       let d;
       if (t && r)
@@ -2621,7 +2621,7 @@ function Rr(n, t) {
   }
   return s;
 }
-function _r(n, t) {
+function Or(n, t) {
   const e = n.geometry();
   if (e.length === 0 || e[0].length === 0)
     return NaN;
@@ -2682,7 +2682,7 @@ class Z {
       if (t.geometryType() === "LineString")
         return Rr(t, this.geometries);
       if (t.geometryType() === "Polygon")
-        return _r(t, this.geometries);
+        return Or(t, this.geometries);
     }
     return NaN;
   }
@@ -2705,7 +2705,7 @@ const Ee = {
   boolean: D,
   case: pe,
   coalesce: ft,
-  collator: _t,
+  collator: Ot,
   format: ye,
   image: ge,
   in: fe,
@@ -2779,7 +2779,7 @@ class F {
     if (a.length === 1)
       e.errors.push(...l.errors);
     else {
-      const c = (a.length ? a : o).map(([p]) => Or(p)).join(" | "), f = [];
+      const c = (a.length ? a : o).map(([p]) => Hr(p)).join(" | "), f = [];
       for (let p = 1; p < t.length; p++) {
         const d = e.parse(t[p], 1 + f.length);
         if (!d)
@@ -2810,7 +2810,7 @@ function Yt(n, t) {
   const e = t[n];
   return typeof e > "u" ? null : e;
 }
-function Hr(n, t, e, r) {
+function _r(n, t, e, r) {
   for (; e <= r; ) {
     const i = e + r >> 1;
     if (t[i] === n)
@@ -3174,7 +3174,7 @@ F.register(Ee, {
     m,
     [v, N(b)],
     // assumes v is a array literal with values sorted in ascending order and of a single type
-    (n, [t, e]) => Hr(n.properties()[t.value], e.value, 0, e.value.length - 1)
+    (n, [t, e]) => _r(n.properties()[t.value], e.value, 0, e.value.length - 1)
   ],
   all: {
     type: m,
@@ -3247,7 +3247,7 @@ F.register(Ee, {
     (n, [t]) => t.evaluate(n).resolvedLocale()
   ]
 });
-function Or(n) {
+function Hr(n) {
   return Array.isArray(n) ? `(${n.map(k).join(", ")})` : `(${k(n.type)}...)`;
 }
 function St(n) {
@@ -3255,7 +3255,7 @@ function St(n) {
     return St(n.boundExpression);
   if (n instanceof F && n.name === "error")
     return !1;
-  if (n instanceof _t)
+  if (n instanceof Ot)
     return !1;
   if (n instanceof X)
     return !1;
@@ -3445,7 +3445,7 @@ function Xr(n, t, e) {
       e = j.fromString(e.toString());
       break;
     case "resolvedImage":
-      e = O.fromString(e.toString());
+      e = H.fromString(e.toString());
       break;
     case "padding":
       e = P.parse(e);
@@ -3537,12 +3537,12 @@ function wn(n, t) {
   const a = o instanceof A ? o.interpolation : void 0;
   return ie(i ? new oe("camera", e.value, o.labels, a) : new oe("composite", e.value, o.labels, a));
 }
-class Ot {
+class Ht {
   constructor(t, e) {
     this._parameters = t, this._specification = e, Xe(this, gn(this._parameters, this._specification));
   }
   static deserialize(t) {
-    return new Ot(t._parameters, t._specification);
+    return new Ht(t._parameters, t._specification);
   }
   static serialize(t) {
     return {
@@ -3553,7 +3553,7 @@ class Ot {
 }
 function Yr(n, t) {
   if (yn(n))
-    return new Ot(n, t);
+    return new Ht(n, t);
   if (bn(n)) {
     const e = wn(n, t);
     if (e.result === "error")
@@ -3632,7 +3632,7 @@ function Cn(n) {
 }
 const ti = {
   StyleExpression: mn,
-  StylePropertyFunction: Ot,
+  StylePropertyFunction: Ht,
   ZoomConstantExpression: se,
   ZoomDependentExpression: oe,
   createExpression: vn,
@@ -3908,7 +3908,7 @@ class hi {
       // Override with user-provided options
     }, this.colorSteps = this.getColorSteps();
     const { outContainer: r, innerContainer: i } = this.createContainer();
-    this.outContainer = r, this.container = i, this.titleDiv = this.createTitleDiv(this.options.title), this.unitDiv = this.createUnitDiv(this.options.unit), this.container.appendChild(this.titleDiv), this.container.appendChild(this.unitDiv), this.options.onClick && this.container.addEventListener("click", this.handleContainerClick);
+    this.outContainer = r, this.container = i, this.titleDiv = this.createTitleDiv(this.options.title), this.unitDiv = this.createUnitDiv(this.options.unit), this.container.appendChild(this.titleDiv), this.container.appendChild(this.unitDiv), this.options.onClick && this.container.addEventListener("click", this.handleContainerClick), this.options.style && Object.assign(this.container.style, this.options.style);
   }
   getTickMinStep() {
     return this.options.tickMinStep || 0;
@@ -3934,7 +3934,7 @@ class hi {
     const t = document.createElement("div");
     Se(t, {
       classNames: ["maplibregl-ctrl"]
-    }), t.style.height = "100%", t.style.display = "flex", t.style.flexDirection = "column", t.style.alignItems = "center", t.style.backgroundColor = "transparent", t.style.pointerEvents = "none";
+    }), t.style.height = "100%", t.style.display = "flex", t.style.flexDirection = "column", t.style.alignItems = "center", t.style.backgroundColor = "transparent", t.style.pointerEvents = "none", t.style.margin = "0";
     const e = (i = this.options.position) != null && i.endsWith("left") ? "map-colorbar-left-group" : "map-colorbar-right-group", r = document.createElement("div");
     return r.classList.add(e), r.classList.add("rp-colorBar"), r.style.width = this.getWidth(), r.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`, r.style.backgroundColor = "rgba(0, 36, 71, 0.8)", r.style.display = "flex", r.style.flexDirection = "column", r.style.borderRadius = "10px", r.style.pointerEvents = "auto", t.appendChild(r), { outContainer: t, innerContainer: r };
   }
@@ -4016,10 +4016,16 @@ class hi {
     return this.map;
   }
   updateInnerContainerStyle(t, e) {
+    var s;
     if (!this.map)
       return;
     const r = this.map.getContainer(), i = r.offsetHeight;
-    t.style.height = `${i}px`, Ut(e, r, this.options.position || "top-left"), e.style.alignItems = "flex-start", e.style.display = "flex", e.style.height = `calc(min((100% - 29px), ${this.getHeight()}))`;
+    t.style.height = `${i}px`, Ut(
+      e,
+      r,
+      this.options.position || "top-left",
+      (s = this.options) == null ? void 0 : s.style
+    ), e.style.alignItems = "flex-start", e.style.display = "flex", e.style.height = `calc(min((100% - 50px), ${this.getHeight()}))`;
   }
   /**
    * Parses the "fill-color" property and extracts speed-to-color mappings.
