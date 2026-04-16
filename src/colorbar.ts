@@ -24,6 +24,12 @@ export type Options = {
   onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void; // Optional click callback with current options
 };
 
+export type ColorBarOptions = Options & {
+  showResetButton?: boolean;
+  onColorChange?: (speed: number, color: string, bar: ColorBar) => void;
+  onReset?: (bar: ColorBar) => void;
+};
+
 interface ColorStep {
   speed: number;
   color: string;
@@ -31,7 +37,7 @@ interface ColorStep {
 
 export default class ColorBar implements IControl {
 	private map: Map | undefined;
-	private options: Options;
+	private options: ColorBarOptions;
 
   private colorSteps: ColorStep[];
   private container: HTMLElement;
@@ -39,10 +45,13 @@ export default class ColorBar implements IControl {
   private titleDiv: HTMLElement;
   private unitDiv: HTMLElement;
   private legendItems: HTMLElement[] = [];
+  private colorPickerInput: HTMLInputElement | null = null;
+  private resetButton: HTMLElement | null = null;
+  private customColors: Record<string, string> = {};
 
   propertySpec: Record<string, any>;
 
-  constructor(propertySpec: any, options: Options) {
+  constructor(propertySpec: any, options: ColorBarOptions) {
     if (!propertySpec) {
       this.propertySpec = {
         "fill-color": {
@@ -116,10 +125,15 @@ export default class ColorBar implements IControl {
     this.container.appendChild(this.titleDiv);
     this.container.appendChild(this.unitDiv);
 
-    // Add click event listener to innerContainer if onClick callback is provided
-    if (this.options.onClick) {
-      this.container.addEventListener('click', this.handleContainerClick);
-    }
+    // Add reset button
+    this.resetButton = this.createResetButton();
+    this.container.appendChild(this.resetButton);
+
+    // Initialize color picker input
+    this.colorPickerInput = this.createColorPickerInput();
+
+    // Add click event listener to container - handle color box clicks and delegate others
+    this.container.addEventListener('click', this.handleContainerClick);
 
     // Apply custom styles if provided, merging with defaults
     if (this.options.style) {
@@ -224,11 +238,12 @@ export default class ColorBar implements IControl {
     return unitDiv;
   }
 
-  private createColorBox(color: string): HTMLElement {
+  private createColorBox(color: string, speed: number): HTMLElement {
     const colorBox = document.createElement("div");
     colorBox.classList.add("map_colorbar_color_box");
     colorBox.style.width = "12px";
     colorBox.style.backgroundColor = color;
+    colorBox.dataset.speed = speed.toString();
     return colorBox;
   }
 
@@ -254,7 +269,7 @@ export default class ColorBar implements IControl {
       legendItem.style.marginTop = "0px";
       legendItem.style.marginLeft = "10px";
 
-      const colorBox = this.createColorBox(color);
+      const colorBox = this.createColorBox(color, speed);
       const label = this.createLabel({speed, color});
 
       legendItem.appendChild(colorBox);
@@ -280,7 +295,20 @@ export default class ColorBar implements IControl {
   }
 
   // Handler for container click events
-  private handleContainerClick = (event: MouseEvent) => {
+  private handleContainerClick = (event: MouseEvent): void => {
+    const target = event.target as HTMLElement;
+
+    // Check if clicked on color box
+    if (target.matches('.map_colorbar_color_box')) {
+      event.stopPropagation();
+      const speedStr = target.dataset.speed;
+      if (speedStr) {
+        this.showColorPicker(parseFloat(speedStr), event.clientX, event.clientY);
+      }
+      return;
+    }
+
+    // Other clicks -> call original onClick
     if (this.options.onClick) {
       this.options.onClick(event, this, this.options);
     }
@@ -344,6 +372,12 @@ export default class ColorBar implements IControl {
     }
     // this.container.parentNode?.removeChild(this.container);
     this.outContainer.parentNode?.removeChild(this.outContainer);
+
+    // Cleanup color picker input
+    if (this.colorPickerInput && this.colorPickerInput.parentNode) {
+      this.colorPickerInput.parentNode.removeChild(this.colorPickerInput);
+    }
+
 		this.map = undefined;
   }
 
@@ -473,6 +507,146 @@ export default class ColorBar implements IControl {
   
     // Sort steps by speed in ascending order
     return steps.sort((a, b) => b.speed - a.speed);
+  }
+
+  // Create the hidden color picker input element
+  private createColorPickerInput(): HTMLInputElement {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.style.cssText = `
+      position: fixed;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: -9999;
+    `;
+    document.body.appendChild(input);
+    return input;
+  }
+
+  // Show the color picker at the specified position
+  private showColorPicker(speed: number, x: number, y: number): void {
+    if (!this.colorPickerInput) {
+      this.colorPickerInput = this.createColorPickerInput();
+    }
+
+    const input = this.colorPickerInput;
+    const colorStep = this.colorSteps.find(s => s.speed === speed);
+
+    input.value = colorStep?.color || '#ffffff';
+    input.style.left = `${x}px`;
+    input.style.top = `${y}px`;
+    input.style.opacity = '1';
+    input.style.width = '40px';
+    input.style.height = '40px';
+    input.style.pointerEvents = 'auto';
+    input.style.zIndex = '9999';
+    input.dataset.speed = speed.toString();
+    input.focus();
+
+    // Remove old listeners to prevent duplicates
+    input.removeEventListener('input', this.handleColorInputChange);
+    input.removeEventListener('change', this.handleColorInputChange);
+    input.addEventListener('input', this.handleColorInputChange);
+  }
+
+  // Handle color input changes
+  private handleColorInputChange = (event: Event): void => {
+    const input = event.target as HTMLInputElement;
+    const speedStr = input.dataset.speed;
+
+    if (!speedStr) return;
+
+    const speed = parseFloat(speedStr);
+    const color = input.value;
+
+    // Hide picker
+    input.style.opacity = '0';
+    input.style.width = '0';
+    input.style.height = '0';
+    input.style.pointerEvents = 'none';
+
+    // Update internal state
+    this.customColors[speedStr] = color;
+    this.updateSingleColorUI(speed, color);
+    this.updateResetButtonVisibility();
+
+    // Callback
+    if (this.options.onColorChange) {
+      this.options.onColorChange(speed, color, this);
+    }
+  };
+
+  // Update a single color box UI
+  public updateSingleColorUI(speed: number, color: string): void {
+    const legendItem = this.legendItems.find(item => {
+      const colorBox = item.querySelector('.map_colorbar_color_box') as HTMLElement;
+      return colorBox && parseFloat(colorBox.dataset.speed || '0') === speed;
+    });
+
+    if (legendItem) {
+      const colorBox = legendItem.querySelector('.map_colorbar_color_box') as HTMLElement;
+      if (colorBox) {
+        colorBox.style.backgroundColor = color;
+      }
+    }
+  }
+
+  // Create the reset button
+  private createResetButton(): HTMLElement {
+    const button = document.createElement('div');
+    button.classList.add('map_colorbar_reset');
+    button.innerHTML = 'restore';
+    button.style.cssText = `
+      margin-top: 6px;
+      margin-bottom: 8px;
+      width: 100%;
+      display: none;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: underline;
+    `;
+
+    button.addEventListener('mouseenter', () => {
+      button.style.color = '#87ceeb';
+    });
+    button.addEventListener('mouseleave', () => {
+      button.style.color = 'white';
+    });
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (this.options.onReset) {
+        this.options.onReset(this);
+      }
+    });
+
+    return button;
+  }
+
+  // Update reset button visibility
+  public updateResetButtonVisibility(): void {
+    if (!this.resetButton) return;
+    const hasCustom = Object.keys(this.customColors).length > 0;
+    this.resetButton.style.display = hasCustom ? 'flex' : 'none';
+  }
+
+  // Set custom colors directly (e.g., from localStorage restoration)
+  public setCustomColors(colors: Record<string, string>): void {
+    this.customColors = { ...colors };
+    this.updateResetButtonVisibility();
+  }
+
+  // Reset colors to default
+  public resetColors(defaultStops: [number, string][]): void {
+    this.customColors = {};
+    defaultStops.forEach(([speed, color]) => {
+      this.updateSingleColorUI(speed, color);
+    });
+    this.updateResetButtonVisibility();
   }
 
   /**
