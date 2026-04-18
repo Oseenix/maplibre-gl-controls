@@ -29,7 +29,7 @@ const makeImg = (svg: string): HTMLImageElement => {
 	return img;
 };
 
-let timerId: number | undefined;
+let timerId: ReturnType<typeof setInterval> | undefined;
 
 const makeContainer = ({
 	length,
