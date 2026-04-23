@@ -13,6 +13,19 @@ export type Options = {
     style?: Partial<CSSStyleDeclaration>;
     onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void;
 };
+export type ColorBarOptions = Options & {
+    showResetButton?: boolean;
+    palettes?: ColorBarPalette[];
+    activePaletteId?: string;
+    onPaletteChange?: (paletteId: string, bar: ColorBar) => void;
+    onColorChange?: (speed: number, color: string, bar: ColorBar) => void;
+    onReset?: (bar: ColorBar) => void;
+};
+export type ColorBarPalette = {
+    id: string;
+    label: string;
+    colors?: string[];
+};
 interface ColorStep {
     speed: number;
     color: string;
@@ -26,8 +39,12 @@ export default class ColorBar implements IControl {
     private titleDiv;
     private unitDiv;
     private legendItems;
+    private colorPickerInput;
+    private resetButton;
+    private paletteSelect;
+    private customColors;
     propertySpec: Record<string, any>;
-    constructor(propertySpec: any, options: Options);
+    constructor(propertySpec: any, options: ColorBarOptions);
     private getTickMinStep;
     private getWidth;
     private getHeight;
@@ -35,9 +52,11 @@ export default class ColorBar implements IControl {
     private createContainer;
     private createTitleDiv;
     private createUnitDiv;
+    private createPaletteSelect;
     private createColorBox;
     private createLabel;
     private initializeLegendItems;
+    private resetLegendItems;
     private calculateHeights;
     private handleContainerClick;
     update(): void;
@@ -50,6 +69,7 @@ export default class ColorBar implements IControl {
      * @param newOptions Partial options to update
      */
     updateOptions(newOptions: Partial<Options>): void;
+    updatePalette(propertySpec: any, newOptions?: Partial<ColorBarOptions>): void;
     getOptions(): Options;
     getMap(): Map | undefined;
     updateInnerContainerStyle(outContainer: HTMLElement, container: HTMLElement): void;
@@ -58,6 +78,14 @@ export default class ColorBar implements IControl {
      * @returns An array of speed thresholds and their corresponding colors.
      */
     getColorSteps(): ColorStep[];
+    private createColorPickerInput;
+    private showColorPicker;
+    private handleColorInputChange;
+    updateSingleColorUI(speed: number, color: string): void;
+    private createResetButton;
+    updateResetButtonVisibility(): void;
+    setCustomColors(colors: Record<string, string>): void;
+    resetColors(defaultStops: [number, string][]): void;
     /**
      * Sets a property using a Mapbox style expression.
      * @param prop The property name.

@@ -26,8 +26,17 @@ export type Options = {
 
 export type ColorBarOptions = Options & {
   showResetButton?: boolean;
+  palettes?: ColorBarPalette[];
+  activePaletteId?: string;
+  onPaletteChange?: (paletteId: string, bar: ColorBar) => void;
   onColorChange?: (speed: number, color: string, bar: ColorBar) => void;
   onReset?: (bar: ColorBar) => void;
+};
+
+export type ColorBarPalette = {
+  id: string;
+  label: string;
+  colors?: string[];
 };
 
 interface ColorStep {
@@ -47,6 +56,7 @@ export default class ColorBar implements IControl {
   private legendItems: HTMLElement[] = [];
   private colorPickerInput: HTMLInputElement | null = null;
   private resetButton: HTMLElement | null = null;
+  private paletteSelect: HTMLSelectElement | null = null;
   private customColors: Record<string, string> = {};
 
   propertySpec: Record<string, any>;
@@ -123,6 +133,10 @@ export default class ColorBar implements IControl {
     this.unitDiv = this.createUnitDiv(this.options.unit);
 
     this.container.appendChild(this.titleDiv);
+    this.paletteSelect = this.createPaletteSelect();
+    if (this.paletteSelect) {
+      this.container.appendChild(this.paletteSelect);
+    }
     this.container.appendChild(this.unitDiv);
 
     // Add reset button
@@ -238,6 +252,48 @@ export default class ColorBar implements IControl {
     return unitDiv;
   }
 
+  private createPaletteSelect(): HTMLSelectElement | null {
+    if (!this.options.palettes || this.options.palettes.length <= 1) {
+      return null;
+    }
+
+    const select = document.createElement("select");
+    select.classList.add("map_colorbar_palette_select");
+    select.style.cssText = `
+      margin: 0 4px 6px 4px;
+      width: calc(100% - 8px);
+      height: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 4px;
+      background: rgba(0, 18, 38, 0.82);
+      color: white;
+      font-size: 10px;
+      outline: none;
+      cursor: pointer;
+    `;
+
+    this.options.palettes.forEach((palette) => {
+      const option = document.createElement("option");
+      option.value = palette.id;
+      option.textContent = palette.label;
+      select.appendChild(option);
+    });
+
+    if (this.options.activePaletteId) {
+      select.value = this.options.activePaletteId;
+    }
+
+    select.addEventListener("click", (event) => event.stopPropagation());
+    select.addEventListener("change", (event) => {
+      event.stopPropagation();
+      if (this.options.onPaletteChange) {
+        this.options.onPaletteChange(select.value, this);
+      }
+    });
+
+    return select;
+  }
+
   private createColorBox(color: string, speed: number): HTMLElement {
     const colorBox = document.createElement("div");
     colorBox.classList.add("map_colorbar_color_box");
@@ -277,6 +333,12 @@ export default class ColorBar implements IControl {
       this.legendItems.push(legendItem);
       this.container.insertBefore(legendItem, this.unitDiv); // 插入 unitDiv 之前
     });
+  }
+
+  private resetLegendItems(): void {
+    this.legendItems.forEach(item => item.remove());
+    this.legendItems = [];
+    this.initializeLegendItems();
   }
 
   private calculateHeights(): { stepHeight: number; showInterval: number } {
@@ -413,6 +475,10 @@ export default class ColorBar implements IControl {
       this.unitDiv.innerHTML = `(${newOptions.unit})`;
     }
 
+    if ((newOptions as Partial<ColorBarOptions>).activePaletteId !== undefined && this.paletteSelect) {
+      this.paletteSelect.value = (newOptions as Partial<ColorBarOptions>).activePaletteId!;
+    }
+
     // Update container dimensions if changed
     if (newOptions.width !== undefined || newOptions.height !== undefined) {
       this.container.style.width = this.getWidth();
@@ -428,10 +494,7 @@ export default class ColorBar implements IControl {
       }
 
       this.colorSteps = this.getColorSteps();
-      // Reinitialize legend items with new color steps
-      this.legendItems.forEach(item => item.remove());
-      this.legendItems = [];
-      this.initializeLegendItems();
+      this.resetLegendItems();
     }
 
     // Update click event listener if onClick changed
@@ -441,6 +504,27 @@ export default class ColorBar implements IControl {
     }
 
     // Refresh the control
+    this.update();
+  }
+
+  public updatePalette(propertySpec: any, newOptions: Partial<ColorBarOptions> = {}): void {
+    this.propertySpec = propertySpec;
+    this.customColors = {};
+    this.options = { ...this.options, ...newOptions };
+    this.colorSteps = this.getColorSteps();
+
+    if (newOptions.title !== undefined) {
+      this.titleDiv.innerHTML = newOptions.title;
+    }
+    if (newOptions.unit !== undefined) {
+      this.unitDiv.innerHTML = `(${newOptions.unit})`;
+    }
+    if (this.paletteSelect && newOptions.activePaletteId) {
+      this.paletteSelect.value = newOptions.activePaletteId;
+    }
+
+    this.resetLegendItems();
+    this.updateResetButtonVisibility();
     this.update();
   }
 
