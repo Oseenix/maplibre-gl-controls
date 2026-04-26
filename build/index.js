@@ -3928,6 +3928,9 @@ class fi {
   getTickMinStep() {
     return this.options.tickMinStep || 0;
   }
+  getDisplaySteps() {
+    return [...this.colorSteps].reverse();
+  }
   getWidth() {
     return this.options.width || "52px";
   }
@@ -3992,7 +3995,7 @@ class fi {
     return e.classList.add("map_colorbar_label"), e.style.marginTop = "0px", e.style.marginLeft = "0px", e.style.marginRight = "2px", e.style.color = "white", e.style.fontSize = "9px", e.textContent = "", e;
   }
   initializeLegendItems() {
-    this.colorSteps.forEach(({ speed: t, color: e }) => {
+    this.getDisplaySteps().forEach(({ speed: t, color: e }) => {
       const r = document.createElement("div");
       r.classList.add("map_colorbar_item"), r.style.display = "flex", r.style.alignItems = "center", r.style.marginBottom = "0px", r.style.marginTop = "0px", r.style.marginLeft = "10px";
       const i = this.createColorBox(e, t), s = this.createLabel({ speed: t, color: e });
@@ -4003,19 +4006,27 @@ class fi {
     this.legendItems.forEach((t) => t.remove()), this.legendItems = [], this.initializeLegendItems();
   }
   calculateHeights() {
-    const t = this.getHeightInPixels(), i = (this.container.getBoundingClientRect().height ? this.container.getBoundingClientRect().height : t) - this.titleDiv.offsetHeight - this.unitDiv.offsetHeight - 22, s = Math.max(Math.floor(i / this.colorSteps.length), 5), o = Math.ceil(20 * this.colorSteps.length / i);
-    return { stepHeight: s, showInterval: o };
+    const t = this.getHeightInPixels(), i = (this.container.getBoundingClientRect().height ? this.container.getBoundingClientRect().height : t) - this.titleDiv.offsetHeight - this.unitDiv.offsetHeight - 22;
+    return { stepHeight: Math.max(Math.floor(i / this.colorSteps.length), 5) };
   }
   update() {
     this.updateInnerContainerStyle(this.outContainer, this.container);
-    const { stepHeight: t, showInterval: e } = this.calculateHeights();
-    let r = this.colorSteps.length - 1;
-    [...this.legendItems].reverse().forEach((i, s) => {
-      const o = i.querySelector(".map_colorbar_color_box"), a = i.querySelector(".map_colorbar_label"), l = s === 0 ? t + 3 : t;
-      i.style.height = `${t}px`, o.style.height = `${l}px`;
-      let u = this.colorSteps.length - 1 - s;
-      const c = this.colorSteps[u].speed, h = this.colorSteps[r].speed, p = Math.abs(c - h);
-      (this.getTickMinStep() == 0 && e > 0 && s % e !== 0 || p < this.getTickMinStep()) && u < r ? a.textContent = "" : (a.textContent = `- ${c.toFixed(this.options.decimal)}`, r = u, a.style.marginTop = `${t}px`);
+    const { stepHeight: t } = this.calculateHeights(), e = this.getDisplaySteps();
+    let r = null;
+    this.legendItems.forEach((i, s) => {
+      const o = i.querySelector(".map_colorbar_color_box"), a = i.querySelector(".map_colorbar_label"), l = e[s];
+      if (!l) {
+        a.textContent = "";
+        return;
+      }
+      const u = s === 0 ? t + 3 : t;
+      i.style.height = `${t}px`, o.style.height = `${u}px`, a.style.marginTop = `${t}px`;
+      const c = l.speed, h = s % 2 === 0, p = r === null || Math.abs(r - c) >= this.getTickMinStep();
+      if (h && p) {
+        a.textContent = `- ${c.toFixed(this.options.decimal)}`, r = c;
+        return;
+      }
+      a.textContent = "";
     });
   }
   onAdd(t) {
@@ -4088,7 +4099,7 @@ class fi {
       const h = o[u] * a, p = o[u + 1];
       i.push({ speed: h, color: p });
     }
-    return i.sort((u, c) => c.speed - u.speed);
+    return i.sort((u, c) => u.speed - c.speed);
   }
   // Create the hidden color picker input element
   createColorPickerInput() {
@@ -4123,8 +4134,6 @@ class fi {
   createResetButton() {
     const t = document.createElement("div");
     return t.classList.add("map_colorbar_reset"), t.innerHTML = "restore", t.style.cssText = `
-      margin-top: 6px;
-      margin-bottom: 8px;
       width: 100%;
       display: none;
       justify-content: center;
@@ -4153,9 +4162,11 @@ class fi {
   }
   // Reset colors to default
   resetColors(t) {
-    this.customColors = {}, t.forEach(([e, r]) => {
-      this.updateSingleColorUI(e, r);
-    }), this.updateResetButtonVisibility();
+    this.customColors = {}, this.getDisplaySteps().forEach(({ speed: e, color: r }) => {
+      var s;
+      const i = ((s = t.find(([o]) => o === e)) == null ? void 0 : s[1]) ?? r;
+      this.updateSingleColorUI(e, i);
+    }), this.updateResetButtonVisibility(), this.update();
   }
   /**
    * Sets a property using a Mapbox style expression.

@@ -46,6 +46,7 @@ export default class ColorBar implements IControl {
     propertySpec: Record<string, any>;
     constructor(propertySpec: any, options: ColorBarOptions);
     private getTickMinStep;
+    private getDisplaySteps;
     private getWidth;
     private getHeight;
     private getHeightInPixels;

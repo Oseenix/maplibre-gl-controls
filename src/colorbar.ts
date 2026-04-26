@@ -159,6 +159,10 @@ export default class ColorBar implements IControl {
     return this.options.tickMinStep || 0;
   }
 
+  private getDisplaySteps(): ColorStep[] {
+    return [...this.colorSteps].reverse();
+  }
+
 	private getWidth(): string {
 		return this.options.width || "52px";
 	}
@@ -316,7 +320,7 @@ export default class ColorBar implements IControl {
   }
 
   private initializeLegendItems(): void {
-    this.colorSteps.forEach(({ speed, color }) => {
+    this.getDisplaySteps().forEach(({ speed, color }) => {
       const legendItem = document.createElement("div");
       legendItem.classList.add("map_colorbar_item");
       legendItem.style.display = "flex";
@@ -341,7 +345,7 @@ export default class ColorBar implements IControl {
     this.initializeLegendItems();
   }
 
-  private calculateHeights(): { stepHeight: number; showInterval: number } {
+  private calculateHeights(): { stepHeight: number } {
     const h = this.getHeightInPixels();
     const containerHeight = (this.container.getBoundingClientRect().height
                                ? this.container.getBoundingClientRect().height
@@ -351,9 +355,8 @@ export default class ColorBar implements IControl {
                         - this.unitDiv.offsetHeight - totalMargin);
 
     const stepHeight = Math.max(Math.floor(stepsHeight / this.colorSteps.length), 5);
-    const showInterval = Math.ceil(20 * this.colorSteps.length / stepsHeight);
 
-    return { stepHeight, showInterval };
+    return { stepHeight };
   }
 
   // Handler for container click events
@@ -378,34 +381,37 @@ export default class ColorBar implements IControl {
 
   public update(): void {
     this.updateInnerContainerStyle(this.outContainer, this.container);
-    const { stepHeight, showInterval } = this.calculateHeights();
+    const { stepHeight } = this.calculateHeights();
+    const displaySteps = this.getDisplaySteps();
+    let lastLabeledValue: number | null = null;
 
-    let lastValIdx = this.colorSteps.length - 1;
-    [...this.legendItems].reverse().forEach((legendItem, index) => {
+    this.legendItems.forEach((legendItem, index) => {
       const colorBox = legendItem.querySelector(".map_colorbar_color_box") as HTMLElement;
       const label = legendItem.querySelector(".map_colorbar_label") as HTMLElement;
+      const currentStep = displaySteps[index];
+
+      if (!currentStep) {
+        label.textContent = "";
+        return;
+      }
 
       const height = index === 0 ? stepHeight + 3 : stepHeight;
-
       legendItem.style.height = `${stepHeight}px`;
       colorBox.style.height = `${height}px`;
-      let reverseIndex = this.colorSteps.length - 1 - index;
-      const currentVal = this.colorSteps[reverseIndex].speed;
+      label.style.marginTop = `${stepHeight}px`;
 
-      const lastVal = this.colorSteps[lastValIdx].speed;
-      const diff = Math.abs(currentVal - lastVal);
+      const currentVal = currentStep.speed;
+      const followsTwoStepRule = index % 2 === 0;
+      const clearsTickMinStep = lastLabeledValue === null
+        || Math.abs(lastLabeledValue - currentVal) >= this.getTickMinStep();
 
-      let blank = (this.getTickMinStep() == 0
-                    && showInterval > 0
-                    && index % showInterval !== 0) || diff < this.getTickMinStep();
-
-      if (blank && reverseIndex < lastValIdx) {
-        label.textContent = "";
-      } else {
+      if (followsTwoStepRule && clearsTickMinStep) {
         label.textContent = `- ${currentVal.toFixed(this.options.decimal)}`;
-        lastValIdx = reverseIndex;
-        label.style.marginTop = `${stepHeight}px`;
+        lastLabeledValue = currentVal;
+        return;
       }
+
+      label.textContent = "";
     });
   }
 
@@ -589,8 +595,8 @@ export default class ColorBar implements IControl {
       steps.push({ speed: absSpeed, color });
     }
   
-    // Sort steps by speed in ascending order
-    return steps.sort((a, b) => b.speed - a.speed);
+    // Keep internal steps in ascending order and only reverse at render time.
+    return steps.sort((a, b) => a.speed - b.speed);
   }
 
   // Create the hidden color picker input element
@@ -683,8 +689,6 @@ export default class ColorBar implements IControl {
     button.classList.add('map_colorbar_reset');
     button.innerHTML = 'restore';
     button.style.cssText = `
-      margin-top: 6px;
-      margin-bottom: 8px;
       width: 100%;
       display: none;
       justify-content: center;
@@ -727,10 +731,12 @@ export default class ColorBar implements IControl {
   // Reset colors to default
   public resetColors(defaultStops: [number, string][]): void {
     this.customColors = {};
-    defaultStops.forEach(([speed, color]) => {
-      this.updateSingleColorUI(speed, color);
+    this.getDisplaySteps().forEach(({ speed, color }) => {
+      const restoredColor = defaultStops.find(([stopSpeed]) => stopSpeed === speed)?.[1] ?? color;
+      this.updateSingleColorUI(speed, restoredColor);
     });
     this.updateResetButtonVisibility();
+    this.update();
   }
 
   /**
