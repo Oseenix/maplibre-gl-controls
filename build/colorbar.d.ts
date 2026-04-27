@@ -40,6 +40,8 @@ export default class ColorBar implements IControl {
     private unitDiv;
     private legendItems;
     private colorPickerInput;
+    private colorPickerOutsidePointerDownHandler;
+    private colorPickerEscapeKeyHandler;
     private resetButton;
     private paletteSelect;
     private customColors;
@@ -81,6 +83,7 @@ export default class ColorBar implements IControl {
     getColorSteps(): ColorStep[];
     private createColorPickerInput;
     private showColorPicker;
+    private closeColorPicker;
     private handleColorInputChange;
     updateSingleColorUI(speed: number, color: string): void;
     private createResetButton;

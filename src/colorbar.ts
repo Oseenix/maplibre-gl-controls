@@ -10,6 +10,8 @@ import type { Expression } from "@maplibre/maplibre-gl-style-spec";
 
 import { applyContainerStyles, applyContainerPosition } from './utils/ui';
 
+const RESTORE_DEFAULTS_VALUE = '__restore_defaults__';
+
 export type Options = {
   title: string;    // show title at the top of the color bar
   unit: string;     // show unit at the bottom of the color bar
@@ -55,6 +57,8 @@ export default class ColorBar implements IControl {
   private unitDiv: HTMLElement;
   private legendItems: HTMLElement[] = [];
   private colorPickerInput: HTMLInputElement | null = null;
+  private colorPickerOutsidePointerDownHandler: ((event: PointerEvent) => void) | null = null;
+  private colorPickerEscapeKeyHandler: ((event: KeyboardEvent) => void) | null = null;
   private resetButton: HTMLElement | null = null;
   private paletteSelect: HTMLSelectElement | null = null;
   private customColors: Record<string, string> = {};
@@ -267,13 +271,20 @@ export default class ColorBar implements IControl {
       margin: 0 4px 6px 4px;
       width: calc(100% - 8px);
       height: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 4px;
-      background: rgba(0, 18, 38, 0.82);
+      border: 0;
+      background: transparent;
       color: white;
       font-size: 10px;
       outline: none;
       cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 14px;
+      background-image: linear-gradient(45deg, transparent 50%, white 50%), linear-gradient(135deg, white 50%, transparent 50%);
+      background-position: calc(100% - 8px) 8px, calc(100% - 3px) 8px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
     `;
 
     this.options.palettes.forEach((palette) => {
@@ -283,6 +294,13 @@ export default class ColorBar implements IControl {
       select.appendChild(option);
     });
 
+    if (this.options.title === 'Wave Height') {
+      const restoreOption = document.createElement("option");
+      restoreOption.value = RESTORE_DEFAULTS_VALUE;
+      restoreOption.textContent = "Restore";
+      select.appendChild(restoreOption);
+    }
+
     if (this.options.activePaletteId) {
       select.value = this.options.activePaletteId;
     }
@@ -290,6 +308,13 @@ export default class ColorBar implements IControl {
     select.addEventListener("click", (event) => event.stopPropagation());
     select.addEventListener("change", (event) => {
       event.stopPropagation();
+      if (select.value === RESTORE_DEFAULTS_VALUE) {
+        select.value = this.options.activePaletteId || this.options.palettes?.[0]?.id || select.value;
+        if (this.options.onReset) {
+          this.options.onReset(this);
+        }
+        return;
+      }
       if (this.options.onPaletteChange) {
         this.options.onPaletteChange(select.value, this);
       }
@@ -368,7 +393,7 @@ export default class ColorBar implements IControl {
       event.stopPropagation();
       const speedStr = target.dataset.speed;
       if (speedStr) {
-        this.showColorPicker(parseFloat(speedStr), event.clientX, event.clientY);
+        this.showColorPicker(parseFloat(speedStr), target);
       }
       return;
     }
@@ -438,6 +463,7 @@ export default class ColorBar implements IControl {
       this.map.off('resize', this.update);
       this.map.off('styledata', this.refresh);
     }
+    this.closeColorPicker();
     // this.container.parentNode?.removeChild(this.container);
     this.outContainer.parentNode?.removeChild(this.outContainer);
 
@@ -606,8 +632,8 @@ export default class ColorBar implements IControl {
     input.style.cssText = `
       position: fixed;
       opacity: 0;
-      width: 0;
-      height: 0;
+      width: 1px;
+      height: 1px;
       pointer-events: none;
       z-index: -9999;
     `;
@@ -616,30 +642,81 @@ export default class ColorBar implements IControl {
   }
 
   // Show the color picker at the specified position
-  private showColorPicker(speed: number, x: number, y: number): void {
+  private showColorPicker(speed: number, swatch: HTMLElement): void {
     if (!this.colorPickerInput) {
       this.colorPickerInput = this.createColorPickerInput();
     }
 
+    this.closeColorPicker();
+
     const input = this.colorPickerInput;
     const colorStep = this.colorSteps.find(s => s.speed === speed);
+    const swatchRect = swatch.getBoundingClientRect();
+    const inputSize = 1;
 
-    input.value = colorStep?.color || '#ffffff';
-    input.style.left = `${x}px`;
-    input.style.top = `${y}px`;
-    input.style.opacity = '1';
-    input.style.width = '40px';
-    input.style.height = '40px';
+    input.value = this.customColors[String(speed)] || colorStep?.color || '#ffffff';
+    input.style.left = `${swatchRect.right + 4}px`;
+    input.style.top = `${swatchRect.top + (swatchRect.height / 2) - (inputSize / 2)}px`;
+    input.style.opacity = '0';
+    input.style.width = `${inputSize}px`;
+    input.style.height = `${inputSize}px`;
     input.style.pointerEvents = 'auto';
     input.style.zIndex = '9999';
     input.dataset.speed = speed.toString();
-    input.focus();
+    this.colorPickerOutsidePointerDownHandler = (event: PointerEvent): void => {
+      if (!this.colorPickerInput) return;
+      if (event.target instanceof Node && !this.colorPickerInput.contains(event.target)) {
+        this.closeColorPicker();
+      }
+    };
+    this.colorPickerEscapeKeyHandler = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        this.closeColorPicker();
+      }
+    };
+    document.addEventListener('pointerdown', this.colorPickerOutsidePointerDownHandler, true);
+    document.addEventListener('keydown', this.colorPickerEscapeKeyHandler, true);
 
     // Remove old listeners to prevent duplicates
     input.removeEventListener('input', this.handleColorInputChange);
     input.removeEventListener('change', this.handleColorInputChange);
     input.addEventListener('input', this.handleColorInputChange);
+    input.addEventListener('change', this.handleColorInputChange);
+
+    const anyInput = input as HTMLInputElement & {
+      showPicker?: () => void;
+    };
+    input.focus({ preventScroll: true });
+    try {
+      if (typeof anyInput.showPicker === 'function') {
+        anyInput.showPicker();
+      } else {
+        input.click();
+      }
+    } catch {
+      input.click();
+    }
   }
+
+  private closeColorPicker = (): void => {
+    if (!this.colorPickerInput) return;
+
+    const input = this.colorPickerInput;
+    input.style.opacity = '0';
+    input.style.width = '1px';
+    input.style.height = '1px';
+    input.style.pointerEvents = 'none';
+    input.removeAttribute('data-picker-open');
+    input.removeAttribute('data-speed');
+    if (this.colorPickerOutsidePointerDownHandler) {
+      document.removeEventListener('pointerdown', this.colorPickerOutsidePointerDownHandler, true);
+      this.colorPickerOutsidePointerDownHandler = null;
+    }
+    if (this.colorPickerEscapeKeyHandler) {
+      document.removeEventListener('keydown', this.colorPickerEscapeKeyHandler, true);
+      this.colorPickerEscapeKeyHandler = null;
+    }
+  };
 
   // Handle color input changes
   private handleColorInputChange = (event: Event): void => {
@@ -650,12 +727,6 @@ export default class ColorBar implements IControl {
 
     const speed = parseFloat(speedStr);
     const color = input.value;
-
-    // Hide picker
-    input.style.opacity = '0';
-    input.style.width = '0';
-    input.style.height = '0';
-    input.style.pointerEvents = 'none';
 
     // Update internal state
     this.customColors[speedStr] = color;
@@ -719,7 +790,7 @@ export default class ColorBar implements IControl {
   public updateResetButtonVisibility(): void {
     if (!this.resetButton) return;
     const hasCustom = Object.keys(this.customColors).length > 0;
-    this.resetButton.style.display = hasCustom ? 'flex' : 'none';
+    this.resetButton.style.display = this.options.title === 'Wave Height' ? 'none' : hasCustom ? 'flex' : 'none';
   }
 
   // Set custom colors directly (e.g., from localStorage restoration)

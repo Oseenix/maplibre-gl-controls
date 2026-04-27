@@ -121,3 +121,41 @@ test('updatePalette clears restore state and preserves descending legend order',
   expect(resetButton.style.display).toBe('none');
   expect(getLegendSpeeds(colorbar)).toEqual(['7.5', '5', '2.5', '0']);
 });
+
+test('wave height uses dropdown restore while other modes keep the standalone restore button', async () => {
+  const waveHeight = new ColorBar(waveColors, {
+    title: 'Wave Height',
+    unit: 'm',
+    max: 10,
+    palettes: [
+      { id: 'wave-classic', label: 'Classic' },
+      { id: 'wave-alt', label: 'Alt' },
+    ],
+    activePaletteId: 'wave-classic',
+  });
+
+  const waveMap = new Map({ container: document.createElement('div') });
+  waveMap.addControl(waveHeight);
+
+  expect(
+    (waveHeight as any).container.querySelector('option[value="__restore_defaults__"]')
+  ).not.toBeNull();
+
+  const waveReset = (waveHeight as any).container.querySelector(
+    '.map_colorbar_reset'
+  ) as HTMLElement;
+  expect(waveReset.style.display).toBe('none');
+
+  const wind = new ColorBar(waveColors, {
+    title: 'Wind Speed',
+    unit: 'm/s',
+    max: 10,
+  });
+  const windMap = new Map({ container: document.createElement('div') });
+  windMap.addControl(wind);
+
+  wind.setCustomColors({ '5': '#000000' });
+
+  const windReset = (wind as any).container.querySelector('.map_colorbar_reset') as HTMLElement;
+  expect(windReset.style.display).toBe('flex');
+});
