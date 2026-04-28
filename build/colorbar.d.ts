@@ -19,6 +19,7 @@ export type ColorBarOptions = Options & {
     activePaletteId?: string;
     onPaletteChange?: (paletteId: string, bar: ColorBar) => void;
     onColorChange?: (speed: number, color: string, bar: ColorBar) => void;
+    onResetColor?: (speed: number, bar: ColorBar) => void;
     onReset?: (bar: ColorBar) => void;
 };
 export type ColorBarPalette = {
@@ -40,6 +41,9 @@ export default class ColorBar implements IControl {
     private unitDiv;
     private legendItems;
     private colorPickerInput;
+    private nativeColorPickerInput;
+    private colorPickerPopover;
+    private nativeColorPickerOpen;
     private colorPickerOutsidePointerDownHandler;
     private colorPickerEscapeKeyHandler;
     private resetButton;
@@ -82,10 +86,18 @@ export default class ColorBar implements IControl {
      */
     getColorSteps(): ColorStep[];
     private createColorPickerInput;
+    private createNativeColorPickerInput;
+    private createColorPickerPopover;
+    private createPickerActionButton;
+    private getColorPickerPopover;
+    private getActivePickerSpeed;
+    getDefaultColorForSpeed(speed: number): string | undefined;
+    private toggleNativeColorPicker;
     private showColorPicker;
     private closeColorPicker;
     private handleColorInputChange;
     updateSingleColorUI(speed: number, color: string): void;
+    resetSingleColor(speed: number): void;
     private createResetButton;
     updateResetButtonVisibility(): void;
     setCustomColors(colors: Record<string, string>): void;

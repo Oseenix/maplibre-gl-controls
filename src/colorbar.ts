@@ -10,8 +10,6 @@ import type { Expression } from "@maplibre/maplibre-gl-style-spec";
 
 import { applyContainerStyles, applyContainerPosition } from './utils/ui';
 
-const RESTORE_DEFAULTS_VALUE = '__restore_defaults__';
-
 export type Options = {
   title: string;    // show title at the top of the color bar
   unit: string;     // show unit at the bottom of the color bar
@@ -32,6 +30,7 @@ export type ColorBarOptions = Options & {
   activePaletteId?: string;
   onPaletteChange?: (paletteId: string, bar: ColorBar) => void;
   onColorChange?: (speed: number, color: string, bar: ColorBar) => void;
+  onResetColor?: (speed: number, bar: ColorBar) => void;
   onReset?: (bar: ColorBar) => void;
 };
 
@@ -57,6 +56,9 @@ export default class ColorBar implements IControl {
   private unitDiv: HTMLElement;
   private legendItems: HTMLElement[] = [];
   private colorPickerInput: HTMLInputElement | null = null;
+  private nativeColorPickerInput: HTMLInputElement | null = null;
+  private colorPickerPopover: HTMLElement | null = null;
+  private nativeColorPickerOpen = false;
   private colorPickerOutsidePointerDownHandler: ((event: PointerEvent) => void) | null = null;
   private colorPickerEscapeKeyHandler: ((event: KeyboardEvent) => void) | null = null;
   private resetButton: HTMLElement | null = null;
@@ -146,9 +148,6 @@ export default class ColorBar implements IControl {
     // Add reset button
     this.resetButton = this.createResetButton();
     this.container.appendChild(this.resetButton);
-
-    // Initialize color picker input
-    this.colorPickerInput = this.createColorPickerInput();
 
     // Add click event listener to container - handle color box clicks and delegate others
     this.container.addEventListener('click', this.handleContainerClick);
@@ -294,13 +293,6 @@ export default class ColorBar implements IControl {
       select.appendChild(option);
     });
 
-    if (this.options.title === 'Wave Height') {
-      const restoreOption = document.createElement("option");
-      restoreOption.value = RESTORE_DEFAULTS_VALUE;
-      restoreOption.textContent = "Restore";
-      select.appendChild(restoreOption);
-    }
-
     if (this.options.activePaletteId) {
       select.value = this.options.activePaletteId;
     }
@@ -308,13 +300,6 @@ export default class ColorBar implements IControl {
     select.addEventListener("click", (event) => event.stopPropagation());
     select.addEventListener("change", (event) => {
       event.stopPropagation();
-      if (select.value === RESTORE_DEFAULTS_VALUE) {
-        select.value = this.options.activePaletteId || this.options.palettes?.[0]?.id || select.value;
-        if (this.options.onReset) {
-          this.options.onReset(this);
-        }
-        return;
-      }
       if (this.options.onPaletteChange) {
         this.options.onPaletteChange(select.value, this);
       }
@@ -471,6 +456,12 @@ export default class ColorBar implements IControl {
     if (this.colorPickerInput && this.colorPickerInput.parentNode) {
       this.colorPickerInput.parentNode.removeChild(this.colorPickerInput);
     }
+    if (this.colorPickerPopover && this.colorPickerPopover.parentNode) {
+      this.colorPickerPopover.parentNode.removeChild(this.colorPickerPopover);
+    }
+    if (this.nativeColorPickerInput && this.nativeColorPickerInput.parentNode) {
+      this.nativeColorPickerInput.parentNode.removeChild(this.nativeColorPickerInput);
+    }
 
 		this.map = undefined;
   }
@@ -625,47 +616,255 @@ export default class ColorBar implements IControl {
     return steps.sort((a, b) => a.speed - b.speed);
   }
 
-  // Create the hidden color picker input element
   private createColorPickerInput(): HTMLInputElement {
     const input = document.createElement('input');
     input.type = 'color';
+    input.classList.add('map_colorbar_picker_input');
+    input.style.cssText = `
+      display: block;
+      width: 100%;
+      height: 26px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      box-sizing: border-box;
+      overflow: hidden;
+    `;
+    input.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+    input.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggleNativeColorPicker();
+    });
+    return input;
+  }
+
+  private createNativeColorPickerInput(): HTMLInputElement {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.classList.add('map_colorbar_picker_native_input');
     input.style.cssText = `
       position: fixed;
-      opacity: 0;
       width: 1px;
       height: 1px;
+      opacity: 0;
       pointer-events: none;
-      z-index: -9999;
+      z-index: -1;
     `;
     document.body.appendChild(input);
     return input;
   }
 
-  // Show the color picker at the specified position
-  private showColorPicker(speed: number, swatch: HTMLElement): void {
+  private createColorPickerPopover(): HTMLElement {
+    const popover = document.createElement('div');
+    popover.classList.add('map_colorbar_picker_popover');
+    popover.style.cssText = `
+      position: fixed;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(0, 36, 71, 0.92);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      z-index: 9998;
+      pointer-events: auto;
+    `;
+
     if (!this.colorPickerInput) {
       this.colorPickerInput = this.createColorPickerInput();
     }
+    if (!this.nativeColorPickerInput) {
+      this.nativeColorPickerInput = this.createNativeColorPickerInput();
+    }
 
+    popover.appendChild(this.colorPickerInput);
+
+    const actionBar = document.createElement('div');
+    actionBar.classList.add('map_colorbar_picker_actions');
+    actionBar.style.cssText = `
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+    `;
+
+    const resetCurrentColorButton = this.createPickerActionButton('Reset');
+    resetCurrentColorButton.classList.add('map_colorbar_picker_reset_current');
+    resetCurrentColorButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const speed = this.getActivePickerSpeed();
+      if (speed === null) {
+        return;
+      }
+
+      if (this.options.onResetColor) {
+        this.options.onResetColor(speed, this);
+      }
+      const defaultColor = this.getDefaultColorForSpeed(speed);
+      this.resetSingleColor(speed);
+      if (defaultColor && this.colorPickerInput) {
+        this.colorPickerInput.value = defaultColor;
+      }
+      if (defaultColor && this.nativeColorPickerInput) {
+        this.nativeColorPickerInput.value = defaultColor;
+      }
+      this.closeColorPicker();
+    });
+
+    const restoreModeButton = this.createPickerActionButton('Restore');
+    restoreModeButton.classList.add('map_colorbar_picker_restore_mode');
+    restoreModeButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (this.options.onReset) {
+        this.options.onReset(this);
+      }
+      this.closeColorPicker();
+    });
+    actionBar.appendChild(restoreModeButton);
+    actionBar.appendChild(resetCurrentColorButton);
+    popover.appendChild(actionBar);
+    document.body.appendChild(popover);
+
+    return popover;
+  }
+
+  private createPickerActionButton(label: string): HTMLButtonElement {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.style.cssText = `
+      appearance: none;
+      color: white;
+      font-size: 10px;
+      line-height: 14px;
+      padding: 4px;
+      flex: 1;
+      cursor: pointer;
+    `;
+
+    button.addEventListener('mouseenter', () => {
+      button.style.background = 'rgba(255, 255, 255, 0.08)';
+    });
+
+    return button;
+  }
+
+  private getColorPickerPopover(): HTMLElement {
+    if (!this.colorPickerPopover) {
+      this.colorPickerPopover = this.createColorPickerPopover();
+    }
+
+    return this.colorPickerPopover;
+  }
+
+  private getActivePickerSpeed(): number | null {
+    if (!this.colorPickerInput) {
+      return null;
+    }
+
+    const speedStr = this.colorPickerInput.dataset.speed;
+    if (!speedStr) {
+      return null;
+    }
+
+    const speed = parseFloat(speedStr);
+    return Number.isFinite(speed) ? speed : null;
+  }
+
+  public getDefaultColorForSpeed(speed: number): string | undefined {
+    return this.colorSteps.find((step) => step.speed === speed)?.color;
+  }
+
+  private toggleNativeColorPicker(): void {
+    const visibleInput = this.colorPickerInput;
+    const nativeInput = this.nativeColorPickerInput;
+    const popover = this.colorPickerPopover;
+    if (!visibleInput || !nativeInput || !popover) {
+      return;
+    }
+
+    if (this.nativeColorPickerOpen) {
+      const speedStr = nativeInput.dataset.speed;
+      const currentValue = nativeInput.value;
+      nativeInput.remove();
+      this.nativeColorPickerInput = this.createNativeColorPickerInput();
+      if (speedStr) {
+        this.nativeColorPickerInput.dataset.speed = speedStr;
+      }
+      this.nativeColorPickerInput.value = currentValue;
+      this.nativeColorPickerInput.style.left = nativeInput.style.left;
+      this.nativeColorPickerInput.style.top = nativeInput.style.top;
+      this.nativeColorPickerInput.style.zIndex = '-1';
+      this.nativeColorPickerInput.removeEventListener('input', this.handleColorInputChange);
+      this.nativeColorPickerInput.removeEventListener('change', this.handleColorInputChange);
+      this.nativeColorPickerInput.addEventListener('input', this.handleColorInputChange);
+      this.nativeColorPickerInput.addEventListener('change', this.handleColorInputChange);
+      this.nativeColorPickerOpen = false;
+      visibleInput.focus({ preventScroll: true });
+      return;
+    }
+
+    nativeInput.style.left = `${popover.offsetLeft + popover.offsetWidth + 12}px`;
+    nativeInput.style.top = `${popover.offsetTop + 8}px`;
+    nativeInput.style.zIndex = '9999';
+    nativeInput.removeEventListener('input', this.handleColorInputChange);
+    nativeInput.removeEventListener('change', this.handleColorInputChange);
+    nativeInput.addEventListener('input', this.handleColorInputChange);
+    nativeInput.addEventListener('change', this.handleColorInputChange);
+    this.nativeColorPickerOpen = true;
+
+    const anyInput = nativeInput as HTMLInputElement & { showPicker?: () => void };
+    try {
+      if (typeof anyInput.showPicker === 'function') {
+        anyInput.showPicker();
+      } else {
+        nativeInput.click();
+      }
+    } catch {
+      nativeInput.click();
+    }
+  }
+
+  // Show the color picker at the specified position
+  private showColorPicker(speed: number, swatch: HTMLElement): void {
     this.closeColorPicker();
 
+    const popover = this.getColorPickerPopover();
     const input = this.colorPickerInput;
+    const nativeInput = this.nativeColorPickerInput;
+    if (!input || !nativeInput) {
+      return;
+    }
+
     const colorStep = this.colorSteps.find(s => s.speed === speed);
     const swatchRect = swatch.getBoundingClientRect();
-    const inputSize = 1;
+    const popoverTop = swatchRect.top + (swatchRect.height / 2) - 28;
+    const popoverLeft = swatchRect.right + 8;
 
     input.value = this.customColors[String(speed)] || colorStep?.color || '#ffffff';
-    input.style.left = `${swatchRect.right + 4}px`;
-    input.style.top = `${swatchRect.top + (swatchRect.height / 2) - (inputSize / 2)}px`;
-    input.style.opacity = '0';
-    input.style.width = `${inputSize}px`;
-    input.style.height = `${inputSize}px`;
-    input.style.pointerEvents = 'auto';
-    input.style.zIndex = '9999';
     input.dataset.speed = speed.toString();
+    popover.style.left = `${popoverLeft}px`;
+    popover.style.top = `${popoverTop}px`;
+    popover.style.display = 'flex';
+    nativeInput.value = input.value;
+    nativeInput.dataset.speed = speed.toString();
+    nativeInput.style.left = `${popoverLeft + popover.offsetWidth + 12}px`;
+    nativeInput.style.top = `${popoverTop + 8}px`;
+    nativeInput.style.zIndex = '-1';
+    this.nativeColorPickerOpen = false;
+
     this.colorPickerOutsidePointerDownHandler = (event: PointerEvent): void => {
-      if (!this.colorPickerInput) return;
-      if (event.target instanceof Node && !this.colorPickerInput.contains(event.target)) {
+      if (
+        event.target instanceof Node &&
+        !popover.contains(event.target)
+      ) {
         this.closeColorPicker();
       }
     };
@@ -677,37 +876,23 @@ export default class ColorBar implements IControl {
     document.addEventListener('pointerdown', this.colorPickerOutsidePointerDownHandler, true);
     document.addEventListener('keydown', this.colorPickerEscapeKeyHandler, true);
 
-    // Remove old listeners to prevent duplicates
-    input.removeEventListener('input', this.handleColorInputChange);
-    input.removeEventListener('change', this.handleColorInputChange);
-    input.addEventListener('input', this.handleColorInputChange);
-    input.addEventListener('change', this.handleColorInputChange);
-
-    const anyInput = input as HTMLInputElement & {
-      showPicker?: () => void;
-    };
     input.focus({ preventScroll: true });
-    try {
-      if (typeof anyInput.showPicker === 'function') {
-        anyInput.showPicker();
-      } else {
-        input.click();
-      }
-    } catch {
-      input.click();
-    }
   }
 
   private closeColorPicker = (): void => {
     if (!this.colorPickerInput) return;
 
     const input = this.colorPickerInput;
-    input.style.opacity = '0';
-    input.style.width = '1px';
-    input.style.height = '1px';
-    input.style.pointerEvents = 'none';
     input.removeAttribute('data-picker-open');
     input.removeAttribute('data-speed');
+    if (this.nativeColorPickerInput) {
+      this.nativeColorPickerInput.removeAttribute('data-speed');
+      this.nativeColorPickerInput.style.zIndex = '-1';
+    }
+    this.nativeColorPickerOpen = false;
+    if (this.colorPickerPopover) {
+      this.colorPickerPopover.style.display = 'none';
+    }
     if (this.colorPickerOutsidePointerDownHandler) {
       document.removeEventListener('pointerdown', this.colorPickerOutsidePointerDownHandler, true);
       this.colorPickerOutsidePointerDownHandler = null;
@@ -730,6 +915,9 @@ export default class ColorBar implements IControl {
 
     // Update internal state
     this.customColors[speedStr] = color;
+    if (this.colorPickerInput) {
+      this.colorPickerInput.value = color;
+    }
     this.updateSingleColorUI(speed, color);
     this.updateResetButtonVisibility();
 
@@ -752,6 +940,15 @@ export default class ColorBar implements IControl {
         colorBox.style.backgroundColor = color;
       }
     }
+  }
+
+  public resetSingleColor(speed: number): void {
+    delete this.customColors[String(speed)];
+    const defaultColor = this.getDefaultColorForSpeed(speed);
+    if (defaultColor) {
+      this.updateSingleColorUI(speed, defaultColor);
+    }
+    this.updateResetButtonVisibility();
   }
 
   // Create the reset button
@@ -789,8 +986,7 @@ export default class ColorBar implements IControl {
   // Update reset button visibility
   public updateResetButtonVisibility(): void {
     if (!this.resetButton) return;
-    const hasCustom = Object.keys(this.customColors).length > 0;
-    this.resetButton.style.display = this.options.title === 'Wave Height' ? 'none' : hasCustom ? 'flex' : 'none';
+    this.resetButton.style.display = 'none';
   }
 
   // Set custom colors directly (e.g., from localStorage restoration)

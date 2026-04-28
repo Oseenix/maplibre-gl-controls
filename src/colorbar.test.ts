@@ -28,6 +28,10 @@ function getLegendLabels(colorbar: ColorBar): string[] {
   );
 }
 
+function getPickerPopover(): HTMLElement | null {
+  return document.body.querySelector('.map_colorbar_picker_popover');
+}
+
 test('unittest', async () => {
   const colorbar = new ColorBar(waveColors, {
     title: "Wind Speed",
@@ -122,7 +126,10 @@ test('updatePalette clears restore state and preserves descending legend order',
   expect(getLegendSpeeds(colorbar)).toEqual(['7.5', '5', '2.5', '0']);
 });
 
-test('wave height uses dropdown restore while other modes keep the standalone restore button', async () => {
+test('swatch picker renders reset-current and restore-current-mode actions', async () => {
+  let resetCurrentSpeed: number | null = null;
+  let restoreCount = 0;
+
   const waveHeight = new ColorBar(waveColors, {
     title: 'Wave Height',
     unit: 'm',
@@ -132,6 +139,12 @@ test('wave height uses dropdown restore while other modes keep the standalone re
       { id: 'wave-alt', label: 'Alt' },
     ],
     activePaletteId: 'wave-classic',
+    onResetColor: (speed: number) => {
+      resetCurrentSpeed = speed;
+    },
+    onReset: () => {
+      restoreCount += 1;
+    },
   });
 
   const waveMap = new Map({ container: document.createElement('div') });
@@ -139,23 +152,51 @@ test('wave height uses dropdown restore while other modes keep the standalone re
 
   expect(
     (waveHeight as any).container.querySelector('option[value="__restore_defaults__"]')
-  ).not.toBeNull();
+  ).toBeNull();
 
-  const waveReset = (waveHeight as any).container.querySelector(
-    '.map_colorbar_reset'
+  const swatch = (waveHeight as any).container.querySelector(
+    '.map_colorbar_color_box'
   ) as HTMLElement;
-  expect(waveReset.style.display).toBe('none');
+  swatch.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
-  const wind = new ColorBar(waveColors, {
+  const popover = getPickerPopover();
+  expect(popover).not.toBeNull();
+  expect(popover?.textContent).toContain('Reset');
+  expect(popover?.textContent).toContain('Restore');
+  expect(popover?.querySelector('.map_colorbar_picker_input')).not.toBeNull();
+
+  const resetCurrentButton = popover?.querySelector(
+    '.map_colorbar_picker_reset_current'
+  ) as HTMLButtonElement;
+  resetCurrentButton.click();
+  expect(resetCurrentSpeed).toBe(7.5);
+
+  swatch.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  const restoreModeButton = getPickerPopover()?.querySelector(
+    '.map_colorbar_picker_restore_mode'
+  ) as HTMLButtonElement;
+  restoreModeButton.click();
+  expect(restoreCount).toBe(1);
+});
+
+test('resetSingleColor restores the default swatch color and clears custom state', async () => {
+  const colorbar = new ColorBar(waveColors, {
     title: 'Wind Speed',
     unit: 'm/s',
     max: 10,
   });
-  const windMap = new Map({ container: document.createElement('div') });
-  windMap.addControl(wind);
 
-  wind.setCustomColors({ '5': '#000000' });
+  const map = new Map({ container: document.createElement('div') });
+  map.addControl(colorbar);
 
-  const windReset = (wind as any).container.querySelector('.map_colorbar_reset') as HTMLElement;
-  expect(windReset.style.display).toBe('flex');
+  colorbar.setCustomColors({ '5': '#000000' });
+  colorbar.updateSingleColorUI(5, '#000000');
+  colorbar.resetSingleColor(5);
+
+  const swatch = Array.from(
+    ((colorbar as any).container as HTMLElement).querySelectorAll('.map_colorbar_color_box')
+  ).find((node) => (node as HTMLElement).dataset.speed === '5') as HTMLElement;
+
+  expect(swatch.style.backgroundColor).toBe('rgb(78, 233, 242)');
+  expect((colorbar as any).customColors['5']).toBeUndefined();
 });
