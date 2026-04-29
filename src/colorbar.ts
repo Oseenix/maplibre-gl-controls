@@ -61,9 +61,18 @@ export default class ColorBar implements IControl {
   private nativeColorPickerOpen = false;
   private colorPickerOutsidePointerDownHandler: ((event: PointerEvent) => void) | null = null;
   private colorPickerEscapeKeyHandler: ((event: KeyboardEvent) => void) | null = null;
+  private resetConfirmPopover: HTMLElement | null = null;
+  private resetConfirmOutsidePointerDownHandler: ((event: PointerEvent) => void) | null = null;
+  private resetConfirmEscapeKeyHandler: ((event: KeyboardEvent) => void) | null = null;
+  private pendingResetAction: (() => void) | null = null;
   private resetButton: HTMLElement | null = null;
-  private paletteSelect: HTMLSelectElement | null = null;
+  private paletteSelect: HTMLElement | null = null;
+  private paletteTrigger: HTMLButtonElement | null = null;
+  private paletteMenu: HTMLElement | null = null;
+  private paletteOutsidePointerDownHandler: ((event: PointerEvent) => void) | null = null;
+  private paletteEscapeKeyHandler: ((event: KeyboardEvent) => void) | null = null;
   private customColors: Record<string, string> = {};
+  private readonly confirmResetMessage = 'Restore default colors?';
 
   propertySpec: Record<string, any>;
 
@@ -174,21 +183,6 @@ export default class ColorBar implements IControl {
 		return this.options.height || "272px";
 	}
 
-  private getHeightInPixels(): number {
-    const heightExpression = this.getHeight();
-    if (heightExpression.endsWith('px')) {
-      return parseFloat(heightExpression);
-    }
-
-    if (heightExpression.endsWith('%')) {
-      const parentHeight = this.outContainer.offsetHeight;
-      const percentage = parseFloat(heightExpression) / 100;
-      return parentHeight * percentage;
-    }
-
-    return 272;
-  }
-
   private createContainer(): { outContainer: HTMLElement; innerContainer: HTMLElement } {
 	  // Outer container - use shared utility for consistent styling
 	  const outContainer = document.createElement("div");
@@ -259,53 +253,137 @@ export default class ColorBar implements IControl {
     return unitDiv;
   }
 
-  private createPaletteSelect(): HTMLSelectElement | null {
+  private createPaletteSelect(): HTMLElement | null {
     if (!this.options.palettes || this.options.palettes.length <= 1) {
       return null;
     }
 
-    const select = document.createElement("select");
-    select.classList.add("map_colorbar_palette_select");
-    select.style.cssText = `
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("map_colorbar_palette_select");
+    wrapper.style.cssText = `
       margin: 0 4px 6px 4px;
       width: calc(100% - 8px);
+      position: relative;
+      box-sizing: border-box;
+    `;
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.classList.add('map_colorbar_palette_trigger');
+    trigger.style.cssText = `
+      width: 100%;
       height: 20px;
-      border: 0;
-      background: transparent;
-      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 0 7px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.92);
       font-size: 10px;
-      outline: none;
+      line-height: 20px;
       cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      padding-right: 14px;
-      background-image: linear-gradient(45deg, transparent 50%, white 50%), linear-gradient(135deg, white 50%, transparent 50%);
-      background-position: calc(100% - 8px) 8px, calc(100% - 3px) 8px;
-      background-size: 5px 5px, 5px 5px;
-      background-repeat: no-repeat;
+      box-sizing: border-box;
+      text-align: left;
+      backdrop-filter: blur(4px);
+    `;
+
+    const label = document.createElement('span');
+    label.classList.add('map_colorbar_palette_trigger_label');
+    label.style.cssText = `
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    `;
+
+    const caret = document.createElement('span');
+    caret.classList.add('map_colorbar_palette_trigger_caret');
+    caret.setAttribute('aria-hidden', 'true');
+    caret.style.cssText = `
+      width: 6px;
+      height: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.68);
+      border-right: 1px solid rgba(255, 255, 255, 0.68);
+      transform: rotate(45deg) translateY(-1px);
+      flex-shrink: 0;
+      opacity: 0.8;
+    `;
+
+    const menu = document.createElement('div');
+    menu.classList.add('map_colorbar_palette_menu');
+    menu.style.cssText = `
+      position: absolute;
+      top: auto;
+      left: 100%;
+      bottom:0;
+      right: 0;
+      display: none;
+      width:74px;
+      flex-direction: column;
+      gap: 2px;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      background: rgba(0, 36, 71, 0.94);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+      z-index: 3;
+      backdrop-filter: blur(8px);
     `;
 
     this.options.palettes.forEach((palette) => {
-      const option = document.createElement("option");
-      option.value = palette.id;
-      option.textContent = palette.label;
-      select.appendChild(option);
+      const optionButton = document.createElement('button');
+      optionButton.type = 'button';
+      optionButton.classList.add('map_colorbar_palette_option');
+      optionButton.dataset.paletteId = palette.id;
+      optionButton.textContent = palette.label;
+      optionButton.style.cssText = `
+        width: 100%;
+        padding: 0 7px;
+        border: 0;
+        border-radius: 7px;
+        height:22px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 10px;
+        line-height: 22px;
+        text-align: left;
+        cursor: pointer;
+      `;
+      optionButton.addEventListener('mouseenter', () => {
+        optionButton.style.background = 'rgba(255, 255, 255, 0.08)';
+      });
+      optionButton.addEventListener('mouseleave', () => {
+        const isActive = optionButton.dataset.active === 'true';
+        optionButton.style.background = isActive ? 'rgba(255, 255, 255, 0.12)' : 'transparent';
+      });
+      optionButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        this.setPaletteSelection(palette.id);
+        this.closePaletteMenu();
+        if (this.options.onPaletteChange) {
+          this.options.onPaletteChange(palette.id, this);
+        }
+      });
+      menu.appendChild(optionButton);
     });
 
-    if (this.options.activePaletteId) {
-      select.value = this.options.activePaletteId;
-    }
-
-    select.addEventListener("click", (event) => event.stopPropagation());
-    select.addEventListener("change", (event) => {
+    trigger.appendChild(label);
+    trigger.appendChild(caret);
+    trigger.addEventListener("click", (event) => {
       event.stopPropagation();
-      if (this.options.onPaletteChange) {
-        this.options.onPaletteChange(select.value, this);
-      }
+      this.togglePaletteMenu();
     });
 
-    return select;
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(menu);
+
+    this.paletteTrigger = trigger;
+    this.paletteMenu = menu;
+    this.setPaletteSelection(this.options.activePaletteId || this.options.palettes[0].id);
+
+    return wrapper;
   }
 
   private createColorBox(color: string, speed: number): HTMLElement {
@@ -315,6 +393,87 @@ export default class ColorBar implements IControl {
     colorBox.style.backgroundColor = color;
     colorBox.dataset.speed = speed.toString();
     return colorBox;
+  }
+
+  private setPaletteSelection(paletteId: string): void {
+    if (!this.options.palettes || this.options.palettes.length === 0) {
+      return;
+    }
+
+    const palette = this.options.palettes.find((item) => item.id === paletteId) || this.options.palettes[0];
+    if (this.paletteSelect) {
+      this.paletteSelect.dataset.value = palette.id;
+    }
+
+    if (this.paletteTrigger) {
+      const label = this.paletteTrigger.querySelector('.map_colorbar_palette_trigger_label');
+      if (label) {
+        label.textContent = palette.label;
+      }
+    }
+
+    if (this.paletteMenu) {
+      Array.from(this.paletteMenu.querySelectorAll('.map_colorbar_palette_option')).forEach((node) => {
+        const option = node as HTMLButtonElement;
+        const isActive = option.dataset.paletteId === palette.id;
+        option.dataset.active = isActive ? 'true' : 'false';
+        option.style.background = isActive ? 'rgba(255, 255, 255, 0.12)' : 'transparent';
+        option.style.color = isActive ? 'white' : 'rgba(255, 255, 255, 0.88)';
+      });
+    }
+  }
+
+  private closePaletteMenu = (): void => {
+    if (this.paletteMenu) {
+      this.paletteMenu.style.display = 'none';
+    }
+    if (this.paletteTrigger) {
+      this.paletteTrigger.setAttribute('aria-expanded', 'false');
+    }
+    if (this.paletteOutsidePointerDownHandler) {
+      document.removeEventListener('pointerdown', this.paletteOutsidePointerDownHandler, true);
+      this.paletteOutsidePointerDownHandler = null;
+    }
+    if (this.paletteEscapeKeyHandler) {
+      document.removeEventListener('keydown', this.paletteEscapeKeyHandler, true);
+      this.paletteEscapeKeyHandler = null;
+    }
+  };
+
+  private openPaletteMenu(): void {
+    if (!this.paletteSelect || !this.paletteMenu) {
+      return;
+    }
+
+    this.closePaletteMenu();
+    this.paletteMenu.style.display = 'flex';
+    if (this.paletteTrigger) {
+      this.paletteTrigger.setAttribute('aria-expanded', 'true');
+    }
+    this.paletteOutsidePointerDownHandler = (event: PointerEvent): void => {
+      if (
+        event.target instanceof Node &&
+        !this.paletteSelect?.contains(event.target)
+      ) {
+        this.closePaletteMenu();
+      }
+    };
+    this.paletteEscapeKeyHandler = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        this.closePaletteMenu();
+      }
+    };
+    document.addEventListener('pointerdown', this.paletteOutsidePointerDownHandler, true);
+    document.addEventListener('keydown', this.paletteEscapeKeyHandler, true);
+  }
+
+  private togglePaletteMenu(): void {
+    if (this.paletteMenu?.style.display === 'flex') {
+      this.closePaletteMenu();
+      return;
+    }
+
+    this.openPaletteMenu();
   }
 
   private createLabel(_step: ColorStep): HTMLElement {
@@ -355,20 +514,6 @@ export default class ColorBar implements IControl {
     this.initializeLegendItems();
   }
 
-  private calculateHeights(): { stepHeight: number } {
-    const h = this.getHeightInPixels();
-    const containerHeight = (this.container.getBoundingClientRect().height
-                               ? this.container.getBoundingClientRect().height
-                               : h);
-    const totalMargin = 6 + 8 + 8;
-    const stepsHeight = (containerHeight - this.titleDiv.offsetHeight
-                        - this.unitDiv.offsetHeight - totalMargin);
-
-    const stepHeight = Math.max(Math.floor(stepsHeight / this.colorSteps.length), 5);
-
-    return { stepHeight };
-  }
-
   // Handler for container click events
   private handleContainerClick = (event: MouseEvent): void => {
     const target = event.target as HTMLElement;
@@ -391,9 +536,9 @@ export default class ColorBar implements IControl {
 
   public update(): void {
     this.updateInnerContainerStyle(this.outContainer, this.container);
-    const { stepHeight } = this.calculateHeights();
     const displaySteps = this.getDisplaySteps();
     let lastLabeledValue: number | null = null;
+    const fixedStepHeight = 9;
 
     this.legendItems.forEach((legendItem, index) => {
       const colorBox = legendItem.querySelector(".map_colorbar_color_box") as HTMLElement;
@@ -405,10 +550,9 @@ export default class ColorBar implements IControl {
         return;
       }
 
-      const height = index === 0 ? stepHeight + 3 : stepHeight;
-      legendItem.style.height = `${stepHeight}px`;
-      colorBox.style.height = `${height}px`;
-      label.style.marginTop = `${stepHeight}px`;
+      legendItem.style.height = `${fixedStepHeight}px`;
+      colorBox.style.height = `${fixedStepHeight}px`;
+      label.style.marginTop = `${fixedStepHeight}px`;
 
       const currentVal = currentStep.speed;
       const followsTwoStepRule = index % 2 === 0;
@@ -449,6 +593,8 @@ export default class ColorBar implements IControl {
       this.map.off('styledata', this.refresh);
     }
     this.closeColorPicker();
+    this.closeResetConfirm();
+    this.closePaletteMenu();
     // this.container.parentNode?.removeChild(this.container);
     this.outContainer.parentNode?.removeChild(this.outContainer);
 
@@ -461,6 +607,9 @@ export default class ColorBar implements IControl {
     }
     if (this.nativeColorPickerInput && this.nativeColorPickerInput.parentNode) {
       this.nativeColorPickerInput.parentNode.removeChild(this.nativeColorPickerInput);
+    }
+    if (this.resetConfirmPopover && this.resetConfirmPopover.parentNode) {
+      this.resetConfirmPopover.parentNode.removeChild(this.resetConfirmPopover);
     }
 
 		this.map = undefined;
@@ -499,7 +648,7 @@ export default class ColorBar implements IControl {
     }
 
     if ((newOptions as Partial<ColorBarOptions>).activePaletteId !== undefined && this.paletteSelect) {
-      this.paletteSelect.value = (newOptions as Partial<ColorBarOptions>).activePaletteId!;
+      this.setPaletteSelection((newOptions as Partial<ColorBarOptions>).activePaletteId!);
     }
 
     // Update container dimensions if changed
@@ -543,7 +692,7 @@ export default class ColorBar implements IControl {
       this.unitDiv.innerHTML = `(${newOptions.unit})`;
     }
     if (this.paletteSelect && newOptions.activePaletteId) {
-      this.paletteSelect.value = newOptions.activePaletteId;
+      this.setPaletteSelection(newOptions.activePaletteId);
     }
 
     this.resetLegendItems();
@@ -722,10 +871,12 @@ export default class ColorBar implements IControl {
     restoreModeButton.classList.add('map_colorbar_picker_restore_mode');
     restoreModeButton.addEventListener('click', (event) => {
       event.stopPropagation();
-      if (this.options.onReset) {
-        this.options.onReset(this);
-      }
-      this.closeColorPicker();
+      this.showResetConfirm(restoreModeButton, () => {
+        if (this.options.onReset) {
+          this.options.onReset(this);
+        }
+        this.closeColorPicker();
+      });
     });
     actionBar.appendChild(restoreModeButton);
     actionBar.appendChild(resetCurrentColorButton);
@@ -754,6 +905,137 @@ export default class ColorBar implements IControl {
     });
 
     return button;
+  }
+
+  private createResetConfirmPopover(): HTMLElement {
+    const popover = document.createElement('div');
+    popover.classList.add('map_colorbar_reset_confirm');
+    popover.style.cssText = `
+      position: fixed;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 136px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(0, 36, 71, 0.96);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+      z-index: 9999;
+      pointer-events: auto;
+    `;
+
+    const message = document.createElement('div');
+    message.classList.add('map_colorbar_reset_confirm_message');
+    message.textContent = this.confirmResetMessage;
+    message.style.cssText = `
+      color: white;
+      font-size: 10px;
+      line-height: 14px;
+      text-align: center;
+    `;
+
+    const actions = document.createElement('div');
+    actions.classList.add('map_colorbar_reset_confirm_actions');
+    actions.style.cssText = `
+      display: flex;
+      gap: 6px;
+    `;
+
+    const cancelButton = this.createPickerActionButton('Cancel');
+    cancelButton.classList.add('map_colorbar_reset_confirm_cancel');
+    cancelButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.closeResetConfirm();
+    });
+
+    const confirmButton = this.createPickerActionButton('Restore');
+    confirmButton.classList.add('map_colorbar_reset_confirm_accept');
+    confirmButton.style.background = 'rgba(255, 255, 255, 0.12)';
+    confirmButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const action = this.pendingResetAction;
+      this.closeResetConfirm();
+      action?.();
+    });
+
+    actions.appendChild(cancelButton);
+    actions.appendChild(confirmButton);
+    popover.appendChild(message);
+    popover.appendChild(actions);
+    document.body.appendChild(popover);
+
+    return popover;
+  }
+
+  private getResetConfirmPopover(): HTMLElement {
+    if (!this.resetConfirmPopover) {
+      this.resetConfirmPopover = this.createResetConfirmPopover();
+    }
+
+    return this.resetConfirmPopover;
+  }
+
+  private closeResetConfirm = (): void => {
+    this.pendingResetAction = null;
+    if (this.resetConfirmPopover) {
+      this.resetConfirmPopover.style.display = 'none';
+    }
+    if (this.resetConfirmOutsidePointerDownHandler) {
+      document.removeEventListener('pointerdown', this.resetConfirmOutsidePointerDownHandler, true);
+      this.resetConfirmOutsidePointerDownHandler = null;
+    }
+    if (this.resetConfirmEscapeKeyHandler) {
+      document.removeEventListener('keydown', this.resetConfirmEscapeKeyHandler, true);
+      this.resetConfirmEscapeKeyHandler = null;
+    }
+  };
+
+  private showResetConfirm(anchor: HTMLElement, onConfirm: () => void): void {
+    const popover = this.getResetConfirmPopover();
+    const anchorRect = anchor.getBoundingClientRect();
+
+    this.closeResetConfirm();
+    this.pendingResetAction = onConfirm;
+    popover.style.display = 'flex';
+
+    const margin = 8;
+    const width = popover.offsetWidth;
+    const height = popover.offsetHeight;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let left = anchorRect.right + margin;
+    if (left + width > viewportWidth - margin) {
+      left = Math.max(margin, anchorRect.left - width - margin);
+    }
+
+    let top = anchorRect.top + (anchorRect.height - height) / 2;
+    if (top + height > viewportHeight - margin) {
+      top = viewportHeight - height - margin;
+    }
+    if (top < margin) {
+      top = margin;
+    }
+
+    popover.style.left = `${left}px`;
+    popover.style.top = `${top}px`;
+
+    this.resetConfirmOutsidePointerDownHandler = (event: PointerEvent): void => {
+      if (
+        event.target instanceof Node &&
+        !popover.contains(event.target)
+      ) {
+        this.closeResetConfirm();
+      }
+    };
+    this.resetConfirmEscapeKeyHandler = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        this.closeResetConfirm();
+      }
+    };
+
+    document.addEventListener('pointerdown', this.resetConfirmOutsidePointerDownHandler, true);
+    document.addEventListener('keydown', this.resetConfirmEscapeKeyHandler, true);
   }
 
   private getColorPickerPopover(): HTMLElement {
@@ -835,6 +1117,7 @@ export default class ColorBar implements IControl {
   // Show the color picker at the specified position
   private showColorPicker(speed: number, swatch: HTMLElement): void {
     this.closeColorPicker();
+    this.closeResetConfirm();
 
     const popover = this.getColorPickerPopover();
     const input = this.colorPickerInput;
@@ -861,9 +1144,11 @@ export default class ColorBar implements IControl {
     this.nativeColorPickerOpen = false;
 
     this.colorPickerOutsidePointerDownHandler = (event: PointerEvent): void => {
+      const resetConfirmPopover = this.resetConfirmPopover;
       if (
         event.target instanceof Node &&
-        !popover.contains(event.target)
+        !popover.contains(event.target) &&
+        !(resetConfirmPopover && resetConfirmPopover.contains(event.target))
       ) {
         this.closeColorPicker();
       }
@@ -880,6 +1165,7 @@ export default class ColorBar implements IControl {
   }
 
   private closeColorPicker = (): void => {
+    this.closeResetConfirm();
     if (!this.colorPickerInput) return;
 
     const input = this.colorPickerInput;
@@ -975,9 +1261,11 @@ export default class ColorBar implements IControl {
     });
     button.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (this.options.onReset) {
-        this.options.onReset(this);
-      }
+      this.showResetConfirm(button, () => {
+        if (this.options.onReset) {
+          this.options.onReset(this);
+        }
+      });
     });
 
     return button;

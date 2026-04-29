@@ -32,6 +32,10 @@ function getPickerPopover(): HTMLElement | null {
   return document.body.querySelector('.map_colorbar_picker_popover');
 }
 
+function getResetConfirmPopover(): HTMLElement | null {
+  return document.body.querySelector('.map_colorbar_reset_confirm');
+}
+
 test('unittest', async () => {
   const colorbar = new ColorBar(waveColors, {
     title: "Wind Speed",
@@ -176,6 +180,47 @@ test('swatch picker renders reset-current and restore-current-mode actions', asy
     '.map_colorbar_picker_restore_mode'
   ) as HTMLButtonElement;
   restoreModeButton.click();
+  expect(restoreCount).toBe(0);
+  const confirmButton = getResetConfirmPopover()?.querySelector(
+    '.map_colorbar_reset_confirm_accept'
+  ) as HTMLButtonElement;
+  confirmButton.click();
+  expect(restoreCount).toBe(1);
+});
+
+test('restore actions require confirmation before resetting', async () => {
+  let restoreCount = 0;
+
+  const colorbar = new ColorBar(waveColors, {
+    title: 'Wave Height',
+    unit: 'm',
+    max: 10,
+    onReset: () => {
+      restoreCount += 1;
+    },
+  });
+
+  const map = new Map({ container: document.createElement('div') });
+  map.addControl(colorbar);
+  colorbar.setCustomColors({ '5': '#000000' });
+
+  const container = (colorbar as any).container as HTMLElement;
+  const restoreButton = container.querySelector('.map_colorbar_reset') as HTMLElement;
+  restoreButton.click();
+  expect(getResetConfirmPopover()).not.toBeNull();
+  expect(restoreCount).toBe(0);
+
+  const cancelButton = getResetConfirmPopover()?.querySelector(
+    '.map_colorbar_reset_confirm_cancel'
+  ) as HTMLButtonElement;
+  cancelButton.click();
+  expect(restoreCount).toBe(0);
+
+  restoreButton.click();
+  const confirmButton = getResetConfirmPopover()?.querySelector(
+    '.map_colorbar_reset_confirm_accept'
+  ) as HTMLButtonElement;
+  confirmButton.click();
   expect(restoreCount).toBe(1);
 });
 
