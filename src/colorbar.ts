@@ -19,6 +19,19 @@ export type Options = {
   max?: number;     // Optional max with a default 30
   decimal?: number; // Optional decimal with a default 1
   tickMinStep?: number; // Optional setup min step, with a default 0 not limit
+  // Explicit set of "speed"-domain values (see getColorSteps()'s ratio*max
+  // construction -- for a min-aware palette this is `stopValue - min`) that
+  // MUST always get a tick label, regardless of array index or spacing.
+  // Required for genuinely non-linear/non-uniform stop spacing (e.g.
+  // precipitation): the old "label every other stop by index" heuristic
+  // only happens to label the right stops when real breakpoints and
+  // interpolation-only midpoints strictly alternate one-for-one, which is a
+  // coincidence of total stop count, not a guarantee. When provided
+  // (non-empty), this replaces the index/tickMinStep heuristic entirely for
+  // this bar. When omitted, the legacy index-parity heuristic is used
+  // unchanged (still the right default for evenly-spaced linear scales like
+  // wave's 29-level ramp, which intentionally doesn't label every level).
+  labeledValues?: number[];
   // Optional constant added to every displayed tick label only -- the
   // underlying "speed" domain driving colours/positions always starts at 0
   // (matches getColorSteps()'s ratio*max construction), so a palette whose
@@ -562,11 +575,23 @@ export default class ColorBar implements IControl {
       label.style.marginTop = `${fixedStepHeight}px`;
 
       const currentVal = currentStep.speed;
-      const followsTwoStepRule = index % 2 === 0;
-      const clearsTickMinStep = lastLabeledValue === null
-        || Math.abs(lastLabeledValue - currentVal) >= this.getTickMinStep();
+      const explicitLabelValues = this.options.labeledValues;
+      const hasExplicitLabels = Array.isArray(explicitLabelValues) && explicitLabelValues.length > 0;
 
-      if (followsTwoStepRule && clearsTickMinStep) {
+      const shouldLabel = hasExplicitLabels
+        // Non-linear/non-uniform scales: label exactly the authored real
+        // breakpoints, independent of array index or spacing -- the caller
+        // (e.g. a precipitation palette with interpolation-only midpoints)
+        // is the single source of truth for which values are meaningful.
+        ? explicitLabelValues!.some((v) => Math.abs(v - currentVal) < 1e-6)
+        // Legacy heuristic for palettes that don't opt in: evenly-spaced
+        // linear scales (e.g. wave's 29-level ramp) intentionally skip every
+        // other stop for a readable label density.
+        : index % 2 === 0 &&
+          (lastLabeledValue === null
+            || Math.abs(lastLabeledValue - currentVal) >= this.getTickMinStep());
+
+      if (shouldLabel) {
         const displayVal = currentVal + (this.options.valueOffset || 0);
         label.textContent = `- ${displayVal.toFixed(this.options.decimal)}`;
         lastLabeledValue = currentVal;

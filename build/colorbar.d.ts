@@ -9,6 +9,7 @@ export type Options = {
     max?: number;
     decimal?: number;
     tickMinStep?: number;
+    labeledValues?: number[];
     valueOffset?: number;
     layerIds?: string[];
     style?: Partial<CSSStyleDeclaration>;

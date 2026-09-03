@@ -41,12 +41,12 @@ const Dn = ({
     ve !== void 0 && (clearInterval(ve), ve = void 0, g.onclick = null, M.style.backgroundColor = "");
   }, g = document.createElement("button");
   g.appendChild(oe(Sn)), g.style.border = "0", g.style.height = "24px", g.style.borderRadius = "4px", g.onclick = d;
-  const C = () => M.style.backgroundColor === me, I = () => {
+  const C = () => M.style.backgroundColor === me, E = () => {
     C() || (M.style.backgroundColor = me, ve = setInterval(() => {
       h();
     }, e));
   }, M = document.createElement("button");
-  M.appendChild(oe(Ln)), M.style.border = "0", M.style.height = "24px", M.style.borderRadius = "4px", M.onclick = I;
+  M.appendChild(oe(Ln)), M.style.border = "0", M.style.height = "24px", M.style.borderRadius = "4px", M.onclick = E;
   const T = document.createElement("button");
   return T.appendChild(oe($n)), T.style.border = "0", T.style.height = "24px", T.style.borderRadius = "4px", T.onclick = h, s.appendChild(f), s.appendChild(g), s.appendChild(M), s.appendChild(T), r.appendChild(s), {
     container: r,
@@ -55,7 +55,7 @@ const Dn = ({
     increment: h,
     decrement: c,
     isPlaying: C,
-    play: I,
+    play: E,
     pause: d,
     isLoopEnabled: l,
     setLoopEnabled: a
@@ -322,7 +322,7 @@ function Un(n) {
         // %         (optional)
         C,
         // ,|/       (optional)
-        I,
+        E,
         // <numeric> (optional)
         M
         // %         (optional)
@@ -334,7 +334,7 @@ function Un(n) {
             J(+a / ye, 0, 1),
             J(+c / ye, 0, 1),
             J(+d / ye, 0, 1),
-            I ? Lt(+I, M) : 1
+            E ? Lt(+E, M) : 1
           ];
           if (Nt(St))
             return St;
@@ -657,13 +657,13 @@ class k {
           let H = u - o;
           u > o && H > 180 ? H -= 360 : u < o && o - u > 180 && (H += 360), d = o + r * H;
         } else isNaN(o) ? isNaN(u) ? d = NaN : (d = u, (a === 1 || a === 0) && (g = c)) : (d = o, (h === 1 || h === 0) && (g = s));
-        const [C, I, M, T] = jn([
+        const [C, E, M, T] = jn([
           d,
           g ?? q(s, c, r),
           q(a, h, r),
           q(l, f, r)
         ]);
-        return new k(C, I, M, T, !1);
+        return new k(C, E, M, T, !1);
       }
       case "lab": {
         const [o, s, a, l] = nn(ue(e.lab, t.lab, r));
@@ -839,7 +839,7 @@ function ce(n) {
   } else
     return !1;
 }
-function E(n) {
+function I(n) {
   if (n === null)
     return Se;
   if (typeof n == "string")
@@ -866,7 +866,7 @@ function E(n) {
     const e = n.length;
     let t;
     for (const r of n) {
-      const i = E(r);
+      const i = I(r);
       if (!t)
         t = i;
       else {
@@ -894,7 +894,7 @@ class ne {
     if (!ce(e[1]))
       return t.error("invalid value");
     const r = e[1];
-    let i = E(r);
+    let i = I(r);
     const o = t.expectedType;
     return i.kind === "array" && i.N === 0 && o && o.kind === "array" && (typeof o.N != "number" || o.N === 0) && (i = o), new ne(i, r);
   }
@@ -955,9 +955,9 @@ class D {
   evaluate(e) {
     for (let t = 0; t < this.args.length; t++) {
       const r = this.args[t].evaluate(e);
-      if (le(this.type, E(r))) {
+      if (le(this.type, I(r))) {
         if (t === this.args.length - 1)
-          throw new x(`Expected value to be of type ${w(this.type)}, but found ${w(E(r))} instead.`);
+          throw new x(`Expected value to be of type ${w(this.type)}, but found ${w(I(r))} instead.`);
       } else return r;
     }
     throw new Error();
@@ -1323,9 +1323,9 @@ class ht {
     if (!r)
       return !1;
     if (!K(t, ["boolean", "string", "number", "null"]))
-      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${w(E(t))} instead.`);
+      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${w(I(t))} instead.`);
     if (!K(r, ["string", "array"]))
-      throw new x(`Expected second argument to be of type array or string, but found ${w(E(r))} instead.`);
+      throw new x(`Expected second argument to be of type array or string, but found ${w(I(r))} instead.`);
     return r.indexOf(t) >= 0;
   }
   eachChild(e) {
@@ -1356,7 +1356,7 @@ class Pe {
   evaluate(e) {
     const t = this.needle.evaluate(e), r = this.haystack.evaluate(e);
     if (!K(t, ["boolean", "string", "number", "null"]))
-      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${w(E(t))} instead.`);
+      throw new x(`Expected first argument to be of type boolean, string, number or null, but found ${w(I(t))} instead.`);
     let i;
     if (this.fromIndex && (i = this.fromIndex.evaluate(e)), K(r, ["string"])) {
       const o = r.indexOf(t, i);
@@ -1364,7 +1364,7 @@ class Pe {
     } else {
       if (K(r, ["array"]))
         return r.indexOf(t, i);
-      throw new x(`Expected second argument to be of type array or string, but found ${w(E(r))} instead.`);
+      throw new x(`Expected second argument to be of type array or string, but found ${w(I(r))} instead.`);
     }
   }
   eachChild(e) {
@@ -1401,8 +1401,8 @@ class pt {
         if (typeof g == "number" && Math.floor(g) !== g)
           return f.error("Numeric branch labels must be integer values.");
         if (!r)
-          r = E(g);
-        else if (f.checkSubtype(r, E(g)))
+          r = I(g);
+        else if (f.checkSubtype(r, I(g)))
           return null;
         if (typeof o[String(g)] < "u")
           return f.error("Branch labels must be unique.");
@@ -1421,7 +1421,7 @@ class pt {
   }
   evaluate(e) {
     const t = this.input.evaluate(e);
-    return (E(t) === this.inputType && this.outputs[this.cases[t]] || this.otherwise).evaluate(e);
+    return (I(t) === this.inputType && this.outputs[this.cases[t]] || this.otherwise).evaluate(e);
   }
   eachChild(e) {
     e(this.input), this.outputs.forEach(e), e(this.otherwise);
@@ -1498,7 +1498,7 @@ class xe {
       return [...t].slice(r, i).join("");
     if (K(t, ["array"]))
       return t.slice(r, i);
-    throw new x(`Expected first argument to be of type array or string, but found ${w(E(t))} instead.`);
+    throw new x(`Expected first argument to be of type array or string, but found ${w(I(t))} instead.`);
   }
   eachChild(e) {
     e(this.input), e(this.beginIndex), this.endIndex && e(this.endIndex);
@@ -1840,12 +1840,12 @@ function re(n, e, t) {
     evaluate(o) {
       const s = this.lhs.evaluate(o), a = this.rhs.evaluate(o);
       if (r && this.hasUntypedArgument) {
-        const l = E(s), u = E(a);
+        const l = I(s), u = I(a);
         if (l.kind !== u.kind || !(l.kind === "string" || l.kind === "number"))
           throw new x(`Expected arguments for "${n}" to be (string, string) or (number, number), but found (${l.kind}, ${u.kind}) instead.`);
       }
       if (this.collator && !r && this.hasUntypedArgument) {
-        const l = E(s), u = E(a);
+        const l = I(s), u = I(a);
         if (l.kind !== "string" || u.kind !== "string")
           return e(o, s, a);
       }
@@ -1971,7 +1971,7 @@ class gt {
   evaluate(e) {
     const t = (r) => {
       const i = r.content.evaluate(e);
-      return E(i) === fe ? new Ye("", i, null, null, null) : new Ye(se(i), null, r.scale ? r.scale.evaluate(e) : null, r.font ? r.font.evaluate(e).join(",") : null, r.textColor ? r.textColor.evaluate(e) : null);
+      return I(i) === fe ? new Ye("", i, null, null, null) : new Ye(se(i), null, r.scale ? r.scale.evaluate(e) : null, r.font ? r.font.evaluate(e).join(",") : null, r.textColor ? r.textColor.evaluate(e) : null);
     };
     return new z(this.sections.map(t));
   }
@@ -2020,7 +2020,7 @@ class mt {
       return [...t].length;
     if (Array.isArray(t))
       return t.length;
-    throw new x(`Expected value to be of type string or array, but found ${w(E(t))} instead.`);
+    throw new x(`Expected value to be of type string or array, but found ${w(I(t))} instead.`);
   }
   eachChild(e) {
     e(this.input);
@@ -2067,7 +2067,7 @@ function je(n, e, t, r) {
   const i = [e[0] - n[0], e[1] - n[1]], o = [r[0] - t[0], r[1] - t[1]];
   return Tr(o, i) === 0 ? !1 : !!(Bt(n, e, t, r) && Bt(t, r, n, e));
 }
-function Ir(n, e, t) {
+function Er(n, e, t) {
   for (const r of t)
     for (let i = 0; i < r.length - 1; ++i)
       if (je(n, e, r[i], r[i + 1]))
@@ -2084,7 +2084,7 @@ function ie(n, e, t = !1) {
     }
   return r;
 }
-function Er(n, e) {
+function Ir(n, e) {
   for (const t of e)
     if (ie(n, t))
       return !0;
@@ -2095,7 +2095,7 @@ function un(n, e) {
     if (!ie(t, e))
       return !1;
   for (let t = 0; t < n.length - 1; ++t)
-    if (Ir(n[t], n[t + 1], e))
+    if (Er(n[t], n[t + 1], e))
       return !1;
   return !0;
 }
@@ -2185,7 +2185,7 @@ function Lr(n, e) {
     if (!pe(t, r))
       return !1;
     for (const a of s)
-      if (!Er(a, o))
+      if (!Ir(a, o))
         return !1;
   }
   return !0;
@@ -2350,7 +2350,7 @@ const Qe = 100, et = 50;
 function fn(n, e) {
   return e[0] - n[0];
 }
-function Ie(n) {
+function Ee(n) {
   return n[1] - n[0] + 1;
 }
 function j(n, e) {
@@ -2359,7 +2359,7 @@ function j(n, e) {
 function tt(n, e) {
   if (n[0] > n[1])
     return [null, null];
-  const t = Ie(n);
+  const t = Ee(n);
   if (e) {
     if (t === 2)
       return [n, null];
@@ -2488,8 +2488,8 @@ function Rr(n, e, t, r = 1 / 0) {
     for (let l = 0, u = a.length, c = u - 1; l < u; c = l++) {
       const h = a[c], f = a[l];
       for (const d of e)
-        for (let g = 0, C = d.length, I = C - 1; g < C; I = g++) {
-          const M = d[I], T = d[g];
+        for (let g = 0, C = d.length, E = C - 1; g < C; E = g++) {
+          const M = d[E], T = d[g];
           if (je(h, f, M, T))
             return 0;
           s = Math.min(s, wt(h, f, M, T, t));
@@ -2509,7 +2509,7 @@ function ke(n, e, t, r, i, o, s) {
   const a = kt(nt(r, o), nt(i, s), t);
   a < e && n.push([a, o, s]);
 }
-function Ee(n, e, t, r, i = 1 / 0) {
+function Ie(n, e, t, r, i = 1 / 0) {
   let o = Math.min(r.distance(n[0], t[0][0]), i);
   if (o === 0)
     return o;
@@ -2519,7 +2519,7 @@ function Ee(n, e, t, r, i = 1 / 0) {
     if (l[0] >= o)
       continue;
     const u = l[1], c = e ? et : Qe;
-    if (Ie(u) <= c) {
+    if (Ee(u) <= c) {
       if (!j(u, n.length))
         return NaN;
       if (e) {
@@ -2550,7 +2550,7 @@ function Me(n, e, t, r, i, o = 1 / 0) {
     if (l[0] >= s)
       continue;
     const u = l[1], c = l[2], h = e ? et : Qe, f = r ? et : Qe;
-    if (Ie(u) <= h && Ie(c) <= f) {
+    if (Ee(u) <= h && Ee(c) <= f) {
       if (!j(u, n.length) && j(c, t.length))
         return NaN;
       let d;
@@ -2590,7 +2590,7 @@ function zr(n, e) {
         o = Math.min(o, Me(r, !1, s.coordinates, !0, i, o));
         break;
       case "Polygon":
-        o = Math.min(o, Ee(r, !1, s.coordinates, i, o));
+        o = Math.min(o, Ie(r, !1, s.coordinates, i, o));
         break;
     }
     if (o === 0)
@@ -2613,7 +2613,7 @@ function Fr(n, e) {
         o = Math.min(o, Me(r, !0, s.coordinates, !0, i, o));
         break;
       case "Polygon":
-        o = Math.min(o, Ee(r, !0, s.coordinates, i, o));
+        o = Math.min(o, Ie(r, !0, s.coordinates, i, o));
         break;
     }
     if (o === 0)
@@ -2631,10 +2631,10 @@ function Hr(n, e) {
     for (const a of r) {
       switch (s.type) {
         case "Point":
-          o = Math.min(o, Ee([s.coordinates], !1, a, i, o));
+          o = Math.min(o, Ie([s.coordinates], !1, a, i, o));
           break;
         case "LineString":
-          o = Math.min(o, Ee(s.coordinates, !0, a, i, o));
+          o = Math.min(o, Ie(s.coordinates, !0, a, i, o));
           break;
         case "Polygon":
           o = Math.min(o, Rr(a, s.coordinates, i, o));
@@ -2756,12 +2756,12 @@ class _ {
       const h = [];
       let f = !1;
       for (let d = 1; d < e.length; d++) {
-        const g = e[d], C = Array.isArray(u) ? u[d - 1] : u.type, I = l.parse(g, 1 + h.length, C);
-        if (!I) {
+        const g = e[d], C = Array.isArray(u) ? u[d - 1] : u.type, E = l.parse(g, 1 + h.length, C);
+        if (!E) {
           f = !0;
           break;
         }
-        h.push(I);
+        h.push(E);
       }
       if (!f) {
         if (Array.isArray(u) && u.length !== h.length) {
@@ -2833,7 +2833,7 @@ _.register(Pt, {
   typeof: [
     b,
     [v],
-    (n, [e]) => w(E(e.evaluate(n)))
+    (n, [e]) => w(I(e.evaluate(n)))
   ],
   "to-rgba": [
     L(p, 4),
@@ -3265,7 +3265,7 @@ function Te(n) {
   let t = !0;
   return n.eachChild((r) => {
     e ? t = t && Te(r) : t = t && r instanceof ne;
-  }), t ? xt(n) && Et(n, ["zoom", "heatmap-density", "line-progress", "accumulated", "is-supported-script"]) : !1;
+  }), t ? xt(n) && It(n, ["zoom", "heatmap-density", "line-progress", "accumulated", "is-supported-script"]) : !1;
 }
 function xt(n) {
   if (n instanceof _) {
@@ -3287,20 +3287,20 @@ function xt(n) {
     e && !xt(t) && (e = !1);
   }), e;
 }
-function It(n) {
+function Et(n) {
   if (n instanceof _ && n.name === "feature-state")
     return !1;
   let e = !0;
   return n.eachChild((t) => {
-    e && !It(t) && (e = !1);
+    e && !Et(t) && (e = !1);
   }), e;
 }
-function Et(n, e) {
+function It(n, e) {
   if (n instanceof _ && e.indexOf(n.name) >= 0)
     return !1;
   let t = !0;
   return n.eachChild((r) => {
-    t && !Et(r, e) && (t = !1);
+    t && !It(r, e) && (t = !1);
   }), t;
 }
 function it(n) {
@@ -3352,14 +3352,14 @@ function yn(n, e) {
   if (r) {
     const c = {}, h = [];
     for (let g = 0; g < n.stops.length; g++) {
-      const C = n.stops[g], I = C[0].zoom;
-      c[I] === void 0 && (c[I] = {
-        zoom: I,
+      const C = n.stops[g], E = C[0].zoom;
+      c[E] === void 0 && (c[E] = {
+        zoom: E,
         type: n.type,
         property: n.property,
         default: n.default,
         stops: []
-      }, h.push(I)), c[I].stops.push([C[0].value, C[1]]);
+      }, h.push(E)), c[E].stops.push([C[0].value, C[1]]);
     }
     const f = [];
     for (const g of h)
@@ -3489,7 +3489,7 @@ function bn(n, e) {
 }
 class ot {
   constructor(e, t) {
-    this.kind = e, this._styleExpression = t, this.isStateDependent = e !== "constant" && !It(t.expression);
+    this.kind = e, this._styleExpression = t, this.isStateDependent = e !== "constant" && !Et(t.expression);
   }
   evaluateWithoutErrorHandling(e, t, r, i, o, s) {
     return this._styleExpression.evaluateWithoutErrorHandling(e, t, r, i, o, s);
@@ -3500,7 +3500,7 @@ class ot {
 }
 class st {
   constructor(e, t, r, i) {
-    this.kind = e, this.zoomStops = r, this._styleExpression = t, this.isStateDependent = e !== "camera" && !It(t.expression), this.interpolationType = i;
+    this.kind = e, this.zoomStops = r, this._styleExpression = t, this.isStateDependent = e !== "camera" && !Et(t.expression), this.interpolationType = i;
   }
   evaluateWithoutErrorHandling(e, t, r, i, o, s) {
     return this._styleExpression.evaluateWithoutErrorHandling(e, t, r, i, o, s);
@@ -3522,7 +3522,7 @@ function Cn(n, e) {
   const r = t.value.expression, i = xt(r);
   if (!i && !Ur(e))
     return Y([new B("", "data expressions not supported")]);
-  const o = Et(r, ["zoom"]);
+  const o = It(r, ["zoom"]);
   if (!o && !qr(e))
     return Y([new B("", "zoom expressions not supported")]);
   const s = we(r);
@@ -3736,7 +3736,7 @@ function xn(n, e) {
     t.delete(r);
   }), t.size === 0 && te.delete(n));
 }
-function In(n) {
+function En(n) {
   const e = document.createElement("button");
   if (Object.assign(e.style, oi), n.backgroundColor && (e.style.backgroundColor = n.backgroundColor), n.className && (e.className = n.className), n.title && (e.title = n.title), n.onClick && (e.onclick = n.onClick), n.icon)
     if (typeof n.icon == "string") {
@@ -3760,7 +3760,7 @@ function li(n, e, t = ae.maxFontSize, r = ae.minFontSize) {
   let c = Math.floor(l / (u * a));
   return c = Math.min(t, Math.max(r, c)), c;
 }
-function En(n, e) {
+function In(n, e) {
   const t = te.get(n);
   if (!t || t.size === 0) return;
   const r = Array.from(t.values()), { smallScreenThreshold: i } = ae, o = e < i;
@@ -4132,10 +4132,10 @@ class pi {
         return;
       }
       i.style.height = `${r}px`, s.style.height = `${r}px`, a.style.marginTop = `${r}px`;
-      const u = l.speed, c = o % 2 === 0, h = t === null || Math.abs(t - u) >= this.getTickMinStep();
-      if (c && h) {
-        const f = u + (this.options.valueOffset || 0);
-        a.textContent = `- ${f.toFixed(this.options.decimal)}`, t = u;
+      const u = l.speed, c = this.options.labeledValues;
+      if (Array.isArray(c) && c.length > 0 ? c.some((d) => Math.abs(d - u) < 1e-6) : o % 2 === 0 && (t === null || Math.abs(t - u) >= this.getTickMinStep())) {
+        const d = u + (this.options.valueOffset || 0);
+        a.textContent = `- ${d.toFixed(this.options.decimal)}`, t = u;
         return;
       }
       a.textContent = "";
@@ -4590,11 +4590,11 @@ class di {
     if (!this.map)
       return;
     const t = this.map.getContainer().clientWidth;
-    En(this.getPosition(), t);
+    In(this.getPosition(), t);
   }
   // Create a single button with icon and label
   createButton(e) {
-    return In({
+    return En({
       icon: si(e.svg, e.label),
       label: e.label,
       // title: config.label,
@@ -4752,7 +4752,7 @@ class gi {
     var r;
     const e = document.createElement("div");
     e.className = "layer-manager-header", (r = this.position) != null && r.includes("left") ? e.classList.add("left") : e.classList.add("right");
-    const t = In({
+    const t = En({
       icon: this._createLayersIcon(20),
       label: this.btnLabel,
       title: `${this.feature} Layers Settings`,
@@ -4835,7 +4835,7 @@ class gi {
   _updateButtonLayout() {
     if (!this.map || !this.container) return;
     const e = this.map.getContainer(), t = e ? e.clientWidth : -1;
-    En(this.getPosition(), t);
+    In(this.getPosition(), t);
   }
   /**
    * Refresh the UI to reflect current feature and layer configurations
