@@ -9,6 +9,7 @@ export type Options = {
     max?: number;
     decimal?: number;
     tickMinStep?: number;
+    valueOffset?: number;
     layerIds?: string[];
     style?: Partial<CSSStyleDeclaration>;
     onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void;

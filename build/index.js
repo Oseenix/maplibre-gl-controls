@@ -3671,7 +3671,9 @@ const ei = {
   font: {
     family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
     size: "11px"
-  }
+  },
+  // Transition
+  transition: "all 0.2s ease"
 }, wn = /* @__PURE__ */ new Set();
 function ti(n) {
   n.style.setProperty("--rp-mctl-text", P.color.text), n.style.setProperty("--rp-mctl-background", P.color.background), n.style.setProperty("--rp-mctl-hover", P.color.hover), n.style.setProperty("--rp-mctl-border", P.color.border), n.style.setProperty("--rp-mctl-borderLight", P.color.borderLight), n.style.setProperty("--rp-mctl-radius-sm", P.radius.sm), n.style.setProperty("--rp-mctl-radius-md", P.radius.md), n.style.setProperty("--rp-mctl-radius-lg", P.radius.lg), n.style.setProperty("--rp-mctl-shadow-sm", P.shadow.sm), n.style.setProperty("--rp-mctl-shadow-md", P.shadow.md), n.style.setProperty("--rp-mctl-font-family", P.font.family), n.style.setProperty("--rp-mctl-font-size", P.font.size);
@@ -3714,6 +3716,7 @@ const oi = {
 }, ae = {
   iconWidth: 20,
   btnPaddingX: 6,
+  btnPaddingY: 4,
   btnGap: 4,
   smallScreenThreshold: 768,
   minFontSize: 10,
@@ -4131,7 +4134,8 @@ class pi {
       i.style.height = `${r}px`, s.style.height = `${r}px`, a.style.marginTop = `${r}px`;
       const u = l.speed, c = o % 2 === 0, h = t === null || Math.abs(t - u) >= this.getTickMinStep();
       if (c && h) {
-        a.textContent = `- ${u.toFixed(this.options.decimal)}`, t = u;
+        const f = u + (this.options.valueOffset || 0);
+        a.textContent = `- ${f.toFixed(this.options.decimal)}`, t = u;
         return;
       }
       a.textContent = "";

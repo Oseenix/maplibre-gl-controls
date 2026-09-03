@@ -1,62 +1,62 @@
 {
-	"name": "@oseenix/maplibre-gl-controls",
-	"type": "module",
-	"version": "2.0.8",
-	"description": "Control plugins for Maplibre GL JS",
-	"scripts": {
-		"test": "vitest src --coverage --coverage.provider=v8",
-		"build": "vite build -c vite.config.example.ts",
-		"build:pkg": "vite build && tsc",
-		"prepare": "pnpm run build:pkg",
-		"dev": "vite -c vite.config.example.ts"
-	},
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Oseenix/maplibre-gl-controls.git"
-	},
-	"author": "Kanahiro Iguchi <kanahiro.iguchi@gmail.com> (https://github.com/Kanahiro), Jinze Zhou",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/Oseenix/maplibre-gl-controls/issues"
-	},
-	"homepage": "https://github.com/Oseenix/maplibre-gl-controls#readme",
-	"devDependencies": {
-		"@vitest/browser": "^2.1.8",
-		"@vitest/coverage-v8": "^2.1.8",
-		"fast-glob": "^3.3.3",
-		"jma-utils": "^0.1.0",
-		"maplibre-gl": "^5.0.0",
-		"playwright": "^1.49.1",
-		"rollup-plugin-visualizer": "^5.13.1",
-		"typescript": "^4.9.5",
-		"vite": "^6.0.6",
-		"vite-plugin-css-injected-by-js": "^3.5.2",
-		"vite-plugin-dts": "^4.5.4",
-		"vite-plugin-libcss": "^1.1.2",
-		"vitest": "^2.1.8"
-	},
-	"main": "./build/index.umd.cjs",
-	"module": "./build/index.js",
-	"types": "./build/index.d.ts",
-	"style": "./build/index.css",
-	"files": [
-		"build"
-	],
-	"exports": {
-		".": {
-			"require": "./build/index.umd.cjs",
-			"import": "./build/index.js"
-		},
-		"./index.css": "./build/index.css"
-	},
-	"sideEffects": [
-		"*.css"
-	],
-	"dependencies": {
-		"@maplibre/maplibre-gl-style-spec": "^22.0.1"
-	},
-	"packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
+  "name": "@oseenix/maplibre-gl-controls",
+  "type": "module",
+  "version": "2.0.9",
+  "description": "Control plugins for Maplibre GL JS",
+  "scripts": {
+    "test": "vitest src --coverage --coverage.provider=v8",
+    "build": "vite build -c vite.config.example.ts",
+    "build:pkg": "vite build && tsc",
+    "prepare": "pnpm run build:pkg",
+    "dev": "vite -c vite.config.example.ts"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oseenix/maplibre-gl-controls.git"
+  },
+  "author": "Kanahiro Iguchi <kanahiro.iguchi@gmail.com> (https://github.com/Kanahiro), Jinze Zhou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Oseenix/maplibre-gl-controls/issues"
+  },
+  "homepage": "https://github.com/Oseenix/maplibre-gl-controls#readme",
+  "devDependencies": {
+    "@vitest/browser": "^2.1.8",
+    "@vitest/coverage-v8": "^2.1.8",
+    "fast-glob": "^3.3.3",
+    "jma-utils": "^0.1.0",
+    "maplibre-gl": "^5.0.0",
+    "playwright": "^1.49.1",
+    "rollup-plugin-visualizer": "^5.13.1",
+    "typescript": "^4.9.5",
+    "vite": "^6.0.6",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-libcss": "^1.1.2",
+    "vitest": "^2.1.8"
+  },
+  "main": "./build/index.umd.cjs",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "style": "./build/index.css",
+  "files": [
+    "build"
+  ],
+  "exports": {
+    ".": {
+      "require": "./build/index.umd.cjs",
+      "import": "./build/index.js"
+    },
+    "./index.css": "./build/index.css"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "dependencies": {
+    "@maplibre/maplibre-gl-style-spec": "^22.0.1"
+  },
+  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

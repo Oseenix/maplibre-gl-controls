@@ -19,6 +19,13 @@ export type Options = {
   max?: number;     // Optional max with a default 30
   decimal?: number; // Optional decimal with a default 1
   tickMinStep?: number; // Optional setup min step, with a default 0 not limit
+  // Optional constant added to every displayed tick label only -- the
+  // underlying "speed" domain driving colours/positions always starts at 0
+  // (matches getColorSteps()'s ratio*max construction), so a palette whose
+  // real values start below zero (e.g. a -20..40C temperature scale) can
+  // shift its authored "speed" domain (0..60) back into physical units
+  // (-20..40) for the legend text without altering colour placement.
+  valueOffset?: number; // Optional label offset, with a default 0
   layerIds?: string[];  // Optional array of layer IDs affected by the color bar
   style?: Partial<CSSStyleDeclaration>; // Custom styles to apply, optional
   onClick?: (event: MouseEvent, bar: ColorBar, options: Options) => void; // Optional click callback with current options
@@ -560,7 +567,8 @@ export default class ColorBar implements IControl {
         || Math.abs(lastLabeledValue - currentVal) >= this.getTickMinStep();
 
       if (followsTwoStepRule && clearsTickMinStep) {
-        label.textContent = `- ${currentVal.toFixed(this.options.decimal)}`;
+        const displayVal = currentVal + (this.options.valueOffset || 0);
+        label.textContent = `- ${displayVal.toFixed(this.options.decimal)}`;
         lastLabeledValue = currentVal;
         return;
       }
