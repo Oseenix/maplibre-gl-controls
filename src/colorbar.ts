@@ -423,6 +423,7 @@ export default class ColorBar implements IControl {
     const colorBox = document.createElement("div");
     colorBox.classList.add("map_colorbar_color_box");
     colorBox.style.width = "12px";
+    colorBox.style.flexShrink = "0";
     colorBox.style.backgroundColor = color;
     colorBox.dataset.speed = speed.toString();
     return colorBox;
@@ -517,6 +518,15 @@ export default class ColorBar implements IControl {
     label.style.marginRight = "2px";
     label.style.color = "white";
     label.style.fontSize = "9px";
+    // Two-digit values (e.g. "- 10.0"/"- 30.0") are wide enough that, combined
+    // with cross-browser font-metric differences (observed on macOS Chrome),
+    // the label can wrap onto a second line inside the narrow legend column.
+    // Since this is a block-level flex child with no explicit width, a
+    // wrapped second line renders directly on top of the row above it,
+    // looking like misaligned/overlapping ticks. Force single-line text and
+    // let it overflow the flex item horizontally instead -- the legend
+    // control floats over the map with nothing to its right to clip against.
+    label.style.whiteSpace = "nowrap";
     label.textContent = "";
     return label;
   }
