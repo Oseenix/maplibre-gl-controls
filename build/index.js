@@ -236,17 +236,17 @@ function en(n) {
   return n = n % 360, n < 0 && (n += 360), n;
 }
 function tn([n, e, t, r]) {
-  n = qe(n), e = qe(e), t = qe(t);
+  n = Ve(n), e = Ve(e), t = Ve(t);
   let i, o;
-  const s = Ve((0.2225045 * n + 0.7168786 * e + 0.0606169 * t) / Zt);
-  n === e && e === t ? i = o = s : (i = Ve((0.4360747 * n + 0.3850649 * e + 0.1430804 * t) / Xt), o = Ve((0.0139322 * n + 0.0971045 * e + 0.7141733 * t) / Jt));
+  const s = qe((0.2225045 * n + 0.7168786 * e + 0.0606169 * t) / Zt);
+  n === e && e === t ? i = o = s : (i = qe((0.4360747 * n + 0.3850649 * e + 0.1430804 * t) / Xt), o = qe((0.0139322 * n + 0.0971045 * e + 0.7141733 * t) / Jt));
   const a = 116 * s - 16;
   return [a < 0 ? 0 : a, 500 * (i - s), 200 * (s - o), r];
 }
-function qe(n) {
+function Ve(n) {
   return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
 }
-function Ve(n) {
+function qe(n) {
   return n > Rn ? Math.pow(n, 1 / 3) : n / Qt + Yt;
 }
 function nn([n, e, t, r]) {
@@ -283,7 +283,7 @@ function On([n, e, t, r]) {
 function Un(n) {
   if (n = n.toLowerCase().trim(), n === "transparent")
     return [0, 0, 0, 0];
-  const e = qn[n];
+  const e = Vn[n];
   if (e) {
     const [i, o, s] = e;
     return [i / 255, o / 255, s / 255, 1];
@@ -389,7 +389,7 @@ function J(n, e, t) {
 function Nt(n) {
   return !n.some(Number.isNaN);
 }
-const qn = {
+const Vn = {
   aliceblue: [240, 248, 255],
   antiquewhite: [250, 235, 215],
   aqua: [0, 255, 255],
@@ -539,13 +539,13 @@ const qn = {
   yellow: [255, 255, 0],
   yellowgreen: [154, 205, 50]
 };
-function q(n, e, t) {
+function V(n, e, t) {
   return n + t * (e - n);
 }
 function ue(n, e, t) {
-  return n.map((r, i) => q(r, e[i], t));
+  return n.map((r, i) => V(r, e[i], t));
 }
-function Vn(n) {
+function qn(n) {
   return n === "rgb" || n === "hcl" || n === "lab";
 }
 class k {
@@ -659,9 +659,9 @@ class k {
         } else isNaN(o) ? isNaN(u) ? d = NaN : (d = u, (a === 1 || a === 0) && (g = c)) : (d = o, (h === 1 || h === 0) && (g = s));
         const [C, E, M, T] = jn([
           d,
-          g ?? q(s, c, r),
-          q(a, h, r),
-          q(l, f, r)
+          g ?? V(s, c, r),
+          V(a, h, r),
+          V(l, f, r)
         ]);
         return new k(C, E, M, T, !1);
       }
@@ -786,7 +786,7 @@ class A {
         throw new x(`Cannot interpolate values containing mismatched anchors. from[${a}]: ${i[a]}, to[${a}]: ${o[a]}`);
       s.push(i[a]);
       const [l, u] = i[a + 1], [c, h] = o[a + 1];
-      s.push([q(l, c, r), q(u, h, r)]);
+      s.push([V(l, c, r), V(u, h, r)]);
     }
     return new A(s);
   }
@@ -1693,7 +1693,7 @@ class $ {
       case "interpolate":
         switch (this.type.kind) {
           case "number":
-            return q(c, h, u);
+            return V(c, h, u);
           case "color":
             return k.interpolate(c, h, u);
           case "padding":
@@ -1726,7 +1726,7 @@ function Xe(n, e, t, r) {
 }
 const er = {
   color: k.interpolate,
-  number: q,
+  number: V,
   padding: S.interpolate,
   variableAnchorOffsetCollection: A.interpolate,
   array: ue
@@ -2497,7 +2497,7 @@ function Rr(n, e, t, r = 1 / 0) {
     }
   return s;
 }
-function qt(n, e, t, r, i, o) {
+function Vt(n, e, t, r, i, o) {
   if (!o)
     return;
   const s = kt(nt(r, o), i, t);
@@ -2535,7 +2535,7 @@ function Ie(n, e, t, r, i = 1 / 0) {
         }
     } else {
       const h = tt(u, e);
-      qt(s, o, r, n, a, h[0]), qt(s, o, r, n, a, h[1]);
+      Vt(s, o, r, n, a, h[0]), Vt(s, o, r, n, a, h[1]);
     }
   }
   return o;
@@ -2796,7 +2796,7 @@ class _ {
       e[r] = _;
   }
 }
-function Vt(n, [e, t, r, i]) {
+function qt(n, [e, t, r, i]) {
   e = e.evaluate(n), t = t.evaluate(n), r = r.evaluate(n);
   const o = i ? i.evaluate(n) : 1, s = rn(e, t, r, o);
   if (s)
@@ -2819,7 +2819,7 @@ function jr(n, e, t, r) {
   }
   return !1;
 }
-function V(n) {
+function q(n) {
   return { type: n };
 }
 _.register(Pt, {
@@ -2846,12 +2846,12 @@ _.register(Pt, {
   rgb: [
     R,
     [p, p, p],
-    Vt
+    qt
   ],
   rgba: [
     R,
     [p, p, p, p],
-    Vt
+    qt
   ],
   has: {
     type: m,
@@ -2921,7 +2921,7 @@ _.register(Pt, {
   ],
   "+": [
     p,
-    V(p),
+    q(p),
     (n, e) => {
       let t = 0;
       for (const r of e)
@@ -2931,7 +2931,7 @@ _.register(Pt, {
   ],
   "*": [
     p,
-    V(p),
+    q(p),
     (n, e) => {
       let t = 1;
       for (const r of e)
@@ -3034,12 +3034,12 @@ _.register(Pt, {
   ],
   min: [
     p,
-    V(p),
+    q(p),
     (n, e) => Math.min(...e.map((t) => t.evaluate(n)))
   ],
   max: [
     p,
-    V(p),
+    q(p),
     (n, e) => Math.max(...e.map((t) => t.evaluate(n)))
   ],
   abs: [
@@ -3184,7 +3184,7 @@ _.register(Pt, {
         (n, [e, t]) => e.evaluate(n) && t.evaluate(n)
       ],
       [
-        V(m),
+        q(m),
         (n, e) => {
           for (const t of e)
             if (!t.evaluate(n))
@@ -3202,7 +3202,7 @@ _.register(Pt, {
         (n, [e, t]) => e.evaluate(n) || t.evaluate(n)
       ],
       [
-        V(m),
+        q(m),
         (n, e) => {
           for (const t of e)
             if (t.evaluate(n))
@@ -3238,7 +3238,7 @@ _.register(Pt, {
   ],
   concat: [
     b,
-    V(v),
+    q(v),
     (n, e) => e.map((t) => se(t.evaluate(n))).join("")
   ],
   "resolved-locale": [
@@ -3312,7 +3312,7 @@ function Y(n) {
 function Ur(n) {
   return n["property-type"] === "data-driven" || n["property-type"] === "cross-faded-data-driven";
 }
-function qr(n) {
+function Vr(n) {
   return !!n.expression && n.expression.parameters.indexOf("zoom") > -1;
 }
 function dn(n) {
@@ -3324,7 +3324,7 @@ function Mt(n) {
 function gn(n) {
   return typeof n == "object" && n !== null && !Array.isArray(n);
 }
-function Vr(n) {
+function qr(n) {
   return n;
 }
 function yn(n, e) {
@@ -3333,7 +3333,7 @@ function yn(n, e) {
     const c = t ? k.parse : S.parse;
     n = Gt({}, n), n.stops && (n.stops = n.stops.map((h) => [h[0], c(h[1])])), n.default ? n.default = c(n.default) : n.default = c(e.default);
   }
-  if (n.colorSpace && !Vn(n.colorSpace))
+  if (n.colorSpace && !qn(n.colorSpace))
     throw new Error(`Unknown color space: "${n.colorSpace}"`);
   let a, l, u;
   if (s === "exponential")
@@ -3427,7 +3427,7 @@ function Kt(n, e, t) {
     return n.stops[0][1];
   if (t >= n.stops[i - 1][0])
     return n.stops[i - 1][1];
-  const o = ze(n.stops.map((c) => c[0]), t), s = Xr(t, r, n.stops[o][0], n.stops[o + 1][0]), a = n.stops[o][1], l = n.stops[o + 1][1], u = er[e.type] || Vr;
+  const o = ze(n.stops.map((c) => c[0]), t), s = Xr(t, r, n.stops[o][0], n.stops[o + 1][0]), a = n.stops[o][1], l = n.stops[o + 1][1], u = er[e.type] || qr;
   return typeof a.evaluate == "function" ? {
     evaluate(...c) {
       const h = a.evaluate.apply(void 0, c), f = l.evaluate.apply(void 0, c);
@@ -3523,7 +3523,7 @@ function Cn(n, e) {
   if (!i && !Ur(e))
     return Y([new B("", "data expressions not supported")]);
   const o = It(r, ["zoom"]);
-  if (!o && !qr(e))
+  if (!o && !Vr(e))
     return Y([new B("", "zoom expressions not supported")]);
   const s = we(r);
   if (!s && !o)
@@ -3957,7 +3957,10 @@ class pi {
     return this.options.tickMinStep || 0;
   }
   getDisplaySteps() {
-    return [...this.colorSteps].reverse();
+    const e = [...this.colorSteps].reverse(), t = this.options.labeledValues;
+    return !Array.isArray(t) || t.length === 0 ? e : e.filter(
+      (r) => t.some((i) => Math.abs(i - r.speed) < 1e-6)
+    );
   }
   getWidth() {
     return this.options.width || "52px";

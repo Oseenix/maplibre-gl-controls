@@ -192,7 +192,20 @@ export default class ColorBar implements IControl {
   }
 
   private getDisplaySteps(): ColorStep[] {
-    return [...this.colorSteps].reverse();
+    const steps = [...this.colorSteps].reverse();
+    const explicitLabelValues = this.options.labeledValues;
+    if (!Array.isArray(explicitLabelValues) || explicitLabelValues.length === 0) {
+      return steps;
+    }
+    // 中文注释：非线性色阶（如降水）真实断点之间插了若干仅用于渐变平滑的中间色标，
+    // 它们在底层 fill-color step 表达式里各占一格，但本身并不代表任何有意义的刻度值。
+    // 之前的实现只是不给这些行配文字标签，视觉上留下一排"有色块却没有数字"的空行，
+    // 容易被误认为遗漏。既然调用方已经通过 labeledValues 明确声明了哪些才是真实刻度，
+    // 图例本身就不应该再渲染那些中间色标行——直接按 labeledValues 过滤，图例行数与
+    // 标签数严格一一对应。地图填色本身用的是完整的 propertySpec，不受这里过滤影响。
+    return steps.filter((step) =>
+      explicitLabelValues.some((v) => Math.abs(v - step.speed) < 1e-6)
+    );
   }
 
 	private getWidth(): string {
